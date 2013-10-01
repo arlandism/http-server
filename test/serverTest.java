@@ -15,20 +15,26 @@ import static org.junit.Assert.assertTrue;
 public class serverTest {
 
     private Server server;
-    private Random rand = new Random();
     private Socket clientSocket;
     private PrintWriter out;
     private BufferedReader in;
 
     @Before
     public void setUp() throws IOException {
-        Integer port = rand.nextInt((6000 - 2000) + 1) + 2000;
+        Integer port = generateRandomPort();
         server = new Server(port);
         clientSocket = trySocketCreation(port);
         out = new PrintWriter(clientSocket.getOutputStream(), true);
         in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
     }
 
+    private Integer generateRandomPort(){
+        final int MIN_PORT = 2000;
+        final int MAX_PORT = 65535;
+
+        Random rand = new Random();
+        return rand.nextInt((MAX_PORT - MIN_PORT) + 1) + MIN_PORT;
+    }
     private Socket trySocketCreation(Integer port) {
         try{
           clientSocket = new Socket("localhost", port);
@@ -50,13 +56,10 @@ public class serverTest {
         }
         return response;
 
-    }    @After
-    public void tearDown(){
-        server.close();
-        tryClientClose();
     }
 
-    private void tryClientClose() {
+    @After
+    public void tearDown(){
         try {
             clientSocket.close();
         } catch (IOException e) {
@@ -69,8 +72,8 @@ public class serverTest {
 
         out.print("GET /ping HTTP/1.0\r\n\r\n");
         server.respond();
-        String serverResponse = readResponse();
-        assertTrue(serverResponse.startsWith("HTTP/1.0 200 OK"));
+        String response = readResponse();
+        assertTrue(response.startsWith("HTTP/1.0 200 OK"));
     }
 
     @Test
@@ -78,9 +81,16 @@ public class serverTest {
 
         out.print("GET /ping HTTP/1.0\r\n\r\n");
         server.respond();
-        String serverResponse = readResponse();
-        tryClientClose();
-        assertTrue(serverResponse.contains("Content-type: text/html"));
+        String response = readResponse();
+        assertTrue(response.contains("Content-type: text/html"));
+    }
+
+    @Test
+    public void testResponseBody(){
+        out.print("GET /ping HTTP/1.0\r\n\r\n");
+        server.respond();
+        String response = readResponse();
+        assertTrue(response.contains("<html><body>pong</body></html>"));
     }
 
 }

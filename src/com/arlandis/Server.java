@@ -17,15 +17,13 @@ public class Server {
       }
     }
 
-    public void close() {
-    }
-
     public void respond() {
         try{
           Socket client = serverSocket.accept();
           PrintWriter out = new PrintWriter(client.getOutputStream(),true);
           out.println("HTTP/1.0 200 OK");
           out.println("Content-type: text/html");
+          out.println("<html><body>pong</body></html>");
           out.close();
 
         } catch (IOException e) {
