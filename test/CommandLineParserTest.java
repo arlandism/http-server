@@ -6,7 +6,7 @@ import static org.junit.Assert.assertEquals;
 public class CommandLineParserTest {
 
     @Test
-    public void testPortNumAgain(){
+    public void testPortNum(){
         String[] args = new String[] { "-p", "6500" };
         CommandLineParser parser = new CommandLineParser(args);
         assertEquals(Integer.valueOf(6500), parser.portNum());
