@@ -22,11 +22,8 @@ public class Start {
 
         Integer port;
 
-        if (args[0].equals("-p")){
-           port = Integer.parseInt(args[1]);
-        } else {
-           port = 8000;
-        }
+        CommandLineParser parser = new CommandLineParser(args);
+        port = parser.portNum();
 
         return port;
     }
