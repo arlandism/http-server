@@ -35,6 +35,7 @@ public class serverTest {
         Random rand = new Random();
         return rand.nextInt((MAX_PORT - MIN_PORT) + 1) + MIN_PORT;
     }
+
     private Socket trySocketCreation(Integer port) {
         try{
           clientSocket = new Socket("localhost", port);
@@ -69,7 +70,6 @@ public class serverTest {
 
     @Test
     public void testResponseStatus(){
-
         out.print("GET /ping HTTP/1.0\r\n\r\n");
         server.respond();
         String response = readResponse();
@@ -78,7 +78,6 @@ public class serverTest {
 
     @Test
     public void testResponseContentType(){
-
         out.print("GET /ping HTTP/1.0\r\n\r\n");
         server.respond();
         String response = readResponse();
@@ -93,4 +92,11 @@ public class serverTest {
         assertTrue(response.contains("<html><body>pong</body></html>"));
     }
 
+    @Test
+    public void test404Response(){
+        out.print("GET / HTTP/1.0\r\n\r\n");
+        server.respond();
+        String response = readResponse();
+        assertTrue(response.startsWith("HTTP/1.0 404 Not Found"));
+    }
 }
