@@ -14,7 +14,7 @@ public class CommandLineParser {
 
         if ( (argsToParse.length > 0) &&
               argsToParse[0].equals("-p")){
-            port = Integer.parseInt(argsToParse[2]);
+            port = Integer.parseInt(argsToParse[1]);
         } else {
             port = 8000;
         }

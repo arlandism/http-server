@@ -7,7 +7,7 @@ public class CommandLineParserTest {
 
     @Test
     public void testPortNumAgain(){
-        String[] args = new String[] { "-p", "", "6500" };
+        String[] args = new String[] { "-p", "6500" };
         CommandLineParser parser = new CommandLineParser(args);
         assertEquals(Integer.valueOf(6500), parser.portNum());
     }
