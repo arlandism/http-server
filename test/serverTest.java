@@ -74,40 +74,13 @@ public class serverTest {
     }
 
     @Test
-    public void testResponseStatus() {
+    public void testIntegration() {
         sendPingRequest();
         server.respond();
         String response = readResponse();
         assertTrue(response.startsWith("HTTP/1.0 200 OK"));
-    }
-
-    @Test
-    public void testResponseContentType() {
-        sendPingRequest();
-        server.respond();
-        String response = readResponse();
         assertTrue(response.contains("Content-type: text/html"));
-    }
-
-    @Test
-    public void testResponseBody() {
-        sendPingRequest();
-        server.respond();
-        String response = readResponse();
         assertTrue(response.contains("<html><body>pong</body></html>"));
-    }
-
-    @Test
-    public void testFormResponse(){
-        out.print("GET /form HTTP/1.0\r\n\r\n");
-        out.println("");
-        server.respond();
-        String response = readResponse();
-        String formBody = "<html><body>" +
-                          "<form method='post', action='/form'>" +
-                          "<label><input name='foo'>foo</label>" +
-                          "<label><input name='bar'>bar</label>";
-        assertTrue(response.contains(formBody));
     }
 
 }
