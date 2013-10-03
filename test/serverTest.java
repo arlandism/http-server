@@ -28,7 +28,7 @@ public class serverTest {
         in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
     }
 
-    private Integer generateRandomPort(){
+    private Integer generateRandomPort() {
         final int MIN_PORT = 2000;
         final int MAX_PORT = 65535;
 
@@ -37,8 +37,8 @@ public class serverTest {
     }
 
     private Socket trySocketCreation(Integer port) {
-        try{
-          clientSocket = new Socket("localhost", port);
+        try {
+            clientSocket = new Socket("localhost", port);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -49,9 +49,9 @@ public class serverTest {
         String response = "";
         String nextLine;
         try {
-            while ((nextLine = in.readLine()) != null){
-                    response += nextLine;
-                }
+            while ((nextLine = in.readLine()) != null) {
+                response += nextLine;
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -60,7 +60,7 @@ public class serverTest {
     }
 
     @After
-    public void tearDown(){
+    public void tearDown() {
         try {
             clientSocket.close();
         } catch (IOException e) {
@@ -69,34 +69,43 @@ public class serverTest {
     }
 
     @Test
-    public void testResponseStatus(){
+    public void testResponseStatus() {
         out.print("GET /ping HTTP/1.0\r\n\r\n");
+        out.println("");
         server.respond();
         String response = readResponse();
         assertTrue(response.startsWith("HTTP/1.0 200 OK"));
     }
 
     @Test
-    public void testResponseContentType(){
+    public void testResponseContentType() {
         out.print("GET /ping HTTP/1.0\r\n\r\n");
+        out.println("");
         server.respond();
         String response = readResponse();
         assertTrue(response.contains("Content-type: text/html"));
     }
 
     @Test
-    public void testResponseBody(){
+    public void testResponseBody() {
         out.print("GET /ping HTTP/1.0\r\n\r\n");
+        out.println("");
         server.respond();
         String response = readResponse();
         assertTrue(response.contains("<html><body>pong</body></html>"));
     }
 
     @Test
-    public void test404Response(){
-        out.print("GET / HTTP/1.0\r\n\r\n");
+    public void testFormResponse(){
+        out.print("GET /form HTTP/1.0\r\n\r\n");
+        out.println("");
         server.respond();
         String response = readResponse();
-        assertTrue(response.startsWith("HTTP/1.0 404 Not Found"));
+        String formBody = "<html><body>" +
+                          "<form method='post', action='/form'>" +
+                          "<label><input name='foo'>foo</label>" +
+                          "<label><input name='bar'>bar</label>";
+        assertTrue(response.contains(formBody));
     }
+
 }
