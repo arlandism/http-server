@@ -59,6 +59,11 @@ public class serverTest {
 
     }
 
+    private void sendPingRequest(){
+      out.print("GET /ping HTTP/1.0\r\n\r\n");
+      out.println("");
+    }
+
     @After
     public void tearDown() {
         try {
@@ -70,8 +75,7 @@ public class serverTest {
 
     @Test
     public void testResponseStatus() {
-        out.print("GET /ping HTTP/1.0\r\n\r\n");
-        out.println("");
+        sendPingRequest();
         server.respond();
         String response = readResponse();
         assertTrue(response.startsWith("HTTP/1.0 200 OK"));
@@ -79,8 +83,7 @@ public class serverTest {
 
     @Test
     public void testResponseContentType() {
-        out.print("GET /ping HTTP/1.0\r\n\r\n");
-        out.println("");
+        sendPingRequest();
         server.respond();
         String response = readResponse();
         assertTrue(response.contains("Content-type: text/html"));
@@ -88,8 +91,7 @@ public class serverTest {
 
     @Test
     public void testResponseBody() {
-        out.print("GET /ping HTTP/1.0\r\n\r\n");
-        out.println("");
+        sendPingRequest();
         server.respond();
         String response = readResponse();
         assertTrue(response.contains("<html><body>pong</body></html>"));
