@@ -32,8 +32,9 @@ public class ResponseBuilderTest {
         String response = builder.response();
         String formBody = "<html><body>" +
                           "<form method='post', action='/form'>" +
-                          "<label><input name='foo'>foo</label>" +
-                          "<label><input name='bar'>bar</label>";
+                          "<label>foo<input name='foo'></label>" +
+                          "<br /><label>bar<input name='bar'></label>" +
+                          "<br /><input value='submit' type='submit'>";
         assertTrue(response.contains(formBody));
     }
 }

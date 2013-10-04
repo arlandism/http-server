@@ -15,8 +15,9 @@ public class ResponseBuilder {
         String body;
         String formBody = "<html><body>" +
                           "<form method='post', action='/form'>" +
-                          "<label><input name='foo'>foo</label>" +
-                          "<label><input name='bar'>bar</label>";
+                          "<label>foo<input name='foo'></label>" +
+                          "<br /><label>bar<input name='bar'></label>" +
+                          "<br /><input value='submit' type='submit'>";
 
         if (requestToRespondTo.startsWith("GET /form")){
             body = formBody;
