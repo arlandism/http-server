@@ -74,13 +74,25 @@ public class serverTest {
     }
 
     @Test
-    public void testIntegration() {
+    public void testGETIntegration() {
         sendPingRequest();
         server.respond();
         String response = readResponse();
         assertTrue(response.startsWith("HTTP/1.0 200 OK"));
         assertTrue(response.contains("Content-type: text/html"));
         assertTrue(response.contains("<html><body>pong</body></html>"));
+    }
+
+    @Test
+    public void testPOSTPing(){
+        out.print("POST /form HTTP/1.0\r\n");
+        out.print("Content-Length: 5\r\n");
+        out.println("\r\n");
+        out.println("\r\n");
+        out.print("fooba");
+        server.respond();
+        String response = readResponse();
+        assertTrue(response.contains("fooba"));
     }
 
 }
