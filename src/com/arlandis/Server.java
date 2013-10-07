@@ -24,11 +24,26 @@ public class Server {
             String request = "";
             String response;
             String nextLine;
-
+            Integer numBytes;
+            String requestBody;
+            RequestParser parser;
+            char[] requestBodyChars;
             try{
                 while (!(nextLine = in.readLine()).equals("")){
                    request += nextLine;
                 }
+
+                if (request.contains("Content-Length:")){
+                  parser = new RequestParser(request);
+                  numBytes = parser.bytesToRead();
+                  Integer max = numBytes + 6;
+                  requestBodyChars = new char[max];
+                  in.read(requestBodyChars, 0, max);
+                  requestBody = new String(requestBodyChars);
+                  out.print(requestBody);
+                  out.close();
+                }
+
             }catch (IOException e){
                     e.printStackTrace();
                 }

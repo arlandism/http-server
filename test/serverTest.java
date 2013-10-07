@@ -12,7 +12,7 @@ import java.util.Random;
 
 import static org.junit.Assert.assertTrue;
 
-public class serverTest {
+public class ServerTest {
 
     private Server server;
     private Socket clientSocket;
@@ -88,11 +88,11 @@ public class serverTest {
         out.print("POST /form HTTP/1.0\r\n");
         out.print("Content-Length: 5\r\n");
         out.println("\r\n");
+        out.print("foo=fooba");
         out.println("\r\n");
-        out.print("fooba");
         server.respond();
         String response = readResponse();
-        assertTrue(response.contains("fooba"));
+        assertTrue(response.contains("foo=fooba"));
     }
 
 }
