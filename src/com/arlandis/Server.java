@@ -21,34 +21,16 @@ public class Server {
             Socket client = serverSocket.accept();
             PrintWriter out = new PrintWriter(client.getOutputStream(),true);
             BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-            String request = "";
             String response;
-            String nextLine;
-            Integer numBytes;
-            String requestBody;
-            RequestParser parser;
-            char[] requestBodyChars;
-            try{
-                while (!(nextLine = in.readLine()).equals("")){
-                   request += nextLine;
-                }
+            String rawRequestHeaders = readHeaders(in);
+            Request request = new Request(rawRequestHeaders);
 
-                if (request.contains("Content-Length:")){
-                  parser = new RequestParser(request);
-                  numBytes = parser.bytesToRead();
-                  Integer max = numBytes + 6;
-                  requestBodyChars = new char[max];
-                  in.read(requestBodyChars, 0, max);
-                  requestBody = new String(requestBodyChars);
-                  out.print(requestBody);
-                  out.close();
-                }
-
-            }catch (IOException e){
-                    e.printStackTrace();
-                }
-
-            response = buildResponse(request);
+            if (request.hasBody()){
+                char[] requestBody = readBody(in, request);
+                response = new String(requestBody);
+            }  else {
+                response = buildResponse(rawRequestHeaders);
+            }
 
             out.print(response);
             out.close();
@@ -58,8 +40,23 @@ public class Server {
         }
     }
 
-    private String buildResponse(String request){
-        ResponseBuilder builder = new ResponseBuilder(request);
+    private char[] readBody(BufferedReader in, Request request) throws IOException {
+        char [] responseBody = new char[request.bytesToRead()];
+        in.read(responseBody, 0, request.bytesToRead());
+        return responseBody;
+    }
+
+    private String readHeaders(BufferedReader in) throws IOException {
+        String nextHeader;
+        StringBuilder requestHeaders = new StringBuilder();
+        while (!(nextHeader = in.readLine()).equals("")){
+            requestHeaders.append(nextHeader);
+        }
+        return requestHeaders.toString();
+    }
+
+    private String buildResponse(String requestHeaders){
+        ResponseBuilder builder = new ResponseBuilder(requestHeaders);
         return builder.response();
     }
 }
