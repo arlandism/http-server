@@ -1,5 +1,8 @@
 package com.arlandis;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+
 public class ResponseBuilder {
 
     private RequestInterface requestToRespondTo;
@@ -42,12 +45,22 @@ public class ResponseBuilder {
     private String fooValue(String requestBody){
         Integer fooBegin = requestBody.indexOf("=") + 1;
         Integer fooEnd = requestBody.indexOf("&");
-        return requestBody.substring(fooBegin, fooEnd);
+        try {
+            return URLDecoder.decode(requestBody.substring(fooBegin, fooEnd), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 
     private String barValue(String requestBody){
         Integer fooEnd = requestBody.indexOf("&");
         Integer barBegin = requestBody.indexOf("=", fooEnd) + 1;
-        return requestBody.substring(barBegin, requestBody.length());
+        try {
+            return URLDecoder.decode(requestBody.substring(barBegin, requestBody.length()), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 }

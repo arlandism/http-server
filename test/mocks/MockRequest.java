@@ -6,6 +6,7 @@ import com.arlandis.RequestInterface;
 public class MockRequest implements RequestInterface{
 
     private String headers;
+    private String body;
 
     public MockRequest(String headersToReturn){
         headers = headersToReturn;
@@ -24,10 +25,11 @@ public class MockRequest implements RequestInterface{
     }
 
     public void setBody(String body){
+        this.body = body;
     }
 
     public String getBody() {
-        return null;
+        return this.body;
     }
 
 }

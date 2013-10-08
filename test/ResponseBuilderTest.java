@@ -9,11 +9,13 @@ public class ResponseBuilderTest {
 
     private MockRequest request;
     private MockRequest formRequest;
+    private MockRequest postRequest;
 
     @Before
     public void setUp(){
         request = new MockRequest("GET /ping HTTP/1.0\r\n\r\n");
         formRequest = new MockRequest("GET /form HTTP/1.0\r\n\r\n");
+        postRequest = new MockRequest("POST /form HTTP/1.o\r\n\r\n");
     }
 
     @Test
@@ -47,5 +49,14 @@ public class ResponseBuilderTest {
                           "<br /><label>bar<input name='bar'></label>" +
                           "<br /><input value='submit' type='submit'>";
         assertTrue(response.contains(formBody));
+    }
+
+    @Test
+    public void testResponseDecoded(){
+        postRequest.setBody("foo=Hello+there&bar=O+hai");
+        ResponseBuilder builder = new ResponseBuilder(postRequest);
+        String response = builder.response();
+        assertTrue(response.contains("foo = Hello there"));
+        assertTrue(response.contains("bar = O hai"));
     }
 }
