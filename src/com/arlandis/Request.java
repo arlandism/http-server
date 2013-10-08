@@ -3,9 +3,10 @@ package com.arlandis;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Request {
+public class Request implements RequestInterface{
     private String requestToParse;
     private final Integer NUM_DELIMITERS = 6;
+    private String body;
 
     public Request(String request) {
         requestToParse = request;
@@ -23,4 +24,17 @@ public class Request {
     public Boolean hasBody(){
         return requestToParse.contains("Content-Length");
     }
+
+    public String headers(){
+        return requestToParse;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    public String getBody(){
+        return body;
+    }
+
 }
