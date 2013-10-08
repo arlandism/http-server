@@ -45,22 +45,22 @@ public class ResponseBuilder {
     private String fooValue(String requestBody){
         Integer fooBegin = requestBody.indexOf("=") + 1;
         Integer fooEnd = requestBody.indexOf("&");
-        try {
-            return URLDecoder.decode(requestBody.substring(fooBegin, fooEnd), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            return "";
-        }
+        return decodeValue(requestBody.substring(fooBegin, fooEnd));
     }
 
     private String barValue(String requestBody){
         Integer fooEnd = requestBody.indexOf("&");
         Integer barBegin = requestBody.indexOf("=", fooEnd) + 1;
-        try {
-            return URLDecoder.decode(requestBody.substring(barBegin, requestBody.length()), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            return "";
-        }
+        return decodeValue(requestBody.substring(barBegin, requestBody.length()));
     }
+
+   private String decodeValue(String value) {
+       try {
+           return URLDecoder.decode(value, "UTF-8");
+       } catch (UnsupportedEncodingException e) {
+           e.printStackTrace();
+           return "";
+       }
+   }
+
 }
