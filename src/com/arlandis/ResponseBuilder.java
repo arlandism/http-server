@@ -2,10 +2,10 @@ package com.arlandis;
 
 public class ResponseBuilder {
 
-    private String requestToRespondTo;
+    private String requestHeader;
 
     public ResponseBuilder(String request){
-       requestToRespondTo = request;
+       requestHeader = request;
     }
 
     public String response(){
@@ -19,7 +19,7 @@ public class ResponseBuilder {
                           "<br /><label>bar<input name='bar'></label>" +
                           "<br /><input value='submit' type='submit'></form>";
 
-        if (requestToRespondTo.startsWith("GET /form")){
+        if (requestHeader.startsWith("GET /form")){
             body = formBody;
            }
         else{

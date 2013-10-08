@@ -26,7 +26,7 @@ public class Server {
             Request request = new Request(rawRequestHeaders);
 
             if (request.hasBody()){
-                char[] requestBody = readBody(in, request);
+                char[] requestBody = readBody(in, request.bytesToRead());
                 response = new String(requestBody);
             }  else {
                 response = buildResponse(rawRequestHeaders);
@@ -40,9 +40,9 @@ public class Server {
         }
     }
 
-    private char[] readBody(BufferedReader in, Request request) throws IOException {
-        char [] responseBody = new char[request.bytesToRead()];
-        in.read(responseBody, 0, request.bytesToRead());
+    private char[] readBody(BufferedReader in, Integer bytesToRead) throws IOException {
+        char [] responseBody = new char[bytesToRead];
+        in.read(responseBody, 0, bytesToRead);
         return responseBody;
     }
 

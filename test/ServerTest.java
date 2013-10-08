@@ -86,7 +86,7 @@ public class ServerTest {
     @Test
     public void testPOSTPing(){
         out.print("POST /form HTTP/1.0\r\n");
-        out.print("Content-Length: 5\r\n");
+        out.print("Content-Length: 10\r\n");
         out.println("\r\n");
         out.print("foo=fooba");
         out.println("\r\n");

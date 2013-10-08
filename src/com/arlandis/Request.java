@@ -1,27 +1,23 @@
 package com.arlandis;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class Request {
     private String requestToParse;
     private final Integer NUM_DELIMITERS = 6;
-    public char[] requestBodyStorage;
 
     public Request(String request) {
         requestToParse = request;
-        requestBodyStorage = new char[bytesToRead()];
     }
 
     public Integer bytesToRead() {
         Integer START_LOCATION = requestToParse.indexOf("Content-Length: ") + 16;
-        Integer END_LOCATION = START_LOCATION + 1;
-        return Integer.parseInt(requestToParse.substring(START_LOCATION, END_LOCATION)) + NUM_DELIMITERS;
-    }
-
-    public char[] getRequestBodyStorage(){
-        return requestBodyStorage;
-    }
-
-    public String getRequestBody() {
-        return new String(getRequestBodyStorage());
+        Pattern intsOnly = Pattern.compile("\\d+");
+        Matcher matcher = intsOnly.matcher(requestToParse.substring(START_LOCATION, requestToParse.length()));
+        matcher.find();
+        String inputInt = matcher.group();
+        return Integer.parseInt(inputInt);
     }
 
     public Boolean hasBody(){
