@@ -27,17 +27,11 @@ public class Server {
 
             if (request.hasBody()){
                 char[] requestBody = readBody(in, request.bytesToRead());
-                String stringVersion = new String(requestBody);
-                Integer fooBegin = stringVersion.indexOf("=") + 1;
-                Integer fooEnd = stringVersion.indexOf("&");
-                Integer barBegin = stringVersion.indexOf("=", fooEnd) + 1;
-                String barValue = stringVersion.substring(barBegin, stringVersion.length());
-                String fooValue = stringVersion.substring(fooBegin, fooEnd);
-                response = "foo = " + fooValue + "<br />bar = " + barValue;
-            }  else {
-                response = buildResponse(rawRequestHeaders);
+                String body = new String(requestBody);
+                request.setBody(body);
             }
 
+            response = buildResponse(request);
             out.print(response);
             out.close();
 
@@ -61,8 +55,8 @@ public class Server {
         return requestHeaders.toString();
     }
 
-    private String buildResponse(String requestHeaders){
-        ResponseBuilder builder = new ResponseBuilder(requestHeaders);
+    private String buildResponse(RequestInterface request){
+        ResponseBuilder builder = new ResponseBuilder(request);
         return builder.response();
     }
 }
