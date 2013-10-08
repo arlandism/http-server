@@ -86,13 +86,13 @@ public class ServerTest {
     @Test
     public void testPOSTPing(){
         out.print("POST /form HTTP/1.0\r\n");
-        out.print("Content-Length: 10\r\n");
-        out.println("\r\n");
-        out.print("foo=fooba");
-        out.println("\r\n");
+        out.print("Content-Length: 17\r\n");
+        out.println("");
+        out.print("foo=fooba&bar=baz");
+        out.println("");
         server.respond();
         String response = readResponse();
-        assertTrue(response.contains("foo=fooba"));
+        assertTrue(response.contains("foo = fooba<br />bar = baz"));
     }
 
 }
