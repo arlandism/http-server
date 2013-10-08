@@ -4,29 +4,25 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Request implements RequestInterface{
-    private String requestToParse;
+    private String requestHeaders;
     private final Integer NUM_DELIMITERS = 6;
     private String body;
 
     public Request(String request) {
-        requestToParse = request;
+        requestHeaders = request;
     }
 
     public Integer bytesToRead() {
-        Integer START_LOCATION = requestToParse.indexOf("Content-Length: ") + 16;
-        Pattern intsOnly = Pattern.compile("\\d+");
-        Matcher matcher = intsOnly.matcher(requestToParse.substring(START_LOCATION, requestToParse.length()));
-        matcher.find();
-        String inputInt = matcher.group();
-        return Integer.parseInt(inputInt);
+        Integer START_LOCATION = requestHeaders.indexOf("Content-Length: ") + 16;
+        return parseHeadersForInt(START_LOCATION);
     }
 
     public Boolean hasBody(){
-        return requestToParse.contains("Content-Length");
+        return requestHeaders.contains("Content-Length");
     }
 
     public String headers(){
-        return requestToParse;
+        return requestHeaders;
     }
 
     public void setBody(String body) {
@@ -35,5 +31,18 @@ public class Request implements RequestInterface{
 
     public String getBody(){
         return body;
+    }
+
+    public Integer sleepTime() {
+        Integer start = requestHeaders.indexOf("sleep") + 6;
+        return parseHeadersForInt(start);
+    }
+
+    private Integer parseHeadersForInt(Integer indexToStartAt){
+        Pattern intsOnly = Pattern.compile("\\d+");
+        Matcher matcher = intsOnly.matcher(requestHeaders.substring(indexToStartAt));
+        matcher.find();
+        String inputInt = matcher.group();
+        return Integer.parseInt(inputInt);
     }
 }
