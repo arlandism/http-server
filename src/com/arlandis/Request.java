@@ -36,5 +36,4 @@ public class Request implements RequestInterface{
     public String getBody(){
         return body;
     }
-
 }
