@@ -27,7 +27,13 @@ public class Server {
 
             if (request.hasBody()){
                 char[] requestBody = readBody(in, request.bytesToRead());
-                response = new String(requestBody);
+                String stringVersion = new String(requestBody);
+                Integer fooBegin = stringVersion.indexOf("=") + 1;
+                Integer fooEnd = stringVersion.indexOf("&");
+                Integer barBegin = stringVersion.indexOf("=", fooEnd) + 1;
+                String barValue = stringVersion.substring(barBegin, stringVersion.length());
+                String fooValue = stringVersion.substring(fooBegin, fooEnd);
+                response = "foo = " + fooValue + "<br />bar = " + barValue;
             }  else {
                 response = buildResponse(rawRequestHeaders);
             }
