@@ -1,5 +1,7 @@
+import com.Sleeper;
 import com.arlandis.ResponseBuilder;
 import mocks.MockRequest;
+import mocks.MockSleeper;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,12 +12,14 @@ public class ResponseBuilderTest {
     private MockRequest request;
     private MockRequest formRequest;
     private MockRequest postRequest;
+    private MockRequest sleepRequest;
 
     @Before
     public void setUp(){
         request = new MockRequest("GET /ping HTTP/1.0\r\n\r\n");
         formRequest = new MockRequest("GET /form HTTP/1.0\r\n\r\n");
         postRequest = new MockRequest("POST /form HTTP/1.o\r\n\r\n");
+        sleepRequest = new MockRequest("GET /ping?sleep=4 HTTP/1.0\r\n\r\n");
     }
 
     @Test
@@ -57,5 +61,13 @@ public class ResponseBuilderTest {
         String response = builder.response();
         assertTrue(response.contains("foo = foo bar baz<>"));
         assertTrue(response.contains("bar = bar foo baz<>"));
+    }
+
+    @Test
+    public void testSleepResponse(){
+        ResponseBuilder builder = new ResponseBuilder(sleepRequest);
+        String response = builder.response();
+        assertTrue(sleepRequest.sleepCalled());
+        assertTrue(response.contains("<html><body>pong</body></html>"));
     }
 }

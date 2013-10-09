@@ -21,7 +21,11 @@ public class ResponseBuilder {
             body = formBody();
         } else if (request.headers().startsWith("POST ")) {
             body = formParams();
-        } else {
+        } else if (request.headers().startsWith("GET /ping?sleep")){
+            SleepImp sleeper = new SleepImp();
+            request.sleep(sleeper);
+            body = pongBody();
+        } else{
             body = pongBody();
         }
 
