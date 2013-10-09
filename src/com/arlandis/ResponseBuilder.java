@@ -5,10 +5,10 @@ import java.net.URLDecoder;
 
 public class ResponseBuilder {
 
-    private RequestInterface requestToRespondTo;
+    private RequestInterface request;
 
     public ResponseBuilder(RequestInterface request){
-       requestToRespondTo = request;
+       this.request = request;
     }
 
     public String response(){
@@ -22,10 +22,10 @@ public class ResponseBuilder {
                           "<br /><label>bar<input name='bar'></label>" +
                           "<br /><input value='submit' type='submit'></form>";
 
-        if (requestToRespondTo.headers().startsWith("GET /form")){
+        if (request.headers().startsWith("GET /form")){
             body = formBody;
            }
-        else if (requestToRespondTo.headers().startsWith("POST")){
+        else if (request.headers().startsWith("POST")){
             body = formParams();
         }
         else{
@@ -38,9 +38,11 @@ public class ResponseBuilder {
 
     private String formParams() {
         String LINE_BREAK = "<br />";
-        String requestBody = requestToRespondTo.getBody();
-        return "foo = " + fooValue(requestBody) + LINE_BREAK + "bar = " + barValue(requestBody);
+        return "foo = " + decodeValue(request.fooValue()) + LINE_BREAK + "bar = " + decodeValue(request.barValue());
     }
+
+  //  fooValue(requestBody)
+    //barValue(requestBody)
 
     private String fooValue(String requestBody){
         Integer fooBegin = requestBody.indexOf("=") + 1;

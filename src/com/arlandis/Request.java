@@ -5,7 +5,6 @@ import java.util.regex.Pattern;
 
 public class Request implements RequestInterface{
     private String requestHeaders;
-    private final Integer NUM_DELIMITERS = 6;
     private String body;
 
     public Request(String request) {
@@ -29,8 +28,16 @@ public class Request implements RequestInterface{
         this.body = body;
     }
 
-    public String getBody(){
-        return body;
+    public String barValue(){
+        Integer fooEnd = body.indexOf("&");
+        Integer barBegin = body.indexOf("=", fooEnd) + 1;
+        return body.substring(barBegin, body.length());
+    }
+
+    public String fooValue(){
+        Integer fooBegin = body.indexOf("=") + 1;
+        Integer fooEnd = body.indexOf("&");
+        return body.substring(fooBegin, fooEnd);
     }
 
     public Integer sleepTime() {

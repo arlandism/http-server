@@ -28,8 +28,12 @@ public class MockRequest implements RequestInterface{
         this.body = body;
     }
 
-    public String getBody() {
-        return this.body;
+    public String fooValue(){
+        return "foo";
+    }
+
+    public String barValue(){
+        return "bar";
     }
 
 }
