@@ -1,5 +1,7 @@
 package com.arlandis;
 
+import com.Sleeper;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,11 +42,14 @@ public class Request implements RequestInterface{
         return body.substring(fooBegin, fooEnd);
     }
 
-    public Integer sleepTime() {
+    public void sleep(Sleeper sleeper){
+        sleeper.sleep(sleepTime());
+    }
+
+    private Integer sleepTime() {
         Integer start = requestHeaders.indexOf("sleep") + 6;
         return parseHeadersForInt(start);
     }
-
     private Integer parseHeadersForInt(Integer indexToStartAt){
         Pattern intsOnly = Pattern.compile("\\d+");
         Matcher matcher = intsOnly.matcher(requestHeaders.substring(indexToStartAt));
