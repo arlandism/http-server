@@ -1,12 +1,14 @@
 package mocks;
 
 
+import com.Sleeper;
 import com.arlandis.RequestInterface;
 
 public class MockRequest implements RequestInterface{
 
     private String headers;
     private String body;
+    private Boolean sleep = false;
 
     public MockRequest(String headersToReturn){
         headers = headersToReturn;
@@ -34,6 +36,14 @@ public class MockRequest implements RequestInterface{
 
     public String barValue(){
         return "bar foo baz<>";
+    }
+
+    public Boolean sleepCalled(){
+        return sleep;
+    }
+
+    public void sleep(Sleeper sleeper){
+        sleep = true;
     }
 
 }
