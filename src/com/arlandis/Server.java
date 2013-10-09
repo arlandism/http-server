@@ -1,5 +1,7 @@
 package com.arlandis;
 
+import com.Sleeper;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -23,13 +25,7 @@ public class Server {
             BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
             String response;
             String rawRequestHeaders = readHeaders(in);
-            Request request = new Request(rawRequestHeaders);
-
-            if (request.hasBody()){
-                char[] requestBody = readBody(in, request.bytesToRead());
-                String body = new String(requestBody);
-                request.setBody(body);
-            }
+            Request request = getRequest(in, rawRequestHeaders);
 
             response = buildResponse(request);
             out.print(response);
@@ -38,6 +34,17 @@ public class Server {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private Request getRequest(BufferedReader in, String rawRequestHeaders) throws IOException {
+        Request request = new Request(rawRequestHeaders);
+
+        if (request.hasBody()){
+            char[] requestBody = readBody(in, request.bytesToRead());
+            String body = new String(requestBody);
+            request.setBody(body);
+        }
+        return request;
     }
 
     private char[] readBody(BufferedReader in, Integer bytesToRead) throws IOException {
