@@ -22,7 +22,7 @@ public class ResponseBuilder {
         } else if (request.headers().startsWith("POST ")) {
             body = formParams();
         } else {
-            body = "<html><body>pong</body></html>";
+            body = pongBody();
         }
 
         response = head + "\n" + contentType + "\n\r\n" + body;
@@ -35,6 +35,10 @@ public class ResponseBuilder {
                "<label>foo<input name='foo'></label>" +
                "<br /><label>bar<input name='bar'></label>" +
                "<br /><input value='submit' type='submit'></form>";
+    }
+
+    private String pongBody(){
+        return "<html><body>pong</body></html>";
     }
 
     private String formParams() {
