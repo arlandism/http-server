@@ -55,7 +55,7 @@ public class ResponseBuilderTest {
     public void testResponseDecoded(){
         ResponseBuilder builder = new ResponseBuilder(postRequest);
         String response = builder.response();
-        assertTrue(response.contains("foo = foo"));
-        assertTrue(response.contains("bar = bar"));
+        assertTrue(response.contains("foo = foo bar baz<>"));
+        assertTrue(response.contains("bar = bar foo baz<>"));
     }
 }

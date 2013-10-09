@@ -29,11 +29,11 @@ public class MockRequest implements RequestInterface{
     }
 
     public String fooValue(){
-        return "foo";
+        return "foo bar baz<>";
     }
 
     public String barValue(){
-        return "bar";
+        return "bar foo baz<>";
     }
 
 }
