@@ -1,7 +1,5 @@
-import com.Sleeper;
 import com.arlandis.ResponseBuilder;
 import mocks.MockRequest;
-import mocks.MockSleeper;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -1,7 +1,7 @@
 package mocks;
 
-import com.arlandis.NetworkIO;
-import com.arlandis.RequestInterface;
+import com.arlandis.interfaces.NetworkIO;
+import com.arlandis.interfaces.RequestInterface;
 
 import java.io.IOException;
 import java.util.LinkedList;

@@ -1,6 +1,4 @@
-package com.arlandis;
-
-import com.Sleeper;
+package com.arlandis.interfaces;
 
 public interface RequestInterface {
 

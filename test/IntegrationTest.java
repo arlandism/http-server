@@ -1,4 +1,5 @@
 import com.arlandis.*;
+import com.arlandis.interfaces.ResponseBuilderInterface;
 import mocks.MockResponseBuilder;
 import org.junit.After;
 import org.junit.Before;

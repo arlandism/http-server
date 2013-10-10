@@ -1,8 +1,8 @@
 package mocks;
 
 
-import com.Sleeper;
-import com.arlandis.RequestInterface;
+import com.arlandis.interfaces.Sleeper;
+import com.arlandis.interfaces.RequestInterface;
 
 public class MockRequest implements RequestInterface{
 

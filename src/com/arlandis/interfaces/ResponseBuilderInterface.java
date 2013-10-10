@@ -1,4 +1,6 @@
-package com.arlandis;
+package com.arlandis.interfaces;
+
+import com.arlandis.interfaces.RequestInterface;
 
 /**
  * Created with IntelliJ IDEA.

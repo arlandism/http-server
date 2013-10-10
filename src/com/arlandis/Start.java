@@ -1,5 +1,7 @@
 package com.arlandis;
 
+import com.arlandis.interfaces.ResponseBuilderInterface;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;

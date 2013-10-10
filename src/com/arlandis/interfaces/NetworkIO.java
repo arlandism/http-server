@@ -1,4 +1,4 @@
-package com.arlandis;
+package com.arlandis.interfaces;
 
 import java.io.IOException;
 

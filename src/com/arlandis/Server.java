@@ -1,5 +1,9 @@
 package com.arlandis;
 
+import com.arlandis.interfaces.NetworkIO;
+import com.arlandis.interfaces.RequestInterface;
+import com.arlandis.interfaces.ResponseBuilderInterface;
+
 import java.io.*;
 
 public class Server {

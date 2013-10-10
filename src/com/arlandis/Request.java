@@ -1,11 +1,12 @@
 package com.arlandis;
 
-import com.Sleeper;
+import com.arlandis.interfaces.RequestInterface;
+import com.arlandis.interfaces.Sleeper;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Request implements RequestInterface{
+public class Request implements RequestInterface {
 
     private String requestHeaders;
     private String body;

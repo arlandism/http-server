@@ -1,8 +1,8 @@
 package com.arlandis;
 
-import com.Sleeper;
+import com.arlandis.interfaces.Sleeper;
 
-public class SleepImp implements Sleeper{
+public class SleepImp implements Sleeper {
 
     public void sleep(Integer sleepTime){
 

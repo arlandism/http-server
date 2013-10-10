@@ -1,4 +1,4 @@
-import com.Sleeper;
+import com.arlandis.interfaces.Sleeper;
 import com.arlandis.Request;
 import mocks.MockSleeper;
 import org.junit.Test;

@@ -1,6 +1,6 @@
 package mocks;
 
-import com.Sleeper;
+import com.arlandis.interfaces.Sleeper;
 
 public class MockSleeper implements Sleeper {
 

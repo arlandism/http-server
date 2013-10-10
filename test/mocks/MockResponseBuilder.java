@@ -1,7 +1,7 @@
 package mocks;
 
-import com.arlandis.RequestInterface;
-import com.arlandis.ResponseBuilderInterface;
+import com.arlandis.interfaces.RequestInterface;
+import com.arlandis.interfaces.ResponseBuilderInterface;
 
 /**
  * Created with IntelliJ IDEA.

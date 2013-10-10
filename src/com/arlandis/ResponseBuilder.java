@@ -1,9 +1,12 @@
 package com.arlandis;
 
+import com.arlandis.interfaces.RequestInterface;
+import com.arlandis.interfaces.ResponseBuilderInterface;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
-public class ResponseBuilder implements ResponseBuilderInterface{
+public class ResponseBuilder implements ResponseBuilderInterface {
 
     private RequestInterface request;
 

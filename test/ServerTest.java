@@ -1,6 +1,5 @@
-import com.arlandis.NetworkIO;
-import com.arlandis.RequestInterface;
-import com.arlandis.ResponseBuilderInterface;
+import com.arlandis.interfaces.NetworkIO;
+import com.arlandis.interfaces.RequestInterface;
 import com.arlandis.Server;
 import mocks.MockNetworkIO;
 import mocks.MockRequest;
