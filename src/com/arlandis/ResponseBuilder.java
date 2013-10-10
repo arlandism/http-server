@@ -3,12 +3,16 @@ package com.arlandis;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
-public class ResponseBuilder {
+public class ResponseBuilder implements ResponseBuilderInterface{
 
     private RequestInterface request;
 
     public ResponseBuilder(RequestInterface request) {
         this.request = request;
+    }
+
+    public ResponseBuilder() {
+        //To change body of created methods use File | Settings | File Templates.
     }
 
     public String response() {
@@ -59,4 +63,8 @@ public class ResponseBuilder {
         }
     }
 
+    @Override
+    public String generateResponse(RequestInterface request) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
 }

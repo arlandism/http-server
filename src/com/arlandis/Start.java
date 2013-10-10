@@ -1,15 +1,40 @@
 package com.arlandis;
 
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+
 public class Start{
 
     public static void main(String[] args){
 
         Integer port = portNum(args);
-        Server server = new Server(port);
+        ServerSocket serverSock = null;
+        ResponseBuilderInterface builder = new ResponseBuilder();
+
+        try {
+            serverSock = new ServerSocket(port);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         System.out.printf("Server starting on port: %d\n", port);
 
         while (true){
-            server.respond();
+            try {
+                final Socket connSocket = serverSock.accept();
+                NetworkIOImp networkIO = new NetworkIOImp(connSocket);
+                final Server server = new Server(networkIO, builder);
+                new Thread(new Runnable() {{
+                }
+                    @Override
+                    public void run() {
+                        server.respond();
+                    }
+                }).start();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
