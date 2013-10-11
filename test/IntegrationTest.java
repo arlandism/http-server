@@ -93,7 +93,6 @@ public class IntegrationTest {
         assertTrue(response.contains("<html><body>pong</body></html>"));
     }
 
-    @Ignore
     @Test
     public void testPOSTPing() {
         out.print("POST /form HTTP/1.0\r\n");
@@ -104,16 +103,5 @@ public class IntegrationTest {
         server.respond();
         String response = readResponse(in);
         assertTrue(response.contains("foo = fooba<br />bar = baz"));
-    }
-
-    /**
-     * Created with IntelliJ IDEA.
-     * User: arlandislawrence
-     * Date: 10/10/13
-     * Time: 4:20 PM
-     * To change this template use File | Settings | File Templates.
-     */
-    public static class NetworkIOImpTest {
-
     }
 }

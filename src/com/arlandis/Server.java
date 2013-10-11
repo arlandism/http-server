@@ -17,11 +17,19 @@ public class Server {
     }
 
     public void respond() {
-            String response;
-            //String rawRequestHeaders = readHeaders();
-            //Request request = getRequest(rawRequestHeaders);
-            //response = buildResponse(request);
-            response = builder.generateResponse(networkIO.nextRequest());
+        String response;
+        Request request = null;
+        String rawRequestHeaders;
+
+        try {
+            rawRequestHeaders = readHeaders();
+
+            request = getRequest(rawRequestHeaders);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+            ResponseBuilder builder = new ResponseBuilder(request);
+            response = builder.response();
             networkIO.send(response);
     }
 
@@ -50,11 +58,6 @@ public class Server {
             requestHeaders.append(nextHeader);
         }
         return requestHeaders.toString();
-    }
-
-    private String buildResponse(RequestInterface request){
-        ResponseBuilder builder = new ResponseBuilder(request);
-        return builder.response();
     }
 
 }

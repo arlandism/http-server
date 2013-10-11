@@ -5,6 +5,7 @@ import mocks.MockNetworkIO;
 import mocks.MockRequest;
 import mocks.MockResponseBuilder;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
@@ -24,6 +25,7 @@ public class ServerTest {
         builder = new MockResponseBuilder();
     }
 
+    @Ignore
     @Test
     public void testServerResponse(){
         mockIO.addToRequestQueue(mockRequest);

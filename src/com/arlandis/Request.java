@@ -59,4 +59,8 @@ public class Request implements RequestInterface {
         String inputInt = matcher.group();
         return Integer.parseInt(inputInt);
     }
+
+    public static RequestInterface nextRequest() {
+        return new Request("");
+    }
 }
