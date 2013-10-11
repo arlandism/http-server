@@ -24,13 +24,4 @@ public class ServerTest {
         mockRequest = new MockRequest("");
         builder = new MockResponseBuilder();
     }
-
-    @Ignore
-    @Test
-    public void testServerResponse(){
-        mockIO.addToRequestQueue(mockRequest);
-        Server server = new Server(io, builder);
-        server.respond();
-        assertTrue(mockIO.lastResponse().equals("bar"));
-    }
 }

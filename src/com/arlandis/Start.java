@@ -12,7 +12,7 @@ public class Start{
 
         Integer port = portNum(args);
         ServerSocket serverSock = null;
-        ResponseBuilderInterface builder = new ResponseBuilder();
+        RequestFactory factory = new RequestFactoryImp();
 
         try {
             serverSock = new ServerSocket(port);
@@ -25,7 +25,7 @@ public class Start{
             try {
                 final Socket connSocket = serverSock.accept();
                 NetworkIOImp networkIO = new NetworkIOImp(connSocket);
-                final Server server = new Server(networkIO, builder);
+                final Server server = new Server(networkIO, factory);
                 new Thread(new Runnable() {{
                 }
                     @Override

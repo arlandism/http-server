@@ -1,5 +1,6 @@
 import com.arlandis.*;
 import com.arlandis.interfaces.ResponseBuilderInterface;
+import mocks.MockFactory;
 import mocks.MockResponseBuilder;
 import org.junit.After;
 import org.junit.Before;
@@ -30,8 +31,8 @@ public class IntegrationTest {
             ServerSocket servSocket = new ServerSocket(port);
             client = trySocketCreation(port);
             NetworkIOImp networkIO = new NetworkIOImp(servSocket.accept());
-            ResponseBuilderInterface builder = new MockResponseBuilder();
-            server = new Server(networkIO, builder);
+            RequestFactory factory = new RequestFactoryImp();
+            server = new Server(networkIO, factory);
             out = new PrintWriter(client.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(client.getInputStream()));
         } catch (IOException e) {
