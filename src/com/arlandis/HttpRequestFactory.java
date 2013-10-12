@@ -8,21 +8,15 @@ import java.io.IOException;
 public class HttpRequestFactory implements RequestFactory {
 
     public HttpRequest nextRequest(NetworkIO networkIO) throws IOException {
-        String nextHeader;
-        StringBuilder requestHeaders = new StringBuilder();
-        while (!(nextHeader = networkIO.readLine()).equals("")) {
-            requestHeaders.append(nextHeader);
-        }
+
+        String requestHeaders = readRequestHeaders(networkIO);
 
         HttpRequest request = null;
         try {
-            request = new HttpRequest(requestHeaders.toString());
+            request = new HttpRequest(requestHeaders);
 
             if (request.hasBody()) {
-                char[] requestBody = networkIO.read(request.bytesToRead());
-
-                String body = new String(requestBody);
-                request.setBody(body);
+                setRequestBody(networkIO, request);
             }
 
         } catch (IOException e) {
@@ -30,5 +24,21 @@ public class HttpRequestFactory implements RequestFactory {
         }
 
         return request;
+    }
+
+    private void setRequestBody(NetworkIO networkIO, HttpRequest request) throws IOException {
+        char[] requestBody = networkIO.read(request.bytesToRead());
+
+        String body = new String(requestBody);
+        request.setBody(body);
+    }
+
+    private String readRequestHeaders(NetworkIO networkIO) throws IOException {
+        StringBuilder requestHeaders = new StringBuilder();
+        String nextHeader;
+        while (!(nextHeader = networkIO.readLine()).equals("")) {
+            requestHeaders.append(nextHeader);
+        }
+        return requestHeaders.toString();
     }
 }

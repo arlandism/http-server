@@ -16,7 +16,8 @@ public class HttpRequest implements Request {
     }
 
     public Integer bytesToRead() {
-        Integer START_LOCATION = requestHeaders.indexOf("Content-Length: ") + 16;
+        final Integer contentHeaderLength = 16;
+        Integer START_LOCATION = requestHeaders.indexOf("Content-Length: ") + contentHeaderLength;
         return parseHeadersForInt(START_LOCATION);
     }
 
@@ -52,6 +53,7 @@ public class HttpRequest implements Request {
         Integer start = requestHeaders.indexOf("sleep") + 6;
         return parseHeadersForInt(start);
     }
+
     private Integer parseHeadersForInt(Integer indexToStartAt){
         Pattern intsOnly = Pattern.compile("\\d+");
         Matcher matcher = intsOnly.matcher(requestHeaders.substring(indexToStartAt));
@@ -60,7 +62,4 @@ public class HttpRequest implements Request {
         return Integer.parseInt(inputInt);
     }
 
-    public static Request nextRequest() {
-        return new HttpRequest("");
-    }
 }
