@@ -8,20 +8,10 @@ import java.net.URLDecoder;
 
 public class HttpResponseBuilder implements ResponseBuilder {
 
-    private Request request;
-
-    public HttpResponseBuilder(Request request) {
-        this.request = request;
-    }
-
-    public HttpResponseBuilder() {
-        //To change body of created methods use File | Settings | File Templates.
-    }
-
-    public String generateResponse() {
-        String response;
-        String head = "HTTP/1.0 200 OK";
-        String contentType = "Content-type: text/html";
+    @Override
+    public String generateResponse(Request request) {
+        String statusHeader = "HTTP/1.0 200 OK";
+        String contentTypeHeader = "Content-type: text/html";
         String body;
 
         if (request.headers().startsWith("GET /form")) {
@@ -36,10 +26,9 @@ public class HttpResponseBuilder implements ResponseBuilder {
             body = pongBody();
         }
 
-        response = head + "\n" + contentType + "\n\r\n" + body;
-        return response;
-    }
+        return statusHeader + "\r\n" + contentTypeHeader + "\r\n\r\n" + body;
 
+    }
     private String formBody() {
         return "<html><body>" +
                 "<form method='post', action='/form'>" +
@@ -66,25 +55,5 @@ public class HttpResponseBuilder implements ResponseBuilder {
         }
     }
 
-    @Override
-    public String generateResponse(Request request) {
-        String statusHeader = "HTTP/1.0 200 OK";
-        String contentTypeHeader = "Content-type: text/html";
-        String body;
 
-        if (request.headers().startsWith("GET /form")) {
-            body = formBody();
-        } else if (request.headers().startsWith("POST ")) {
-            body = formParams(request);
-        } else if (request.headers().startsWith("GET /ping?sleep")) {
-            ThreadSleeper sleeper = new ThreadSleeper();
-            request.sleep(sleeper);
-            body = pongBody();
-        } else {
-            body = pongBody();
-        }
-
-        return statusHeader + "\r\n" + contentTypeHeader + "\r\n\r\n" + body;
-
-    }
 }

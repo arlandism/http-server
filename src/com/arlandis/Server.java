@@ -31,8 +31,6 @@ public void respond() {
         }
 
         response = builder.generateResponse(request);
-        //HttpResponseBuilder builder = new HttpResponseBuilder(request);
-        //generateResponse = builder.generateResponse();
         networkIO.send(response);
     }
 
