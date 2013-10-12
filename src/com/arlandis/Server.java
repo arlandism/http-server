@@ -30,9 +30,9 @@ public void respond() {
             e.printStackTrace();
         }
 
-        response = this.builder.generateResponse(request);
+        response = builder.generateResponse(request);
         //HttpResponseBuilder builder = new HttpResponseBuilder(request);
-        //response = builder.response();
+        //generateResponse = builder.generateResponse();
         networkIO.send(response);
     }
 

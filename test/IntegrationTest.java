@@ -13,6 +13,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Random;
 
+import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class IntegrationTest {
@@ -30,7 +31,7 @@ public class IntegrationTest {
             client = trySocketCreation(port);
             NetworkIOImp networkIO = new NetworkIOImp(servSocket.accept());
             RequestFactory factory = new HttpRequestFactory();
-            HttpResponseBuilder builder = null;
+            HttpResponseBuilder builder = new HttpResponseBuilder();
             server = new Server(networkIO, factory, builder);
             out = new PrintWriter(client.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(client.getInputStream()));
@@ -83,18 +84,17 @@ public class IntegrationTest {
         }
     }
 
-    @Ignore
     @Test
     public void testGETIntegration() {
         sendPingRequest(out);
         server.respond();
         String response = readResponse(in);
-        assertTrue(response.startsWith("HTTP/1.0 200 OK"));
-        assertTrue(response.contains("Content-type: text/html"));
-        assertTrue(response.contains("<html><body>pong</body></html>"));
+        String expected = "HTTP/1.0 200 OK" +
+                          "Content-type: text/html" +
+                          "<html><body>pong</body></html>";
+        assertEquals(expected, response);
     }
 
-    @Ignore
     @Test
     public void testPOSTPing() {
         out.print("POST /form HTTP/1.0\r\n");
@@ -104,6 +104,10 @@ public class IntegrationTest {
         out.println("");
         server.respond();
         String response = readResponse(in);
-        assertTrue(response.contains("foo = fooba<br />bar = baz"));
+        String expected = "HTTP/1.0 200 OK" +
+                          "Content-type: text/html" +
+                          "foo = fooba " + "<br /> " +
+                          "bar = baz";
+        assertEquals(expected, response);
     }
 }

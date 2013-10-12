@@ -7,7 +7,6 @@ import com.arlandis.interfaces.Sleeper;
 public class MockRequest implements Request {
 
     private String headers;
-    private String body;
     private Boolean sleep = false;
 
     public MockRequest(String headersToReturn){
@@ -26,16 +25,8 @@ public class MockRequest implements Request {
         return false;
     }
 
-    public void setBody(String body){
-        this.body = body;
-    }
-
-    public String fooValue(){
-        return "foo bar baz<>";
-    }
-
-    public String barValue(){
-        return "bar foo baz<>";
+    @Override
+    public void setBody(String body) {
     }
 
     public Boolean sleepCalled(){
@@ -44,6 +35,16 @@ public class MockRequest implements Request {
 
     public void sleep(Sleeper sleeper){
         sleep = true;
+    }
+
+    @Override
+    public String fooValue() {
+        return "foo";
+    }
+
+    @Override
+    public String barValue() {
+        return "bar";
     }
 
 }

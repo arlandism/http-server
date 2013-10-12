@@ -28,6 +28,7 @@ public class HttpRequestFactory implements RequestFactory {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         return request;
     }
 }

@@ -18,7 +18,7 @@ public class HttpResponseBuilder implements ResponseBuilder {
         //To change body of created methods use File | Settings | File Templates.
     }
 
-    public String response() {
+    public String generateResponse() {
         String response;
         String head = "HTTP/1.0 200 OK";
         String contentType = "Content-type: text/html";
@@ -27,12 +27,12 @@ public class HttpResponseBuilder implements ResponseBuilder {
         if (request.headers().startsWith("GET /form")) {
             body = formBody();
         } else if (request.headers().startsWith("POST ")) {
-            body = formParams();
-        } else if (request.headers().startsWith("GET /ping?sleep")){
+            body = formParams(request);
+        } else if (request.headers().startsWith("GET /ping?sleep")) {
             ThreadSleeper sleeper = new ThreadSleeper();
             request.sleep(sleeper);
             body = pongBody();
-        } else{
+        } else {
             body = pongBody();
         }
 
@@ -40,21 +40,21 @@ public class HttpResponseBuilder implements ResponseBuilder {
         return response;
     }
 
-    private String formBody(){
+    private String formBody() {
         return "<html><body>" +
-               "<form method='post', action='/form'>" +
-               "<label>foo<input name='foo'></label>" +
-               "<br /><label>bar<input name='bar'></label>" +
-               "<br /><input value='submit' type='submit'></form>";
+                "<form method='post', action='/form'>" +
+                "<label>foo<input name='foo'></label>" +
+                "<br /><label>bar<input name='bar'></label>" +
+                "<br /><input value='submit' type='submit'></form>";
     }
 
-    private String pongBody(){
+    private String pongBody() {
         return "<html><body>pong</body></html>";
     }
 
-    private String formParams() {
+    private String formParams(Request request) {
         String LINE_BREAK = "<br />";
-        return "foo = " + decodeValue(request.fooValue()) + LINE_BREAK + "bar = " + decodeValue(request.barValue());
+        return "foo = " + decodeValue(request.fooValue()) + " " + LINE_BREAK + " bar = " + decodeValue(request.barValue());
     }
 
     private String decodeValue(String value) {
@@ -68,6 +68,23 @@ public class HttpResponseBuilder implements ResponseBuilder {
 
     @Override
     public String generateResponse(Request request) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        String statusHeader = "HTTP/1.0 200 OK";
+        String contentTypeHeader = "Content-type: text/html";
+        String body;
+
+        if (request.headers().startsWith("GET /form")) {
+            body = formBody();
+        } else if (request.headers().startsWith("POST ")) {
+            body = formParams(request);
+        } else if (request.headers().startsWith("GET /ping?sleep")) {
+            ThreadSleeper sleeper = new ThreadSleeper();
+            request.sleep(sleeper);
+            body = pongBody();
+        } else {
+            body = pongBody();
+        }
+
+        return statusHeader + "\r\n" + contentTypeHeader + "\r\n\r\n" + body;
+
     }
 }

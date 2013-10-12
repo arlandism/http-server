@@ -36,9 +36,9 @@ public class Start{
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        System.out.println("pre response");
+                        System.out.println("pre generateResponse");
                         server.respond();
-                        System.out.println("after response");
+                        System.out.println("after generateResponse");
                     }
                 }).start();
                 System.out.println("DONE, KICKED off");
