@@ -1,20 +1,20 @@
 package com.arlandis;
 
-import com.arlandis.interfaces.RequestInterface;
-import com.arlandis.interfaces.ResponseBuilderInterface;
+import com.arlandis.interfaces.Request;
+import com.arlandis.interfaces.ResponseBuilder;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
-public class ResponseBuilder implements ResponseBuilderInterface {
+public class HttpResponseBuilder implements ResponseBuilder {
 
-    private RequestInterface request;
+    private Request request;
 
-    public ResponseBuilder(RequestInterface request) {
+    public HttpResponseBuilder(Request request) {
         this.request = request;
     }
 
-    public ResponseBuilder() {
+    public HttpResponseBuilder() {
         //To change body of created methods use File | Settings | File Templates.
     }
 
@@ -29,7 +29,7 @@ public class ResponseBuilder implements ResponseBuilderInterface {
         } else if (request.headers().startsWith("POST ")) {
             body = formParams();
         } else if (request.headers().startsWith("GET /ping?sleep")){
-            SleepImp sleeper = new SleepImp();
+            ThreadSleeper sleeper = new ThreadSleeper();
             request.sleep(sleeper);
             body = pongBody();
         } else{
@@ -67,7 +67,7 @@ public class ResponseBuilder implements ResponseBuilderInterface {
     }
 
     @Override
-    public String generateResponse(RequestInterface request) {
+    public String generateResponse(Request request) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

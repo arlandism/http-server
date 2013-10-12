@@ -1,21 +1,22 @@
 package com.arlandis;
 
 import com.arlandis.interfaces.NetworkIO;
+import com.arlandis.interfaces.RequestFactory;
 
 import java.io.IOException;
 
-public class RequestFactoryImp implements RequestFactory {
+public class HttpRequestFactory implements RequestFactory {
 
-    public Request nextRequest(NetworkIO networkIO) throws IOException {
+    public HttpRequest nextRequest(NetworkIO networkIO) throws IOException {
         String nextHeader;
         StringBuilder requestHeaders = new StringBuilder();
         while (!(nextHeader = networkIO.readLine()).equals("")) {
             requestHeaders.append(nextHeader);
         }
 
-        Request request = null;
+        HttpRequest request = null;
         try {
-            request = new Request(requestHeaders.toString());
+            request = new HttpRequest(requestHeaders.toString());
 
             if (request.hasBody()) {
                 char[] requestBody = networkIO.read(request.bytesToRead());

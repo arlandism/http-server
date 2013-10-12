@@ -1,6 +1,6 @@
 package com.arlandis.interfaces;
 
-public interface RequestInterface {
+public interface Request {
 
     public String headers();
     public Integer bytesToRead();

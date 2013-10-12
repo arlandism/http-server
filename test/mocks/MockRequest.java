@@ -1,10 +1,10 @@
 package mocks;
 
 
+import com.arlandis.interfaces.Request;
 import com.arlandis.interfaces.Sleeper;
-import com.arlandis.interfaces.RequestInterface;
 
-public class MockRequest implements RequestInterface{
+public class MockRequest implements Request {
 
     private String headers;
     private String body;

@@ -9,5 +9,4 @@ public interface NetworkIO {
 
     char[] read(Integer bytesToRead) throws IOException;
 
-    RequestInterface nextRequest();
 }

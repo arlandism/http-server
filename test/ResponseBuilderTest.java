@@ -1,4 +1,4 @@
-import com.arlandis.ResponseBuilder;
+import com.arlandis.HttpResponseBuilder;
 import mocks.MockRequest;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,28 +22,28 @@ public class ResponseBuilderTest {
 
     @Test
     public void testResponseStatus(){
-        ResponseBuilder builder = new ResponseBuilder(request);
+        HttpResponseBuilder builder = new HttpResponseBuilder(request);
         String response = builder.response();
         assertTrue(response.startsWith("HTTP/1.0 200 OK"));
     }
 
     @Test
     public void testResponseContentType() {
-        ResponseBuilder builder = new ResponseBuilder(request);
+        HttpResponseBuilder builder = new HttpResponseBuilder(request);
         String response = builder.response();
         assertTrue(response.contains("Content-type: text/html"));
     }
 
     @Test
     public void testResponseBody() {
-        ResponseBuilder builder = new ResponseBuilder(request);
+        HttpResponseBuilder builder = new HttpResponseBuilder(request);
         String response = builder.response();
         assertTrue(response.contains("<html><body>pong</body></html>"));
     }
 
     @Test
     public void testFormResponse(){
-        ResponseBuilder builder = new ResponseBuilder(formRequest);
+        HttpResponseBuilder builder = new HttpResponseBuilder(formRequest);
         String response = builder.response();
         String formBody = "<html><body>" +
                           "<form method='post', action='/form'>" +
@@ -55,7 +55,7 @@ public class ResponseBuilderTest {
 
     @Test
     public void testResponseDecoded(){
-        ResponseBuilder builder = new ResponseBuilder(postRequest);
+        HttpResponseBuilder builder = new HttpResponseBuilder(postRequest);
         String response = builder.response();
         assertTrue(response.contains("foo = foo bar baz<>"));
         assertTrue(response.contains("bar = bar foo baz<>"));
@@ -63,7 +63,7 @@ public class ResponseBuilderTest {
 
     @Test
     public void testSleepResponse(){
-        ResponseBuilder builder = new ResponseBuilder(sleepRequest);
+        HttpResponseBuilder builder = new HttpResponseBuilder(sleepRequest);
         String response = builder.response();
         assertTrue(sleepRequest.sleepCalled());
         assertTrue(response.contains("<html><body>pong</body></html>"));

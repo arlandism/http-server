@@ -1,5 +1,5 @@
+import com.arlandis.HttpRequest;
 import com.arlandis.interfaces.Sleeper;
-import com.arlandis.Request;
 import mocks.MockSleeper;
 import org.junit.Test;
 
@@ -13,14 +13,14 @@ public class RequestTest {
     @Test
     public void testReadBytes(){
         String rawHeader = "Content-Length: 15";
-        Request request = new Request(rawHeader);
+        HttpRequest request = new HttpRequest(rawHeader);
         assertEquals(Integer.valueOf(15), request.bytesToRead());
     }
 
     @Test
     public void testSleepCanBeCalledWithQuery(){
         String rawHeader = "GET /ping?sleep=4\r\n";
-        Request request = new Request(rawHeader);
+        HttpRequest request = new HttpRequest(rawHeader);
         Sleeper s = sleeper;
         request.sleep(s);
         assertTrue(sleeper.sleepCalledWith(4));

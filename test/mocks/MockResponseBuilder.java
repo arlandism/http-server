@@ -1,18 +1,24 @@
 package mocks;
 
-import com.arlandis.interfaces.RequestInterface;
-import com.arlandis.interfaces.ResponseBuilderInterface;
+import com.arlandis.interfaces.Request;
+import com.arlandis.interfaces.ResponseBuilder;
 
-/**
- * Created with IntelliJ IDEA.
- * User: arlandislawrence
- * Date: 10/10/13
- * Time: 2:56 PM
- * To change this template use File | Settings | File Templates.
- */
-public class MockResponseBuilder implements ResponseBuilderInterface {
+public class MockResponseBuilder implements ResponseBuilder {
+
+    private String toReturn;
+    private Request calledWith;
+
+    public MockResponseBuilder(String toReturn) {
+        this.toReturn = toReturn;
+    }
+
     @Override
-    public String generateResponse(RequestInterface request) {
-        return "bar";
+    public String generateResponse(Request request) {
+        calledWith = request;
+        return toReturn;
+    }
+
+    public Request history() {
+        return calledWith;
     }
 }

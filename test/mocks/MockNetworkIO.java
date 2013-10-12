@@ -1,7 +1,7 @@
 package mocks;
 
 import com.arlandis.interfaces.NetworkIO;
-import com.arlandis.interfaces.RequestInterface;
+import com.arlandis.interfaces.Request;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -26,16 +26,11 @@ public class MockNetworkIO implements NetworkIO {
         return new char[0];
     }
 
-    @Override
-    public RequestInterface nextRequest() {
-        return (RequestInterface) requestQueue.getLast();
-    }
-
     public String lastResponse(){
         return (String) responseQueue.getLast();
     }
 
-    public void addToRequestQueue(RequestInterface request){
+    public void addToRequestQueue(Request request){
         requestQueue.add(request);
     }
 }

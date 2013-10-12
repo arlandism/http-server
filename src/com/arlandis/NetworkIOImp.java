@@ -40,9 +40,4 @@ public class NetworkIOImp implements NetworkIO {
         in.read(characterStorage, 0, bytesToRead);
         return characterStorage;
     }
-
-    @Override
-    public Request nextRequest() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
 }

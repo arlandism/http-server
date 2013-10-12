@@ -1,17 +1,17 @@
 package com.arlandis;
 
-import com.arlandis.interfaces.RequestInterface;
+import com.arlandis.interfaces.Request;
 import com.arlandis.interfaces.Sleeper;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Request implements RequestInterface {
+public class HttpRequest implements Request {
 
     private String requestHeaders;
     private String body;
 
-    public Request(String request) {
+    public HttpRequest(String request) {
         requestHeaders = request;
     }
 
@@ -60,7 +60,7 @@ public class Request implements RequestInterface {
         return Integer.parseInt(inputInt);
     }
 
-    public static RequestInterface nextRequest() {
-        return new Request("");
+    public static Request nextRequest() {
+        return new HttpRequest("");
     }
 }

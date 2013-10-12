@@ -1,6 +1,6 @@
 package com.arlandis;
 
-import com.arlandis.interfaces.ResponseBuilderInterface;
+import com.arlandis.interfaces.RequestFactory;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -12,7 +12,8 @@ public class Start{
 
         Integer port = portNum(args);
         ServerSocket serverSock = null;
-        RequestFactory factory = new RequestFactoryImp();
+        RequestFactory factory = new HttpRequestFactory();
+        HttpResponseBuilder builder = new HttpResponseBuilder();
 
         try {
             serverSock = new ServerSocket(port);
@@ -23,16 +24,24 @@ public class Start{
 
         while (true){
             try {
+                System.out.println("top of loop");
                 final Socket connSocket = serverSock.accept();
+                System.out.println("accepted");
                 NetworkIOImp networkIO = new NetworkIOImp(connSocket);
-                final Server server = new Server(networkIO, factory);
-                new Thread(new Runnable() {{
-                }
+                final Server server = new Server(networkIO, factory, builder);
+                System.out.println("Thread count: " + Thread.activeCount());
+
+                System.out.println("kicking off");
+
+                new Thread(new Runnable() {
                     @Override
                     public void run() {
+                        System.out.println("pre response");
                         server.respond();
+                        System.out.println("after response");
                     }
                 }).start();
+                System.out.println("DONE, KICKED off");
 
             } catch (IOException e) {
                 e.printStackTrace();
