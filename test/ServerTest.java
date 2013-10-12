@@ -10,7 +10,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class ServerTest {
 
@@ -29,7 +28,6 @@ public class ServerTest {
     @Test
     public void getsRequestAndSendsToResponse(){
         RequestFactory factory = new MockRequestFactory(mockRequest);
-
         Server server = new Server(io, factory, builder);
         server.respond();
         assertEquals("baz", mockIO.lastResponse()) ;
@@ -38,7 +36,6 @@ public class ServerTest {
     @Test
     public void getsResponseUsingRequest(){
         RequestFactory factory = new MockRequestFactory(mockRequest);
-
         Server server = new Server(io, factory, builder);
         server.respond();
         assertEquals(mockRequest, builder.history());

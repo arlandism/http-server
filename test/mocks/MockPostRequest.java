@@ -12,12 +12,10 @@ public class MockPostRequest extends MockRequest {
         this.barToReturn = barToReturn;
     }
 
-    @Override
     public String fooValue() {
         return fooToReturn;
     }
 
-    @Override
     public String barValue() {
         return barToReturn;
     }
