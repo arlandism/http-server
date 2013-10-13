@@ -2,11 +2,9 @@ package com.arlandis;
 
 import com.arlandis.interfaces.Sleeper;
 
-public class
+public class ThreadSleeper implements Sleeper {
 
-        ThreadSleeper implements Sleeper {
-
-    public void sleep(Integer sleepTime){
+    public void sleep(Integer sleepTime) {
 
         try {
             Thread.sleep(sleepTime);

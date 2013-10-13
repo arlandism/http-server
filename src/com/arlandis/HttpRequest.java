@@ -11,8 +11,8 @@ public class HttpRequest implements Request {
     private String requestHeaders;
     private String body;
 
-    public HttpRequest(String request) {
-        requestHeaders = request;
+    public HttpRequest(String requestHeaders) {
+        this.requestHeaders = requestHeaders;
     }
 
     public Integer bytesToRead() {
@@ -21,11 +21,11 @@ public class HttpRequest implements Request {
         return parseHeadersForInt(START_LOCATION);
     }
 
-    public Boolean hasBody(){
+    public Boolean hasBody() {
         return requestHeaders.contains("Content-Length");
     }
 
-    public String headers(){
+    public String headers() {
         return requestHeaders;
     }
 
@@ -33,19 +33,19 @@ public class HttpRequest implements Request {
         this.body = body;
     }
 
-    public String barValue(){
+    public String barValue() {
         Integer fooEnd = body.indexOf("&");
         Integer barBegin = body.indexOf("=", fooEnd) + 1;
         return body.substring(barBegin, body.length());
     }
 
-    public String fooValue(){
+    public String fooValue() {
         Integer fooBegin = body.indexOf("=") + 1;
         Integer fooEnd = body.indexOf("&");
         return body.substring(fooBegin, fooEnd);
     }
 
-    public void sleep(Sleeper sleeper){
+    public void sleep(Sleeper sleeper) {
         sleeper.sleep(sleepTime());
     }
 
@@ -54,7 +54,7 @@ public class HttpRequest implements Request {
         return parseHeadersForInt(start);
     }
 
-    private Integer parseHeadersForInt(Integer indexToStartAt){
+    private Integer parseHeadersForInt(Integer indexToStartAt) {
         Pattern intsOnly = Pattern.compile("\\d+");
         Matcher matcher = intsOnly.matcher(requestHeaders.substring(indexToStartAt));
         matcher.find();

@@ -17,7 +17,7 @@ public class NetworkIOImp implements NetworkIO {
         try {
 
             in = new BufferedReader(new InputStreamReader(connSocket.getInputStream()));
-            out = new PrintWriter(connSocket.getOutputStream(),true);
+            out = new PrintWriter(connSocket.getOutputStream(), true);
         } catch (IOException e) {
             e.printStackTrace();
         }

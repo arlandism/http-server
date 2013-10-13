@@ -29,12 +29,13 @@ public class HttpResponseBuilder implements ResponseBuilder {
         return statusHeader + "\r\n" + contentTypeHeader + "\r\n\r\n" + body;
 
     }
+
     private String formBody() {
         return "<html><body>" +
-               "<form method='post', action='/form'>" +
-               "<label>foo<input name='foo'></label>" +
-               "<br /><label>bar<input name='bar'></label>" +
-               "<br /><input value='submit' type='submit'></form>";
+                "<form method='post', action='/form'>" +
+                "<label>foo<input name='foo'></label>" +
+                "<br /><label>bar<input name='bar'></label>" +
+                "<br /><input value='submit' type='submit'></form>";
     }
 
     private String pongBody() {
