@@ -1,26 +1,23 @@
 package com.arlandis;
 
-import com.arlandis.interfaces.NetworkIO;
-import com.arlandis.interfaces.Request;
-import com.arlandis.interfaces.RequestFactory;
-import com.arlandis.interfaces.ResponseBuilder;
+import com.arlandis.interfaces.*;
 
 import java.io.*;
 
-public class Server {
+public class Server implements Responder {
 
     private final ResponseBuilder builder;
     private RequestFactory requestFactory;
     private NetworkIO networkIO;
 
-    public Server(NetworkIO networkIO, RequestFactory requestFactory, ResponseBuilder builder){
+    public Server(NetworkIO networkIO, RequestFactory requestFactory, ResponseBuilder builder) {
         this.networkIO = networkIO;
         this.requestFactory = requestFactory;
         this.builder = builder;
 
     }
 
-public void respond() {
+    public void respond() {
         String response;
         Request request = null;
 
