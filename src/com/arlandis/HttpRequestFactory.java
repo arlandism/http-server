@@ -7,16 +7,18 @@ import java.io.IOException;
 
 public class HttpRequestFactory implements RequestFactory {
 
-    public HttpRequest nextRequest(NetworkIO networkIO) throws IOException {
+    private NetworkIO networkIO;
 
-        String requestHeaders = readRequestHeaders(networkIO);
+    public HttpRequest nextRequest(NetworkIO networkIO) throws IOException {
+        setNetworkIO(networkIO);
+        String requestHeaders = readRequestHeaders();
 
         HttpRequest request = null;
         try {
             request = new HttpRequest(requestHeaders);
 
             if (request.hasBody()) {
-                setRequestBody(networkIO, request);
+                setRequestBody(request);
             }
 
         } catch (IOException e) {
@@ -26,19 +28,22 @@ public class HttpRequestFactory implements RequestFactory {
         return request;
     }
 
-    private void setRequestBody(NetworkIO networkIO, HttpRequest request) throws IOException {
+    private void setRequestBody(HttpRequest request) throws IOException {
         char[] requestBody = networkIO.read(request.bytesToRead());
-
         String body = new String(requestBody);
         request.setBody(body);
     }
 
-    private String readRequestHeaders(NetworkIO networkIO) throws IOException {
+    private String readRequestHeaders() throws IOException {
         StringBuilder requestHeaders = new StringBuilder();
         String nextHeader;
         while (!(nextHeader = networkIO.readLine()).equals("")) {
             requestHeaders.append(nextHeader);
         }
         return requestHeaders.toString();
+    }
+
+    private void setNetworkIO(NetworkIO networkIO){
+        this.networkIO = networkIO;
     }
 }
