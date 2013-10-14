@@ -13,16 +13,12 @@ public class HttpRequestFactory implements RequestFactory {
         setNetworkIO(networkIO);
         String requestHeaders = readRequestHeaders();
 
-        HttpRequest request = null;
-        try {
-            request = new HttpRequest(requestHeaders);
+        HttpRequest request = new HttpRequest(requestHeaders);
 
-            if (request.hasBody()) {
-                setRequestBody(request);
-            }
+        if (request.hasBody()) {
 
-        } catch (IOException e) {
-            e.printStackTrace();
+            setRequestBody(request);
+
         }
 
         return request;
@@ -43,7 +39,7 @@ public class HttpRequestFactory implements RequestFactory {
         return requestHeaders.toString();
     }
 
-    private void setNetworkIO(NetworkIO networkIO){
+    private void setNetworkIO(NetworkIO networkIO) {
         this.networkIO = networkIO;
     }
 }
