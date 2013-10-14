@@ -23,10 +23,13 @@ public class Start {
         while (true) {
 
             try {
-                Socket connSocket = serverSock.accept();
+                Socket connSocket = null;
+                if (serverSock != null) {
+                    connSocket = serverSock.accept();
+                }
                 NetworkIOImp networkIO = new NetworkIOImp(connSocket);
                 Server server = new Server(networkIO, factory, builder);
-                new Thread(new ServerThread(server)).start();
+                (new Thread(new ServerThread(server))).start();
 
             } catch (IOException e) {
                 e.printStackTrace();
