@@ -2,15 +2,15 @@ package com.arlandis.interfaces;
 
 public interface Request {
 
-    public String headers();
+    String headers();
 
-    public Integer bytesToRead();
+    Integer bytesToRead();
 
-    public Boolean hasBody();
+    Boolean hasBody();
 
-    public void setBody(String body);
+    void setBody(String body);
 
-    public void sleep(Sleeper sleeper);
+    void sleep(Sleeper sleeper);
 
     String fooValue();
 

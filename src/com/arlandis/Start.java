@@ -1,7 +1,5 @@
 package com.arlandis;
 
-import com.arlandis.interfaces.RequestFactory;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -12,7 +10,7 @@ public class Start {
 
         Integer port = portNum(args);
         ServerSocket serverSock = null;
-        RequestFactory factory = new HttpRequestFactory();
+        HttpRequestFactory factory = new HttpRequestFactory();
         HttpResponseBuilder builder = new HttpResponseBuilder();
 
         try {
@@ -25,9 +23,9 @@ public class Start {
         while (true) {
 
             try {
-                final Socket connSocket = serverSock.accept();
+                Socket connSocket = serverSock.accept();
                 NetworkIOImp networkIO = new NetworkIOImp(connSocket);
-                final Server server = new Server(networkIO, factory, builder);
+                Server server = new Server(networkIO, factory, builder);
                 new Thread(new ServerThread(server)).start();
 
             } catch (IOException e) {

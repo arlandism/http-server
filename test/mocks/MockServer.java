@@ -3,6 +3,7 @@ package mocks;
 import com.arlandis.interfaces.Responder;
 
 public class MockServer implements Responder {
+
     private Boolean respondCalled = false;
 
     @Override

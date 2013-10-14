@@ -12,7 +12,6 @@ public class HttpRequestFactory implements RequestFactory {
     public HttpRequest nextRequest(NetworkIO networkIO) throws IOException {
         setNetworkIO(networkIO);
         String requestHeaders = readRequestHeaders();
-
         HttpRequest request = new HttpRequest(requestHeaders);
 
         if (request.hasBody()) {

@@ -56,5 +56,4 @@ public class HttpResponseBuilder implements ResponseBuilder {
         }
     }
 
-
 }
