@@ -23,10 +23,7 @@ public class Start {
         while (true) {
 
             try {
-                Socket connSocket = null;
-                if (serverSock != null) {
-                    connSocket = serverSock.accept();
-                }
+                Socket connSocket = serverSock.accept();
                 NetworkIOImp networkIO = new NetworkIOImp(connSocket);
                 Server server = new Server(networkIO, factory, builder);
                 (new Thread(new ServerThread(server))).start();
