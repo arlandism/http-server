@@ -1,4 +1,6 @@
 import com.arlandis.HttpResponseBuilder;
+import mocks.MockFileReader;
+import com.arlandis.interfaces.ResourceRetriever;
 import mocks.MockPostRequest;
 import mocks.MockRequest;
 import org.junit.Before;
@@ -13,8 +15,10 @@ public class HttpResponseBuilderTest {
     private MockRequest formRequest;
     private MockRequest postRequest;
     private MockRequest sleepRequest;
+    private MockRequest fileRequest;
     private MockPostRequest encodedPostRequest;
     private HttpResponseBuilder builder = new HttpResponseBuilder();
+    private String testFilePath = "foo/bar/baz.txt";
 
     @Before
     public void setUp(){
@@ -22,6 +26,8 @@ public class HttpResponseBuilderTest {
         formRequest = new MockRequest("GET /form HTTP/1.0\r\n\r\n");
         postRequest = new MockRequest("POST /form HTTP/1.0\r\n\r\n");
         sleepRequest = new MockRequest("GET /ping?sleep=4 HTTP/1.0\r\n\r\n");
+        fileRequest = new MockRequest("GET /browse/" + testFilePath +  "HTTP/1.0\r\n\r\n");
+
         encodedPostRequest = new MockPostRequest("POST /form HTTP/1.0\r\n\r\n", "foo Hello!<>", "bar baz<>!");
     }
 
@@ -43,7 +49,7 @@ public class HttpResponseBuilderTest {
                           "<label>foo<input name='foo'></label>" +
                           "<br /><label>bar<input name='bar'></label>" +
                           "<br /><input value='submit' type='submit'>" +
-                          "</form>";
+                          "</form></body></html>";
         assertEquals(expected, response);
     }
 
@@ -73,5 +79,19 @@ public class HttpResponseBuilderTest {
         String response = builder.generateResponse(sleepRequest);
         assertTrue(sleepRequest.sleepCalled());
         assertEquals(expected, response);
+    }
+
+    @Test
+    public void testAskForFile(){
+        String fileBody = "mock file";
+        MockFileReader mockReader = new MockFileReader(fileBody);
+        ResourceRetriever retriever = mockReader;
+        HttpResponseBuilder builder = new HttpResponseBuilder(retriever);
+        String response = builder.generateResponse(fileRequest);
+        String expectedResponse = "HTTP/1.0 200 OK" + "\r\n" +
+                                  "Content-type: text/html" + "\r\n\r\n" +
+                                  "<html><body>" + fileBody + "</body></html>";
+        assertEquals(expectedResponse, response);
+        assertEquals(testFilePath, mockReader.getHistory());
     }
 }
