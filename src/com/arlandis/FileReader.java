@@ -4,22 +4,21 @@ import com.arlandis.interfaces.ResourceRetriever;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class FileReader implements ResourceRetriever {
 
-    private BufferedReader in;
-    private File file;
+    private File f;
+    private BufferedReader inputStream;
 
     public String retrieve(String filePath) {
         String data;
-        setFile(filePath.trim());
+        f = new File(filePath.trim());
 
         try {
-            java.io.FileReader reader = new java.io.FileReader(file);
-            setInputStream(reader);
-            data = fileData();
+            java.io.FileReader reader = new java.io.FileReader(f);
+            inputStream = new BufferedReader(reader);
+            data = fileData(f, inputStream);
         } catch (IOException e) {
             e.printStackTrace();
             data = "NOT FOUND";
@@ -27,22 +26,15 @@ public class FileReader implements ResourceRetriever {
         return data;
     }
 
-    private Integer fileSize() {
-        Long byteLength = file.length();
+    private Integer fileSize(File f) {
+        Long byteLength = f.length();
         return byteLength.intValue();
     }
 
-    private String fileData() throws IOException {
-        char[] data = new char[fileSize()];
-        in.read(data, 0, fileSize());
+    private String fileData(File f, BufferedReader in) throws IOException {
+        char[] data = new char[fileSize(f)];
+        in.read(data, 0, fileSize(f));
         return new String(data).trim();
     }
 
-    private void setFile(String filePath) {
-        this.file = new File(filePath.trim());
-    }
-
-    public void setInputStream(java.io.FileReader reader) {
-        this.in = new BufferedReader(reader);
-    }
 }
