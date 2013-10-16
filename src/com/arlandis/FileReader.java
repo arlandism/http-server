@@ -12,18 +12,18 @@ public class FileReader implements ResourceRetriever {
     private BufferedReader inputStream;
 
     public String retrieve(String filePath) {
-        String data;
+        String returnData;
         f = new File(filePath.trim());
 
         try {
             java.io.FileReader reader = new java.io.FileReader(f);
             inputStream = new BufferedReader(reader);
-            data = fileData(f, inputStream);
+            returnData = fileData(f, inputStream);
         } catch (IOException e) {
             e.printStackTrace();
-            data = "NOT FOUND";
+            returnData = "NOT FOUND";
         }
-        return data;
+        return returnData;
     }
 
     private Integer fileSize(File f) {
