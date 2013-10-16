@@ -1,27 +1,24 @@
 import com.arlandis.*;
+import com.arlandis.FileReader;
 import com.arlandis.interfaces.RequestFactory;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.*;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Random;
 
 import static junit.framework.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 public class IntegrationTest {
 
     private Server server;
     private Socket client;
     private PrintWriter out;
     private BufferedReader in;
+    private String filePath = "test/tmp/testing.txt";
+    private String testFileContent = "Testing...123...Testing...4567";
+    private File f;
+    private BufferedWriter writer;
 
     @Before
     public void setUp(){
@@ -31,10 +28,16 @@ public class IntegrationTest {
             client = trySocketCreation(port);
             NetworkIOImp networkIO = new NetworkIOImp(servSocket.accept());
             RequestFactory factory = new HttpRequestFactory();
-            HttpResponseBuilder builder = new HttpResponseBuilder();
+            FileReader retriever = new FileReader();
+            HttpResponseBuilder builder = new HttpResponseBuilder(retriever);
             server = new Server(networkIO, factory, builder);
             out = new PrintWriter(client.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(client.getInputStream()));
+            (new File("test/tmp")).mkdir();
+            f = new File(filePath);
+            f.createNewFile();
+            writer = new BufferedWriter(new FileWriter(f.getAbsolutePath()));
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -79,6 +82,7 @@ public class IntegrationTest {
     public void tearDown() {
         try {
             client.close();
+            f.delete();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -110,4 +114,22 @@ public class IntegrationTest {
                           "bar = baz";
         assertEquals(expected, response);
     }
+
+    @Test
+    public void testBrowse() throws IOException {
+        writer.write(testFileContent);
+        writer.close();
+        out.print("GET /browse/" + filePath + " HTTP/1.0");
+        out.println("");
+        out.println("");
+        server.respond();
+        String response = readResponse(in);
+        String expected = "HTTP/1.0 200 OK" +
+                          "Content-type: text/html" +
+                           "<html><body>" +
+                           testFileContent +
+                           "</body></html>";
+        assertEquals(expected, response);
+    }
+
 }

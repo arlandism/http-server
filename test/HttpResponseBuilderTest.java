@@ -17,7 +17,7 @@ public class HttpResponseBuilderTest {
     private MockRequest sleepRequest;
     private MockRequest fileRequest;
     private MockPostRequest encodedPostRequest;
-    private HttpResponseBuilder builder = new HttpResponseBuilder();
+    private HttpResponseBuilder builder = new HttpResponseBuilder(new MockFileReader(""));
     private String testFilePath = "foo/bar/baz.txt";
 
     @Before
@@ -26,8 +26,7 @@ public class HttpResponseBuilderTest {
         formRequest = new MockRequest("GET /form HTTP/1.0\r\n\r\n");
         postRequest = new MockRequest("POST /form HTTP/1.0\r\n\r\n");
         sleepRequest = new MockRequest("GET /ping?sleep=4 HTTP/1.0\r\n\r\n");
-        fileRequest = new MockRequest("GET /browse/" + testFilePath +  "HTTP/1.0\r\n\r\n");
-
+        fileRequest = new MockRequest("GET /browse/" + testFilePath +  " HTTP/1.0\r\n\r\n");
         encodedPostRequest = new MockPostRequest("POST /form HTTP/1.0\r\n\r\n", "foo Hello!<>", "bar baz<>!");
     }
 
@@ -93,5 +92,10 @@ public class HttpResponseBuilderTest {
                                   "<html><body>" + fileBody + "</body></html>";
         assertEquals(expectedResponse, response);
         assertEquals(testFilePath, mockReader.getHistory());
+    }
+
+    @Test
+    public void testReturns404(){
+
     }
 }

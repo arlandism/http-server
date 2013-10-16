@@ -11,9 +11,6 @@ public class HttpResponseBuilder implements ResponseBuilder {
 
     private ResourceRetriever retriever;
 
-    public HttpResponseBuilder() {
-    }
-
     public HttpResponseBuilder(ResourceRetriever retriever) {
         this.retriever = retriever;
     }
@@ -32,6 +29,12 @@ public class HttpResponseBuilder implements ResponseBuilder {
     }
 
     private String getBody(Request request) {
+        String body;
+        body = respondToRequest(request);
+        return body;
+    }
+
+    private String respondToRequest(Request request) {
         String body;
         if (request.headers().startsWith("GET /form")) {
             body = formBody();
@@ -57,7 +60,9 @@ public class HttpResponseBuilder implements ResponseBuilder {
         Integer startOfFilePath = request.headers().indexOf("browse") + 7;
         Integer endOfFilePath = request.headers().indexOf("HTTP");
         String filePath = request.headers().substring(startOfFilePath, endOfFilePath);
-        return addHeaderAndBodyTags(this.retriever.retrieve(filePath));
+        String data;
+        data = addHeaderAndBodyTags(this.retriever.retrieve(filePath.trim()));
+        return data;
     }
 
     private String formBody() {

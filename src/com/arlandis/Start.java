@@ -11,7 +11,7 @@ public class Start {
         Integer port = portNum(args);
         ServerSocket serverSock = null;
         HttpRequestFactory factory = new HttpRequestFactory();
-        HttpResponseBuilder builder = new HttpResponseBuilder();
+        HttpResponseBuilder builder = new HttpResponseBuilder(new FileReader());
 
         try {
             serverSock = new ServerSocket(port);
