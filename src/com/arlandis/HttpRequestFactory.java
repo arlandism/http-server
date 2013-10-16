@@ -7,38 +7,43 @@ import java.io.IOException;
 
 public class HttpRequestFactory implements RequestFactory {
 
-    private NetworkIO networkIO;
-
     public HttpRequest nextRequest(NetworkIO networkIO) throws IOException {
-        setNetworkIO(networkIO);
-        String requestHeaders = readRequestHeaders();
+
+        String requestHeaders = readRequestHeaders(networkIO);
         HttpRequest request = new HttpRequest(requestHeaders);
 
-        if (request.hasBody()) {
-
-            setRequestBody(request);
-
-        }
+        setBodyIfPresent(networkIO, request);
 
         return request;
     }
 
-    private void setRequestBody(HttpRequest request) throws IOException {
+    private void setBodyIfPresent(NetworkIO networkIO, HttpRequest request) throws IOException {
+        if (request.hasBody()) {
+
+            setRequestBody(request, networkIO);
+
+        }
+    }
+
+    private void setRequestBody(HttpRequest request, NetworkIO networkIO) throws IOException {
         char[] requestBody = networkIO.read(request.bytesToRead());
         String body = new String(requestBody);
         request.setBody(body);
     }
 
-    private String readRequestHeaders() throws IOException {
+    private String readRequestHeaders(NetworkIO networkIO) throws IOException {
         StringBuilder requestHeaders = new StringBuilder();
-        String nextHeader;
-        while (!(nextHeader = networkIO.readLine()).equals("")) {
-            requestHeaders.append(nextHeader);
+        String nextHeader = "bar";
+        while (!nextHeader.equals("")) {
+            nextHeader = readNextHeader(networkIO, requestHeaders);
         }
         return requestHeaders.toString();
     }
 
-    private void setNetworkIO(NetworkIO networkIO) {
-        this.networkIO = networkIO;
+    private String readNextHeader(NetworkIO networkIO, StringBuilder requestHeaders) throws IOException {
+        String nextHeader;
+        nextHeader = networkIO.readLine();
+        requestHeaders.append(nextHeader);
+        return nextHeader;
     }
 }
