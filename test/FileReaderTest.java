@@ -8,15 +8,16 @@ import java.io.*;
 import static org.junit.Assert.assertEquals;
 
 public class FileReaderTest {
-    private String testFileContent = "Testing...123...Testing...4567";
-    private File file = new File("test/test.txt");
+    private File file = new File("test/tmp/test.txt");
     private BufferedWriter writer;
+    private FileReader reader;
 
     @Before
     public void setUp() throws IOException {
       (new File("test/tmp")).mkdir();
       file.createNewFile();
       writer = new BufferedWriter(new FileWriter(file.getAbsoluteFile()));
+      reader = new FileReader();
     }
 
     @After
@@ -26,18 +27,10 @@ public class FileReaderTest {
 
     @Test
     public void testRetrieveWithRealFile() throws IOException {
+        String testFileContent = "Testing...123...Testing...4567";
         writer.write(testFileContent);
         writer.close();
-        FileReader reader = new FileReader();
-        assertEquals(testFileContent, reader.retrieve("test/test.txt"));
-    }
-
-    @Test
-    public void testRetrieveWithFile() throws IOException {
-        writer.write(testFileContent);
-        writer.close();
-        FileReader reader = new FileReader();
-        assertEquals(testFileContent, reader.retrieve("testing.txt"));
+        assertEquals(testFileContent, reader.retrieve("test/tmp/test.txt"));
     }
 
 }
