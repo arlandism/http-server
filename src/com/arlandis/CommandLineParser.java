@@ -23,15 +23,15 @@ public class CommandLineParser {
         return valueOrDefault("-d", "") + "/";
     }
 
-    private Boolean flagPresent(String flag){
+    private Boolean flagPresent(String flag) {
         final Integer NOT_FOUND = -1;
         return Arrays.asList(argsToParse).indexOf(flag) != NOT_FOUND;
     }
 
-    private String valueOrDefault(String flag, String defaultValue){
+    private String valueOrDefault(String flag, String defaultValue) {
         String value;
         Integer index = indexOfFlag(flag) + 1;
-        if (flagPresent(flag)){
+        if (flagPresent(flag)) {
             value = argsToParse[index];
         } else {
             value = defaultValue;
