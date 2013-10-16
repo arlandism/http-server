@@ -10,10 +10,15 @@ public class HttpRequestFactory implements RequestFactory {
     public HttpRequest nextRequest(NetworkIO networkIO) throws IOException {
 
         String requestHeaders = readRequestHeaders(networkIO);
+        HttpRequest request = buildRequest(networkIO, requestHeaders);
+
+        return request;
+    }
+
+    private HttpRequest buildRequest(NetworkIO networkIO, String requestHeaders) throws IOException {
         HttpRequest request = new HttpRequest(requestHeaders);
 
         setBodyIfPresent(networkIO, request);
-
         return request;
     }
 
