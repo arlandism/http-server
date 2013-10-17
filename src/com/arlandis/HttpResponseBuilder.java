@@ -36,11 +36,12 @@ public class HttpResponseBuilder implements ResponseBuilder {
 
     private String respondToRequest(Request request) {
         String body;
-        if (request.headers().startsWith("GET /form")) {
+
+        if (isFormRequest(request)) {
             body = formBody();
-        } else if (request.headers().startsWith("POST ")) {
+        } else if (isPostRequest(request)) {
             body = formParams(request);
-        } else if (request.headers().startsWith("GET /ping?sleep")) {
+        } else if (isSleepRequest(request)) {
             ThreadSleeper sleeper = new ThreadSleeper();
             request.sleep(sleeper);
             body = pongBody();
@@ -50,6 +51,18 @@ public class HttpResponseBuilder implements ResponseBuilder {
             body = pongBody();
         }
         return body;
+    }
+
+    private boolean isFormRequest(Request request) {
+        return request.headers().startsWith("GET /form");
+    }
+
+    private boolean isPostRequest(Request request) {
+        return request.headers().startsWith("POST ");
+    }
+
+    private boolean isSleepRequest(Request request) {
+        return request.headers().startsWith("GET /ping?sleep");
     }
 
     private boolean isFileRequest(Request request) {

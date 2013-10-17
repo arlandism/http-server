@@ -15,7 +15,7 @@ public class HttpResponseBuilderTest {
     private MockRequest formRequest;
     private MockRequest postRequest;
     private MockRequest sleepRequest;
-    private MockRequest fileRequest;
+    private MockRequest txtFileRequest;
     private MockPostRequest encodedPostRequest;
     private HttpResponseBuilder builder = new HttpResponseBuilder(new MockFileReader(""));
     private String testFilePath = "foo/bar/baz.txt";
@@ -26,7 +26,7 @@ public class HttpResponseBuilderTest {
         formRequest = new MockRequest("GET /form HTTP/1.0\r\n\r\n");
         postRequest = new MockRequest("POST /form HTTP/1.0\r\n\r\n");
         sleepRequest = new MockRequest("GET /ping?sleep=4 HTTP/1.0\r\n\r\n");
-        fileRequest = new MockRequest("GET /browse/" + testFilePath +  " HTTP/1.0\r\n\r\n");
+        txtFileRequest = new MockRequest("GET /browse/" + testFilePath +  " HTTP/1.0\r\n\r\n");
         encodedPostRequest = new MockPostRequest("POST /form HTTP/1.0\r\n\r\n", "foo Hello!<>", "bar baz<>!");
     }
 
@@ -86,7 +86,7 @@ public class HttpResponseBuilderTest {
         MockFileReader mockReader = new MockFileReader(fileBody);
         ResourceRetriever retriever = mockReader;
         HttpResponseBuilder builder = new HttpResponseBuilder(retriever);
-        String response = builder.generateResponse(fileRequest);
+        String response = builder.generateResponse(txtFileRequest);
         String expectedResponse = "HTTP/1.0 200 OK" + "\r\n" +
                                   "Content-type: text/html" + "\r\n\r\n" +
                                   "<html><body>" + fileBody + "</body></html>";
@@ -95,7 +95,7 @@ public class HttpResponseBuilderTest {
     }
 
     @Test
-    public void testReturns404(){
+    public void testResponseHeadersWithPng(){
 
     }
 }
