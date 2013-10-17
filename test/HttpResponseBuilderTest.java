@@ -1,8 +1,7 @@
 import com.arlandis.HttpResponseBuilder;
-import mocks.MockFileReader;
+import mocks.*;
+import com.arlandis.interfaces.FileResponseFactory;
 import com.arlandis.interfaces.ResourceRetriever;
-import mocks.MockPostRequest;
-import mocks.MockRequest;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -17,8 +16,9 @@ public class HttpResponseBuilderTest {
     private MockRequest sleepRequest;
     private MockRequest txtFileRequest;
     private MockPostRequest encodedPostRequest;
-    private HttpResponseBuilder builder = new HttpResponseBuilder(new MockFileReader(""));
+    private HttpResponseBuilder builder;
     private String testFilePath = "foo/bar/baz.txt";
+    private FileResponseFactory factory;
 
     @Before
     public void setUp(){
@@ -28,6 +28,8 @@ public class HttpResponseBuilderTest {
         sleepRequest = new MockRequest("GET /ping?sleep=4 HTTP/1.0\r\n\r\n");
         txtFileRequest = new MockRequest("GET /browse/" + testFilePath +  " HTTP/1.0\r\n\r\n");
         encodedPostRequest = new MockPostRequest("POST /form HTTP/1.0\r\n\r\n", "foo Hello!<>", "bar baz<>!");
+        factory = new MockFileResponseFactory(new MockResponse("mock content type", "bar"));
+        builder = new HttpResponseBuilder(new MockFileReader(""), factory);
     }
 
     @Test
@@ -81,21 +83,12 @@ public class HttpResponseBuilderTest {
     }
 
     @Test
-    public void testAskForFile(){
-        String fileBody = "mock file";
-        MockFileReader mockReader = new MockFileReader(fileBody);
-        ResourceRetriever retriever = mockReader;
-        HttpResponseBuilder builder = new HttpResponseBuilder(retriever);
-        String response = builder.generateResponse(txtFileRequest);
-        String expectedResponse = "HTTP/1.0 200 OK" + "\r\n" +
-                                  "Content-type: text/html" + "\r\n\r\n" +
-                                  "<html><body>" + fileBody + "</body></html>";
-        assertEquals(expectedResponse, response);
-        assertEquals(testFilePath, mockReader.getHistory());
-    }
-
-    @Test
-    public void testResponseHeadersWithPngFile(){
-
+    public void testDanceWithFileResponseFactory(){
+        ResourceRetriever retriever = new MockFileReader("foo");
+        HttpResponseBuilder builder = new HttpResponseBuilder(retriever, factory);
+        String expected = "HTTP/1.0 200 OK" + "\r\n" +
+                          "Content-type: mock content type" +  "\r\n\r\n" +
+                          "bar";
+        assertEquals(expected, builder.generateResponse(txtFileRequest));
     }
 }

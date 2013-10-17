@@ -28,11 +28,8 @@ public abstract class FileResponse implements Response {
         Integer endOfFilePath = request.headers().indexOf("HTTP");
         String filePath = request.headers().substring(startOfFilePath, endOfFilePath);
         String data;
-        data = addHeaderAndBodyTags(this.retriever.retrieve(filePath.trim()));
+        data = this.retriever.retrieve(filePath.trim());
         return data;
     }
 
-    private String addHeaderAndBodyTags(String content) {
-        return "<html><body>" + content + "</body></html>";
-    }
 }

@@ -1,17 +1,16 @@
 package com.arlandis;
 
 import com.arlandis.Responses.*;
-import com.arlandis.interfaces.Request;
-import com.arlandis.interfaces.ResourceRetriever;
-import com.arlandis.interfaces.Response;
-import com.arlandis.interfaces.ResponseBuilder;
+import com.arlandis.interfaces.*;
 
 public class HttpResponseBuilder implements ResponseBuilder {
 
     private ResourceRetriever retriever;
+    private FileResponseFactory factory;
 
-    public HttpResponseBuilder(ResourceRetriever retriever) {
+    public HttpResponseBuilder(ResourceRetriever retriever, FileResponseFactory factory) {
         this.retriever = retriever;
+        this.factory = factory;
     }
 
     @Override
@@ -43,7 +42,7 @@ public class HttpResponseBuilder implements ResponseBuilder {
 
         } else if (isFileRequest(request)) {
 
-             response = FileResponseFactory.fileResponse(request, retriever);
+             response = factory.fileResponse(request, retriever);
 
         } else {
 

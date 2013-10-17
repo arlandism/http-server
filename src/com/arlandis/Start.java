@@ -10,8 +10,9 @@ public class Start {
 
         Integer port = portNum(args);
         ServerSocket serverSock = null;
-        HttpRequestFactory factory = new HttpRequestFactory();
-        HttpResponseBuilder builder = new HttpResponseBuilder(new FileReader());
+        HttpRequestFactory requestFactory = new HttpRequestFactory();
+        FileResponseFactoryImp fileResponseFactory = new FileResponseFactoryImp();
+        HttpResponseBuilder builder = new HttpResponseBuilder(new FileReader(), fileResponseFactory);
 
         try {
             serverSock = new ServerSocket(port);
@@ -25,7 +26,7 @@ public class Start {
             try {
                 Socket connSocket = serverSock.accept();
                 NetworkIOImp networkIO = new NetworkIOImp(connSocket);
-                Server server = new Server(networkIO, factory, builder);
+                Server server = new Server(networkIO, requestFactory, builder);
                 (new Thread(new ServerThread(server))).start();
 
             } catch (IOException e) {

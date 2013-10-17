@@ -27,10 +27,11 @@ public class IntegrationTest {
             ServerSocket servSocket = new ServerSocket(port);
             client = trySocketCreation(port);
             NetworkIOImp networkIO = new NetworkIOImp(servSocket.accept());
-            RequestFactory factory = new HttpRequestFactory();
+            RequestFactory requestFactory = new HttpRequestFactory();
+            FileResponseFactoryImp responseFactoryImp = new FileResponseFactoryImp();
             FileReader retriever = new FileReader();
-            HttpResponseBuilder builder = new HttpResponseBuilder(retriever);
-            server = new Server(networkIO, factory, builder);
+            HttpResponseBuilder builder = new HttpResponseBuilder(retriever, responseFactoryImp);
+            server = new Server(networkIO, requestFactory, builder);
             out = new PrintWriter(client.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(client.getInputStream()));
             (new File("test/tmp")).mkdir();
@@ -126,9 +127,7 @@ public class IntegrationTest {
         String response = readResponse(in);
         String expected = "HTTP/1.0 200 OK" +
                           "Content-type: text/html" +
-                           "<html><body>" +
-                           testFileContent +
-                           "</body></html>";
+                           testFileContent;
         assertEquals(expected, response);
     }
 
