@@ -1,10 +1,12 @@
 package com.arlandis;
 
 import com.arlandis.interfaces.ResourceRetriever;
+import com.sun.xml.internal.ws.util.StringUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
 
 public class FileReader implements ResourceRetriever {
 
@@ -28,7 +30,27 @@ public class FileReader implements ResourceRetriever {
 
     @Override
     public String retrieveDirContents(String directoryPath) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        f = new File(directoryPath);
+        File[] directoryContents = f.listFiles();
+
+        return concatFileNames(directoryContents).toString();
+    }
+
+    private StringBuilder concatFileNames(File[] directoryContents) {
+
+        StringBuilder fileNames = new StringBuilder();
+        for (int i = 0; i < directoryContents.length; i++){
+            if (isEnd(directoryContents, i)){
+                fileNames.append(directoryContents[i].getName());
+            } else {
+            fileNames.append(directoryContents[i].getName()).append("\n");
+            }
+        }
+        return fileNames;
+    }
+
+    private Boolean isEnd(File[] contents, int currentIndex){
+        return currentIndex == contents.length - 1;
     }
 
     private Integer fileSize(File f) {

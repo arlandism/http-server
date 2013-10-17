@@ -33,4 +33,12 @@ public class FileReaderTest {
         assertEquals(testFileContent, reader.retrieve("test/tmp/test.txt"));
     }
 
+    @Test
+    public void testRetrieveDir() throws IOException {
+      (new File("test/tmp/bar.txt")).createNewFile();
+      (new File("test/tmp/bar.txt")).createNewFile();
+      String expected = "bar.txt\ntest.txt";
+      assertEquals(expected, reader.retrieveDirContents("test/tmp/"));
+    }
+
 }
