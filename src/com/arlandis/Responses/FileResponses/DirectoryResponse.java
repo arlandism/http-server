@@ -16,7 +16,8 @@ public class DirectoryResponse implements Response {
 
     @Override
     public String body() {
-        return retriever.retrieveDirContents(requestSection());
+        String dirPath = request.requestedResource();
+        return retriever.retrieveDirContents(dirPath);
     }
 
     @Override
@@ -24,9 +25,4 @@ public class DirectoryResponse implements Response {
         return "Content-type: text/html";
     }
 
-    private String requestSection(){
-        Integer startOfRequestSection = request.headers().indexOf("/browse") + 8;
-        Integer protocolIndex = request.headers().indexOf("HTTP");
-        return request.headers().substring(startOfRequestSection, protocolIndex - 1).trim();
-    }
 }
