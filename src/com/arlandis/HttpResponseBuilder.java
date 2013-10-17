@@ -1,6 +1,7 @@
 package com.arlandis;
 
 import com.arlandis.Responses.PongResponse;
+import com.arlandis.Responses.PostFormResponse;
 import com.arlandis.Responses.SleepResponse;
 import com.arlandis.interfaces.Request;
 import com.arlandis.interfaces.ResourceRetriever;
@@ -42,7 +43,8 @@ public class HttpResponseBuilder implements ResponseBuilder {
         if (request.headers().startsWith("GET /form")) {
             body = formBody();
         } else if (request.headers().startsWith("POST ")) {
-            body = formParams(request);
+           // body = formParams(request);
+            body = new PostFormResponse(request).content();
         } else if (request.headers().startsWith("GET /ping?sleep")) {
             body = new SleepResponse(request, new ThreadSleeper()).content();
         } else if (isFileRequest(request)) {
@@ -76,20 +78,6 @@ public class HttpResponseBuilder implements ResponseBuilder {
 
     private String addHeaderAndBodyTags(String content) {
         return "<html><body>" + content + "</body></html>";
-    }
-
-    private String formParams(Request request) {
-        String LINE_BREAK = "<br />";
-        return "foo = " + decodeValue(request.fooValue()) + " " + LINE_BREAK + " bar = " + decodeValue(request.barValue());
-    }
-
-    private String decodeValue(String value) {
-        try {
-            return URLDecoder.decode(value, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            return "";
-        }
     }
 
 }
