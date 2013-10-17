@@ -2,9 +2,10 @@ package com.arlandis.Responses;
 
 import com.arlandis.ThreadSleeper;
 import com.arlandis.interfaces.Request;
+import com.arlandis.interfaces.Response;
 import com.arlandis.interfaces.Sleeper;
 
-public class SleepResponse {
+public class SleepResponse implements Response {
 
     private Request request;
     private Sleeper sleeper;
@@ -13,9 +14,13 @@ public class SleepResponse {
         this.request = request;
         this.sleeper = sleeper;
     }
-    public String content() {
+    public String body() {
         ThreadSleeper sleeper = new ThreadSleeper();
         request.sleep(sleeper);
-        return (new PongResponse()).content();
+        return (new PongResponse()).body();
+    }
+
+    public String contentType(){
+        return "Content-type: text/html";
     }
 }

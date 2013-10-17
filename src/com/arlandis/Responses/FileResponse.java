@@ -2,8 +2,9 @@ package com.arlandis.Responses;
 
 import com.arlandis.interfaces.Request;
 import com.arlandis.interfaces.ResourceRetriever;
+import com.arlandis.interfaces.Response;
 
-public class FileResponse {
+public class FileResponse implements Response {
 
     private Request request;
     private ResourceRetriever retriever;
@@ -13,8 +14,13 @@ public class FileResponse {
         this.retriever = retriever;
     }
 
-    public String content(){
+    public String body(){
         return fileBody();
+    }
+
+    @Override
+    public String contentType() {
+        return "Content-type: text/html";
     }
 
     private String fileBody() {

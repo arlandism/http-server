@@ -1,9 +1,15 @@
 package com.arlandis.Responses;
 
-public class GetFormResponse {
+import com.arlandis.interfaces.Response;
 
-    public String content() {
+public class GetFormResponse implements Response {
+
+    public String body() {
         return formBody();
+    }
+
+    public String contentType(){
+        return "Content-type: text/html";
     }
 
     private String formBody() {

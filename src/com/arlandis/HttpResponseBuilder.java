@@ -3,6 +3,7 @@ package com.arlandis;
 import com.arlandis.Responses.*;
 import com.arlandis.interfaces.Request;
 import com.arlandis.interfaces.ResourceRetriever;
+import com.arlandis.interfaces.Response;
 import com.arlandis.interfaces.ResponseBuilder;
 
 public class HttpResponseBuilder implements ResponseBuilder {
@@ -15,15 +16,7 @@ public class HttpResponseBuilder implements ResponseBuilder {
 
     @Override
     public String generateResponse(Request request) {
-        String body = getBody(request);
-        return wrapBody(body);
-
-    }
-
-    private String wrapBody(String body) {
-        String statusHeader = "HTTP/1.0 200 OK";
-        String contentTypeHeader = "Content-type: text/html";
-        return statusHeader + "\r\n" + contentTypeHeader + "\r\n\r\n" + body;
+        return getBody(request);
     }
 
     private String getBody(Request request) {
@@ -33,31 +26,48 @@ public class HttpResponseBuilder implements ResponseBuilder {
     }
 
     private String respondToRequest(Request request) {
-        String body;
 
-        if (request.headers().startsWith("GET /form")) {
+        Response response;
 
-            body = new GetFormResponse().content();
+        if (isFormRequest(request)) {
 
-        } else if (request.headers().startsWith("POST ")) {
+            response = new GetFormResponse();
 
-            body = new PostFormResponse(request).content();
+        } else if (isPostRequest(request)) {
 
-        } else if (request.headers().startsWith("GET /ping?sleep")) {
+            response = new PostFormResponse(request);
 
-            body = new SleepResponse(request, new ThreadSleeper()).content();
+        } else if (isSleepRequest(request)) {
 
-        } else if (request.headers().startsWith("GET /browse")) {
+            response = new SleepResponse(request, new ThreadSleeper());
 
-            body = new FileResponse(request, retriever).content();
+        } else if (isFileRequest(request)) {
+
+            response = new FileResponse(request, retriever);
 
         } else {
 
-            body = new PongResponse().content();
+            response = new PongResponse();
 
         }
 
-        return body;
+        return "HTTP/1.0 200 OK" + "\r\n" + response.contentType() + "\r\n\r\n" + response.body();
+    }
+
+    private boolean isFormRequest(Request request) {
+        return request.headers().startsWith("GET /form");
+    }
+
+    private boolean isPostRequest(Request request) {
+        return request.headers().startsWith("POST ");
+    }
+
+    private boolean isSleepRequest(Request request) {
+        return request.headers().startsWith("GET /ping?sleep");
+    }
+
+    private boolean isFileRequest(Request request) {
+        return request.headers().startsWith("GET /browse");
     }
 
 }

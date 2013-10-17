@@ -1,9 +1,15 @@
 package com.arlandis.Responses;
 
-public class PongResponse {
+import com.arlandis.interfaces.Response;
 
-    public String content() {
+public class PongResponse implements Response {
+
+    public String body() {
         return pongBody();
+    }
+
+    public String contentType(){
+        return "Content-type: text/html";
     }
 
     private String addHeaderAndBodyTags(String content) {
@@ -13,4 +19,5 @@ public class PongResponse {
     private String pongBody() {
         return addHeaderAndBodyTags("pong");
     }
+
 }
