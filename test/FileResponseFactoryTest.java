@@ -12,6 +12,7 @@ public class FileResponseFactoryTest {
     private MockRequest pngFileRequest = new MockRequest("GET /browse/foo.png HTTP/1.0");
     private MockRequest jpegFileRequest = new MockRequest("GET /browse/foo.jpeg HTTP/1.0");
     private MockRequest jpgFileRequest = new MockRequest("GET /browse/foo.jpg HTTP/1.0");
+    private MockRequest pdfFileRequest = new MockRequest("GET /browse/foo.pdf HTTP/1.0");
     private MockFileReader reader = new MockFileReader("fake data");
 
     @Test
@@ -32,5 +33,12 @@ public class FileResponseFactoryTest {
         assertEquals("Content-type: image/jpeg", response.contentType());
         Response response1 = FileResponseFactory.fileResponse(jpgFileRequest, reader);
         assertEquals("Content-type: image/jpeg", response1.contentType());
+    }
+
+    @Test
+    public void testContentTypeWithRequestForPdfFile(){
+        Response response = FileResponseFactory.fileResponse(pdfFileRequest, reader);
+        assertEquals("Content-type: application/pdf", response.contentType());
+
     }
 }

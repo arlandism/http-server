@@ -43,7 +43,7 @@ public class HttpResponseBuilder implements ResponseBuilder {
 
         } else if (isFileRequest(request)) {
 
-            response = new FileResponse(request, retriever);
+             response = FileResponseFactory.fileResponse(request, retriever);
 
         } else {
 

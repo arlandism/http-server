@@ -1,5 +1,6 @@
 package com.arlandis;
 
+import com.arlandis.Responses.FileResponses.PdfFileResponse;
 import com.arlandis.Responses.FileResponses.PngFileResponse;
 import com.arlandis.Responses.FileResponses.TextFileResponse;
 import com.arlandis.Responses.FileResponses.JpegFileResponse;
@@ -15,6 +16,8 @@ public class FileResponseFactory {
         return new TextFileResponse(request, retriever);
         } else if (isJpegFileRequest(request)) {
             return new JpegFileResponse(request, retriever);
+        } else if (isPdfFileRequest(request)){
+            return new PdfFileResponse(request, retriever);
         }
           else{
             return new PngFileResponse(request, retriever);
@@ -28,6 +31,10 @@ public class FileResponseFactory {
 
     private static boolean isTextFileRequest(Request request) {
         return fileRequestSection(request).endsWith("txt");
+    }
+
+    private static boolean isPdfFileRequest(Request request){
+        return fileRequestSection(request).endsWith("pdf");
     }
 
     private static String fileRequestSection(Request request){

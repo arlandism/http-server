@@ -95,7 +95,7 @@ public class HttpResponseBuilderTest {
     }
 
     @Test
-    public void testResponseHeadersWithPng(){
+    public void testResponseHeadersWithPngFile(){
 
     }
 }
