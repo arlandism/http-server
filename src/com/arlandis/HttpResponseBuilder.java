@@ -1,5 +1,7 @@
 package com.arlandis;
 
+import com.arlandis.Responses.PongResponse;
+import com.arlandis.Responses.SleepResponse;
 import com.arlandis.interfaces.Request;
 import com.arlandis.interfaces.ResourceRetriever;
 import com.arlandis.interfaces.ResponseBuilder;
@@ -37,32 +39,18 @@ public class HttpResponseBuilder implements ResponseBuilder {
     private String respondToRequest(Request request) {
         String body;
 
-        if (isFormRequest(request)) {
+        if (request.headers().startsWith("GET /form")) {
             body = formBody();
-        } else if (isPostRequest(request)) {
+        } else if (request.headers().startsWith("POST ")) {
             body = formParams(request);
-        } else if (isSleepRequest(request)) {
-            ThreadSleeper sleeper = new ThreadSleeper();
-            request.sleep(sleeper);
-            body = pongBody();
+        } else if (request.headers().startsWith("GET /ping?sleep")) {
+            body = new SleepResponse(request, new ThreadSleeper()).content();
         } else if (isFileRequest(request)) {
             body = fileBody(request);
         } else {
-            body = pongBody();
+            body = new PongResponse().content();
         }
         return body;
-    }
-
-    private boolean isFormRequest(Request request) {
-        return request.headers().startsWith("GET /form");
-    }
-
-    private boolean isPostRequest(Request request) {
-        return request.headers().startsWith("POST ");
-    }
-
-    private boolean isSleepRequest(Request request) {
-        return request.headers().startsWith("GET /ping?sleep");
     }
 
     private boolean isFileRequest(Request request) {
@@ -88,10 +76,6 @@ public class HttpResponseBuilder implements ResponseBuilder {
 
     private String addHeaderAndBodyTags(String content) {
         return "<html><body>" + content + "</body></html>";
-    }
-
-    private String pongBody() {
-        return addHeaderAndBodyTags("pong");
     }
 
     private String formParams(Request request) {
