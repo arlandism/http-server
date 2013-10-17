@@ -47,4 +47,11 @@ public class HttpRequestTest {
         request.sleep(s);
         assertTrue(sleeper.sleepCalledWith(4));
     }
+
+    @Test
+    public void testRequestedResource(){
+        String rawHeader = "GET /browse/foo.txt HTTP/1.0";
+        HttpRequest request = new HttpRequest(rawHeader);
+        assertEquals("foo.txt", request.requestedResource());
+    }
 }

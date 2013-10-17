@@ -15,4 +15,6 @@ public interface Request {
     String fooValue();
 
     String barValue();
+
+    String requestedResource();
 }

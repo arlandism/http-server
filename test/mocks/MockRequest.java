@@ -8,9 +8,15 @@ public class MockRequest implements Request {
 
     private String headers;
     private Boolean sleep = false;
+    private String resourceToReturn;
 
     public MockRequest(String headersToReturn){
         headers = headersToReturn;
+    }
+
+    public MockRequest(String headersToReturn, String resourceToReturn){
+        headers = headersToReturn;
+        this.resourceToReturn = resourceToReturn;
     }
 
     public String headers(){
@@ -45,6 +51,11 @@ public class MockRequest implements Request {
     @Override
     public String barValue() {
         return "bar";
+    }
+
+    @Override
+    public String requestedResource() {
+        return resourceToReturn;
     }
 
 }

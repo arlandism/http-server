@@ -26,6 +26,11 @@ public class FileReader implements ResourceRetriever {
         return returnData;
     }
 
+    @Override
+    public String retrieveDirContents(String directoryPath) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
     private Integer fileSize(File f) {
         Long byteLength = f.length();
         return byteLength.intValue();

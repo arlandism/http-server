@@ -8,11 +8,13 @@ import static org.junit.Assert.assertEquals;
 
 public class FileResponseFactoryImpTest {
 
-    private MockRequest textFileRequest = new MockRequest("GET /browse/foo.txt HTTP/1.0");
-    private MockRequest pngFileRequest = new MockRequest("GET /browse/foo.png HTTP/1.0");
-    private MockRequest jpegFileRequest = new MockRequest("GET /browse/foo.jpeg HTTP/1.0");
-    private MockRequest jpgFileRequest = new MockRequest("GET /browse/foo.jpg HTTP/1.0");
-    private MockRequest pdfFileRequest = new MockRequest("GET /browse/foo.pdf HTTP/1.0");
+    private MockRequest textFileRequest = new MockRequest("GET /browse/foo.txt HTTP/1.0", "foo.txt");
+    private MockRequest pngFileRequest = new MockRequest("GET /browse/foo.png HTTP/1.0", "foo.png");
+    private MockRequest jpegFileRequest = new MockRequest("GET /browse/foo.jpeg HTTP/1.0", "foo.jpeg");
+    private MockRequest jpgFileRequest = new MockRequest("GET /browse/foo.jpg HTTP/1.0", "foo.jpg");
+    private MockRequest pdfFileRequest = new MockRequest("GET /browse/foo.pdf HTTP/1.0", "foo.pdf");
+    private MockRequest bmpFileRequest = new MockRequest("GET /browse/foo.bmp HTTP/1.0", "foo.bmp");
+    private MockRequest directoryRequest = new MockRequest("GET /browse/foo/ HTTP/1.0", "foo/");
     private MockFileReader reader = new MockFileReader("fake data");
     private FileResponseFactoryImp factory = new FileResponseFactoryImp();
 
@@ -40,6 +42,20 @@ public class FileResponseFactoryImpTest {
     public void testContentTypeWithRequestForPdfFile(){
         Response response = factory.fileResponse(pdfFileRequest, reader);
         assertEquals("Content-type: application/pdf", response.contentType());
+    }
+
+    @Test
+    public void testContentTypeWithRequestForBmpFile(){
+        Response response = factory.fileResponse(bmpFileRequest, reader);
+        assertEquals("Content-type: image/bmp", response.contentType());
+    }
+
+    @Test
+    public void testDirectoryRequest(){
+        reader = new MockFileReader("","foo, bar");
+        Response response = factory.fileResponse(directoryRequest, reader);
+        assertEquals("Content-type: text/html", response.contentType());
+        assertEquals("foo, bar", response.body());
     }
 
 }

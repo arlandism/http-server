@@ -24,12 +24,7 @@ public abstract class FileResponse implements Response {
     }
 
     private String fileBody() {
-        Integer startOfFilePath = request.headers().indexOf("browse") + 7;
-        Integer endOfFilePath = request.headers().indexOf("HTTP");
-        String filePath = request.headers().substring(startOfFilePath, endOfFilePath);
-        String data;
-        data = this.retriever.retrieve(filePath.trim());
-        return data;
+        return this.retriever.retrieve(request.requestedResource().trim());
     }
 
 }

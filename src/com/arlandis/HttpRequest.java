@@ -45,6 +45,12 @@ public class HttpRequest implements Request {
         return body.substring(fooBegin, fooEnd);
     }
 
+    public String requestedResource(){
+        Integer startOfRequestSection = requestHeaders.indexOf("/browse") + 8;
+        Integer protocolIndex = requestHeaders.indexOf("HTTP");
+        return requestHeaders.substring(startOfRequestSection, protocolIndex - 1).trim();
+    }
+
     public void sleep(Sleeper sleeper) {
         sleeper.sleep(sleepTime());
     }

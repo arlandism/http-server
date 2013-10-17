@@ -23,7 +23,7 @@ public class ServerTest {
     public void setUp(){
         mockIO = new MockNetworkIO();
         io = mockIO;
-        mockRequest = new MockRequest("");
+        mockRequest = new MockRequest("", "");
         builder = new MockResponseBuilder("baz");
         factory = new MockRequestFactory(mockRequest);
     }
