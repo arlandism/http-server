@@ -9,6 +9,7 @@ import com.arlandis.interfaces.Response;
 
 public class FileResponseFactoryImp implements FileResponseFactory {
 
+
     public Response fileResponse(final Request request, final ResourceRetriever retriever) {
 
         return getResponse(request, retriever);
