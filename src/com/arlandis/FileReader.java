@@ -9,19 +9,20 @@ import java.io.IOException;
 public class FileReader implements ResourceRetriever {
 
     private File f;
-    private BufferedReader inputStream;
 
     public String retrieve(String filePath) {
         String returnData;
         f = new File(filePath.trim());
 
         try {
-            java.io.FileReader reader = new java.io.FileReader(f);
-            inputStream = new BufferedReader(reader);
-            returnData = fileData(f, inputStream);
+
+            returnData = fileData(f);
+
         } catch (IOException e) {
+
             e.printStackTrace();
             returnData = "NOT FOUND";
+
         }
         return returnData;
     }
@@ -55,9 +56,10 @@ public class FileReader implements ResourceRetriever {
         return !(currentIndex == contents.length - 1);
     }
 
-    private String fileData(File f, BufferedReader input) throws IOException {
+    private String fileData(File f) throws IOException {
+        BufferedReader in = new BufferedReader(new java.io.FileReader(f));
         char[] data = new char[fileSize(f)];
-        input.read(data, 0, fileSize(f));
+        in.read(data, 0, fileSize(f));
         return new String(data).trim();
     }
 
