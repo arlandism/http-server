@@ -3,14 +3,14 @@ package com.arlandis;
 public class Config {
 
     private int portNum;
-    private static Config itsInstance;
+    private static Config theInstance;
     private String rootDir;
 
     public static Config instance() {
-        if (itsInstance == null){
-            itsInstance = new Config();
+        if (theInstance == null){
+            theInstance = new Config();
         }
-        return itsInstance;
+        return theInstance;
     }
 
     public void setPortNum(int portNum) {
