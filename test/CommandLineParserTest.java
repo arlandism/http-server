@@ -23,14 +23,14 @@ public class CommandLineParserTest {
     public void testBrowsePath(){
         String[] args = new String[] {"-d", "foo/bar"};
         CommandLineParser parser = new CommandLineParser(args);
-        assertEquals("foo/bar/", parser.browsePath());
+        assertEquals("foo/bar", parser.browsePath());
     }
 
     @Test
     public void testDefaultBrowsePath(){
         String[] args = new String[0];
         CommandLineParser parser = new CommandLineParser(args);
-        assertEquals("/", parser.browsePath());
+        assertEquals(System.getProperty("user.dir"), parser.browsePath());
     }
 
     @Test

@@ -22,7 +22,7 @@ public class Config {
     }
 
     public String getRootDir() {
-        return rootDir;
+        return rootDir + "/";
     }
 
     public void setRootDir(String rootDir) {

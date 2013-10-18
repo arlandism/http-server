@@ -9,6 +9,7 @@ public class Start {
     public static void main(String[] args) {
 
         Integer port = portNum(args);
+        Config.instance().setRootDir(rootDir(args));
         ServerSocket serverSock = null;
         HttpRequestFactory requestFactory = new HttpRequestFactory();
         FileResponseFactoryImp fileResponseFactory = new FileResponseFactoryImp();

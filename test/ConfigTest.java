@@ -23,8 +23,8 @@ public class ConfigTest {
 
     @Test
     public void testRootDir(){
-        Config.instance().setRootDir("/foo");
-        assertEquals("/foo", Config.instance().getRootDir());
+        Config.instance().setRootDir("foo");
+        assertEquals("foo/", Config.instance().getRootDir());
     }
 
 }

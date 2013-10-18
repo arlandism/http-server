@@ -23,6 +23,7 @@ public class MockFileReader implements ResourceRetriever {
     }
 
     public String retrieveDirContents(String dirPath){
+        history = dirPath;
         return retrieveDirReturnValue;
     }
 

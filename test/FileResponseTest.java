@@ -1,3 +1,4 @@
+import com.arlandis.Config;
 import com.arlandis.Responses.FileResponses.FileResponse;
 import com.arlandis.interfaces.Request;
 import com.arlandis.interfaces.ResourceRetriever;
@@ -10,7 +11,7 @@ import static org.junit.Assert.assertEquals;
 public class FileResponseTest {
     MockFileReader mockReader = new MockFileReader("data from mock reader");
     ResourceRetriever retriever = mockReader;
-    MockRequest request = new MockRequest("baz", "buzz");
+    MockRequest request = new MockRequest("", "bar");
 
     class TestFileResponse extends FileResponse{
 
@@ -31,4 +32,12 @@ public class FileResponseTest {
     public void testContentTypeDefaultsToNull(){
         assertEquals(null, fileResponse.contentType());
     }
+
+    @Test
+    public void testReaderPolledWithConfigDir(){
+        Config.instance().setRootDir("baz");
+        fileResponse.body();
+        assertEquals("baz/bar", mockReader.history());
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.arlandis.Responses.FileResponses;
 
+import com.arlandis.Config;
 import com.arlandis.interfaces.Request;
 import com.arlandis.interfaces.ResourceRetriever;
 import com.arlandis.interfaces.Response;
@@ -16,7 +17,8 @@ public class DirectoryResponse implements Response {
 
     @Override
     public String body() {
-        String dirPath = request.requestedResource();
+        String configPath = Config.instance().getRootDir();
+        String dirPath = configPath + request.requestedResource();
         return retriever.retrieveDirContents(dirPath);
     }
 

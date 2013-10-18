@@ -20,7 +20,7 @@ public class CommandLineParser {
     }
 
     public String browsePath() {
-        return valueOrDefault("-d", "") + "/";
+        return valueOrDefault("-d", System.getProperty("user.dir"));
     }
 
     private Boolean flagPresent(String flag) {

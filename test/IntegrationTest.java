@@ -118,6 +118,7 @@ public class IntegrationTest {
 
     @Test
     public void testBrowse() throws IOException {
+        Config.instance().setRootDir(System.getProperty("user.dir"));
         writer.write(testFileContent);
         writer.close();
         out.print("GET /browse/" + filePath + " HTTP/1.0");

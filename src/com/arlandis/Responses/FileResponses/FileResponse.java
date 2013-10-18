@@ -1,5 +1,6 @@
 package com.arlandis.Responses.FileResponses;
 
+import com.arlandis.Config;
 import com.arlandis.interfaces.Request;
 import com.arlandis.interfaces.ResourceRetriever;
 import com.arlandis.interfaces.Response;
@@ -24,7 +25,10 @@ public abstract class FileResponse implements Response {
     }
 
     private String fileBody() {
-        return retriever.retrieve(request.requestedResource().trim());
+        String configRootDir = Config.instance().getRootDir();
+        String requestedResource = request.requestedResource();
+        String path = configRootDir + requestedResource;
+        return retriever.retrieve(path);
     }
 
 }
