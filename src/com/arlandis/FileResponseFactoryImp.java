@@ -15,7 +15,6 @@ public class FileResponseFactoryImp implements FileResponseFactory {
     }
 
     private Response getResponse(Request request, ResourceRetriever retriever) {
-
         if (isTextFileRequest(request)){
 
         return new TextFileResponse(request, retriever);

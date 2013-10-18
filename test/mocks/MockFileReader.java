@@ -26,4 +26,7 @@ public class MockFileReader implements ResourceRetriever {
         return retrieveDirReturnValue;
     }
 
+    public String history() {
+        return history;
+    }
 }

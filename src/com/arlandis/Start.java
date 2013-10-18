@@ -39,4 +39,10 @@ public class Start {
 
         return new CommandLineParser(args).portNum();
     }
+
+    private static String rootDir(String[] args){
+
+        return new CommandLineParser(args).browsePath();
+    }
+
 }

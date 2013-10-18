@@ -24,7 +24,7 @@ public abstract class FileResponse implements Response {
     }
 
     private String fileBody() {
-        return this.retriever.retrieve(request.requestedResource().trim());
+        return retriever.retrieve(request.requestedResource().trim());
     }
 
 }

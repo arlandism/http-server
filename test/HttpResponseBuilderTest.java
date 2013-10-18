@@ -19,6 +19,9 @@ public class HttpResponseBuilderTest {
     private HttpResponseBuilder builder;
     private String testFilePath = "foo/bar/baz.txt";
     private FileResponseFactory factory;
+    private MockFileResponseFactory mockFactory;
+    private MockFileReader mockReader;
+    private ResourceRetriever retriever;
 
     @Before
     public void setUp(){
@@ -28,8 +31,12 @@ public class HttpResponseBuilderTest {
         sleepRequest = new MockRequest("GET /ping?sleep=4 HTTP/1.0\r\n\r\n");
         txtFileRequest = new MockRequest("GET /browse/" + testFilePath +  " HTTP/1.0\r\n\r\n");
         encodedPostRequest = new MockPostRequest("POST /form HTTP/1.0\r\n\r\n", "foo Hello!<>", "bar baz<>!");
-        factory = new MockFileResponseFactory(new MockResponse("mock content type", "bar"));
-        builder = new HttpResponseBuilder(new MockFileReader(""), factory);
+        mockFactory = new MockFileResponseFactory(new MockResponse("mock content type", "bar"));
+        factory = mockFactory;
+
+        mockReader = new MockFileReader("foo");
+        retriever = mockReader;
+        builder = new HttpResponseBuilder(mockReader, factory);
     }
 
     @Test
@@ -84,11 +91,11 @@ public class HttpResponseBuilderTest {
 
     @Test
     public void testDanceWithFileResponseFactory(){
-        ResourceRetriever retriever = new MockFileReader("foo");
-        HttpResponseBuilder builder = new HttpResponseBuilder(retriever, factory);
         String expected = "HTTP/1.0 200 OK" + "\r\n" +
                           "Content-type: mock content type" +  "\r\n\r\n" +
                           "bar";
         assertEquals(expected, builder.generateResponse(txtFileRequest));
+        assertEquals(txtFileRequest, mockFactory.history()[0]);
+        assertEquals(retriever, mockFactory.history()[1]);
     }
 }
