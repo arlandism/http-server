@@ -1,12 +1,10 @@
 package com.arlandis;
 
 import com.arlandis.interfaces.ResourceRetriever;
-import com.sun.xml.internal.ws.util.StringUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
 
 public class FileReader implements ResourceRetriever {
 
@@ -30,38 +28,42 @@ public class FileReader implements ResourceRetriever {
 
     @Override
     public String retrieveDirContents(String directoryPath) {
-        f = new File(directoryPath);
+        f = new File(directoryPath.trim());
         File[] directoryContents = f.listFiles();
-
         return concatFileNames(directoryContents).toString();
     }
 
     private StringBuilder concatFileNames(File[] directoryContents) {
 
         StringBuilder fileNames = new StringBuilder();
+        String nextFileName;
+
         for (int i = 0; i < directoryContents.length; i++){
-            if (isEnd(directoryContents, i)){
-                fileNames.append(directoryContents[i].getName());
+
+            nextFileName = directoryContents[i].getName();
+
+            if (notLastFile(directoryContents, i)){
+                fileNames.append(nextFileName).append(", ");
             } else {
-            fileNames.append(directoryContents[i].getName()).append("\n");
+                fileNames.append(nextFileName);
             }
         }
         return fileNames;
     }
 
-    private Boolean isEnd(File[] contents, int currentIndex){
-        return currentIndex == contents.length - 1;
+    private Boolean notLastFile(File[] contents, int currentIndex){
+        return !(currentIndex == contents.length - 1);
+    }
+
+    private String fileData(File f, BufferedReader input) throws IOException {
+        char[] data = new char[fileSize(f)];
+        input.read(data, 0, fileSize(f));
+        return new String(data).trim();
     }
 
     private Integer fileSize(File f) {
         Long byteLength = f.length();
         return byteLength.intValue();
-    }
-
-    private String fileData(File f, BufferedReader in) throws IOException {
-        char[] data = new char[fileSize(f)];
-        in.read(data, 0, fileSize(f));
-        return new String(data).trim();
     }
 
 }
