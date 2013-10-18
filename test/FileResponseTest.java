@@ -23,12 +23,12 @@ public class FileResponseTest {
     private TestFileResponse fileResponse = new TestFileResponse(request, retriever);
 
     @Test
-    public void testFileResponse(){
+    public void testFileResponseBodyPollsResourceRetriever(){
        assertEquals("data from mock reader", fileResponse.body());
     }
 
     @Test
-    public void testContentType(){
+    public void testContentTypeDefaultsToNull(){
         assertEquals(null, fileResponse.contentType());
     }
 }
