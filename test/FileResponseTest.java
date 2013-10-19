@@ -4,7 +4,6 @@ import com.arlandis.interfaces.Request;
 import com.arlandis.interfaces.ResourceRetriever;
 import mocks.MockFileReader;
 import mocks.MockRequest;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
