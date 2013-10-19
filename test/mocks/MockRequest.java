@@ -11,7 +11,7 @@ public class MockRequest implements Request {
     private String resourceToReturn;
 
     public MockRequest(String headersToReturn){
-        headers = headersToReturn;
+       headers = headersToReturn;
     }
 
     public MockRequest(String headersToReturn, String resourceToReturn){
