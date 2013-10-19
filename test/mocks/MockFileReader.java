@@ -5,7 +5,7 @@ import com.arlandis.interfaces.ResourceRetriever;
 public class MockFileReader implements ResourceRetriever {
 
     private String retrieveReturnValue;
-    private String retrieveDirReturnValue;
+    private String[] retrieveDirReturnValue = new String[1];
     private String history;
 
     public MockFileReader(String toReturn) {
@@ -14,7 +14,7 @@ public class MockFileReader implements ResourceRetriever {
 
     public MockFileReader(String forRetrieveToReturn, String retrieveDirReturnValue) {
         this.retrieveReturnValue = forRetrieveToReturn;
-        this.retrieveDirReturnValue = retrieveDirReturnValue;
+        this.retrieveDirReturnValue[0] = retrieveDirReturnValue;
     }
 
     public String retrieve(String requestedPath){
@@ -22,7 +22,7 @@ public class MockFileReader implements ResourceRetriever {
         return retrieveReturnValue;
     }
 
-    public String retrieveDirContents(String dirPath){
+    public String[] retrieveDirContents(String dirPath){
         history = dirPath;
         return retrieveDirReturnValue;
     }
