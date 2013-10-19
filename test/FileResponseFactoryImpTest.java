@@ -2,6 +2,7 @@ import com.arlandis.FileResponseFactoryImp;
 import com.arlandis.interfaces.Response;
 import mocks.MockFileReader;
 import mocks.MockRequest;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -48,14 +49,6 @@ public class FileResponseFactoryImpTest {
     public void testContentTypeWithRequestForBmpFile(){
         Response response = factory.fileResponse(bmpFileRequest, reader);
         assertEquals("Content-type: image/bmp", response.contentType());
-    }
-
-    @Test
-    public void testDirectoryRequest(){
-        reader = new MockFileReader("","foo, bar");
-        Response response = factory.fileResponse(directoryRequest, reader);
-        assertEquals("Content-type: text/html", response.contentType());
-        assertEquals("foo, bar", response.body());
     }
 
     @Test
