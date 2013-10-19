@@ -10,11 +10,10 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class FileResponseTest {
-    MockFileReader mockReader = new MockFileReader("data from mock reader");
-    ResourceRetriever retriever = mockReader;
-    MockRequest mockRequest = new MockRequest("", "bar");
-    Request request = mockRequest;
-
+    private MockFileReader mockReader = new MockFileReader("data from mock reader");
+    private ResourceRetriever retriever = mockReader;
+    private MockRequest mockRequest = new MockRequest("", "bar");
+    private Request request = mockRequest;
     private FileResponse fileResponse = new FileResponse(request, retriever);
 
     @Test
