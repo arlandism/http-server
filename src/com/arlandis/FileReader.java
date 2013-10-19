@@ -28,26 +28,22 @@ public class FileReader implements ResourceRetriever {
     }
 
     @Override
-    public String retrieveDirContents(String directoryPath) {
+    public String[] retrieveDirContents(String directoryPath) {
         f = new File(directoryPath.trim());
         File[] directoryContents = f.listFiles();
-        return concatFileNames(directoryContents).toString();
+        return concatFileNames(directoryContents);
     }
 
-    private StringBuilder concatFileNames(File[] directoryContents) {
+    private String[] concatFileNames(File[] directoryContents) {
 
-        StringBuilder fileNames = new StringBuilder();
+        String[] fileNames = new String[directoryContents.length];
         String nextFileName;
 
         for (int i = 0; i < directoryContents.length; i++){
 
             nextFileName = directoryContents[i].getName();
+            fileNames[i] = nextFileName;
 
-            if (notLastFile(directoryContents, i)){
-                fileNames.append(nextFileName).append(", ");
-            } else {
-                fileNames.append(nextFileName);
-            }
         }
         return fileNames;
     }

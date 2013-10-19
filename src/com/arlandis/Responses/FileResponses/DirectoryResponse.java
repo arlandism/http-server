@@ -19,7 +19,13 @@ public class DirectoryResponse implements Response {
     public String body() {
         String configPath = Config.instance().getRootDir();
         String dirPath = configPath + request.requestedResource();
-        return retriever.retrieveDirContents(dirPath);
+        String[] dirContents = retriever.retrieveDirContents(dirPath);
+        StringBuilder output = new StringBuilder();
+        for (int i = 0; i < dirContents.length ; i++){
+            String file = dirContents[i];
+            output.append("<a href='").append(file).append("'>").append(file).append("</a>").append(" ");
+        }
+        return output.toString();
     }
 
     @Override

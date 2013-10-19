@@ -3,6 +3,7 @@ import com.arlandis.Responses.FileResponses.DirectoryResponse;
 import com.arlandis.interfaces.ResourceRetriever;
 import mocks.MockFileReader;
 import mocks.MockRequest;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -16,7 +17,7 @@ public class DirectoryResponseTest {
     @Test
     public void testDirectoryResponsePollsReader(){
         DirectoryResponse response = new DirectoryResponse(request, retriever);
-        assertEquals("bar",response.body());
+        assertEquals("<a href='bar'>bar</a> ",response.body());
     }
 
     @Test
