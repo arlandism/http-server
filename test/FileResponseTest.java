@@ -12,17 +12,10 @@ import static org.junit.Assert.assertEquals;
 public class FileResponseTest {
     MockFileReader mockReader = new MockFileReader("data from mock reader");
     ResourceRetriever retriever = mockReader;
-    MockRequest request = new MockRequest("", "bar");
+    MockRequest mockRequest = new MockRequest("", "bar");
+    Request request = mockRequest;
 
-    class TestFileResponse extends FileResponse{
-
-        public TestFileResponse(Request request, ResourceRetriever retriever){
-            super(request, retriever);
-        }
-
-    }
-
-    private FileResponse fileResponse = new TestFileResponse(request, retriever);
+    private FileResponse fileResponse = new FileResponse(request, retriever);
 
     @Test
     public void testFileResponseBodyPollsResourceRetriever(){
