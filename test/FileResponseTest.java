@@ -4,6 +4,7 @@ import com.arlandis.interfaces.Request;
 import com.arlandis.interfaces.ResourceRetriever;
 import mocks.MockFileReader;
 import mocks.MockRequest;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -21,16 +22,11 @@ public class FileResponseTest {
 
     }
 
-    private TestFileResponse fileResponse = new TestFileResponse(request, retriever);
+    private FileResponse fileResponse = new TestFileResponse(request, retriever);
 
     @Test
     public void testFileResponseBodyPollsResourceRetriever(){
        assertEquals("data from mock reader", fileResponse.body());
-    }
-
-    @Test
-    public void testContentTypeDefaultsToNull(){
-        assertEquals(null, fileResponse.contentType());
     }
 
     @Test

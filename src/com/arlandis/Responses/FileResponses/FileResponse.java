@@ -5,14 +5,22 @@ import com.arlandis.interfaces.Request;
 import com.arlandis.interfaces.ResourceRetriever;
 import com.arlandis.interfaces.Response;
 
-public abstract class FileResponse implements Response {
+public class FileResponse implements Response {
 
     private ResourceRetriever retriever;
     private Request request;
+    private String contentType;
 
     public FileResponse(Request request, ResourceRetriever retriever){
         this.request = request;
         this.retriever = retriever;
+    }
+
+    public FileResponse(Request request, ResourceRetriever retriever, String contentType){
+        this.request = request;
+        this.retriever = retriever;
+        this.contentType = contentType;
+
     }
 
     public String body(){
@@ -21,7 +29,7 @@ public abstract class FileResponse implements Response {
 
     @Override
     public String contentType() {
-        return null;
+        return "Content-type: " + this.contentType;
     }
 
     private String fileBody() {

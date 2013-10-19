@@ -58,4 +58,12 @@ public class FileResponseFactoryImpTest {
         assertEquals("foo, bar", response.body());
     }
 
+    @Test
+    public void testDefaultContentTypeIsText(){
+        reader = new MockFileReader("");
+        MockRequest request = new MockRequest("", "bar.clj");
+        Response response = factory.fileResponse(request, reader);
+        assertEquals("Content-type: text/html", response.contentType());
+    }
+
 }

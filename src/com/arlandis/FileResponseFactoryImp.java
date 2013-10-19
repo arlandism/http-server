@@ -1,11 +1,13 @@
 package com.arlandis;
 
-import com.arlandis.Responses.FileResponses.BmpFileResponse;
 import com.arlandis.Responses.FileResponses.*;
 import com.arlandis.interfaces.FileResponseFactory;
 import com.arlandis.interfaces.Request;
 import com.arlandis.interfaces.ResourceRetriever;
 import com.arlandis.interfaces.Response;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class FileResponseFactoryImp implements FileResponseFactory {
 
@@ -15,62 +17,50 @@ public class FileResponseFactoryImp implements FileResponseFactory {
         return getResponse(request, retriever);
     }
 
+    private Map<String, String> endingToContentType(){
+        Map<String, String> endingToContentType = new HashMap<String, String>();
+        endingToContentType.put("txt", "text/html");
+        endingToContentType.put("pdf", "application/pdf");
+        endingToContentType.put("bmp", "image/bmp");
+        endingToContentType.put("png", "image/png");
+        endingToContentType.put("jpg", "image/jpeg");
+        endingToContentType.put("jpeg", "image/jpeg");
+
+        return endingToContentType;
+    }
+
     private Response getResponse(Request request, ResourceRetriever retriever) {
-        if (isTextFileRequest(request)){
 
-        return new TextFileResponse(request, retriever);
+        String requestSection = fileRequestSection(request);
+        Response response;
 
-        } else if (isJpegFileRequest(request)) {
-
-            return new JpegFileResponse(request, retriever);
-
-        } else if (isPdfFileRequest(request)){
-
-            return new PdfFileResponse(request, retriever);
-
-        } else if (isBmpFileRequest(request)){
-
-            return new BmpFileResponse(request, retriever);
-
+        if(isDirectoryRequest(request)){
+            response = new DirectoryResponse(request, retriever);
+        }else{
+            String contentType = lookupContentType(requestSection);
+            response = new FileResponse(request, retriever, contentType);
         }
-          else if (isPngFileRequest(request)) {
 
-            return new PngFileResponse(request, retriever);
-
-        } else if (isDirectoryRequest(request)){
-
-            return new DirectoryResponse(request, retriever);
-
-        } else {
-
-            return null;
-
-        }
-    }
-
-    private boolean isPngFileRequest(Request request) {
-        return fileRequestSection(request).endsWith("png");
-    }
-
-    private boolean isBmpFileRequest(Request request) {
-        return fileRequestSection(request).endsWith("bmp");
-    }
-
-    private boolean isJpegFileRequest(Request request) {
-        return fileRequestSection(request).endsWith("jpeg") ||
-                fileRequestSection(request).endsWith("jpg");
-    }
-
-    private boolean isTextFileRequest(Request request) {
-        return fileRequestSection(request).endsWith("txt");
-    }
-
-    private boolean isPdfFileRequest(Request request){
-        return fileRequestSection(request).endsWith("pdf");
+        return response;
     }
 
     private boolean isDirectoryRequest(Request request){
         return fileRequestSection(request).endsWith("/");
+    }
+
+    private String lookupContentType(String requestSection) {
+        String contentType = endingToContentType().get(extension(requestSection));
+        if (!(contentType == null)){
+            return contentType;
+        } else {
+            return "text/html";
+        }
+    }
+
+    private String extension(String filename){
+        int lastDotIndex = filename.lastIndexOf('.');
+
+        return filename.substring(lastDotIndex + 1);
     }
 
     private String fileRequestSection(Request request){
