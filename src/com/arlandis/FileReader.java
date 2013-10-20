@@ -11,20 +11,20 @@ public class FileReader implements ResourceRetriever {
     private File f;
 
     public String retrieve(String filePath) {
-        String returnData;
+        String fileData;
         f = new File(filePath.trim());
 
         try {
 
-            returnData = fileData(f);
+            fileData = fileData(f);
 
         } catch (IOException e) {
 
             e.printStackTrace();
-            returnData = "NOT FOUND";
+            fileData = "NOT FOUND";
 
         }
-        return returnData;
+        return fileData;
     }
 
     @Override
@@ -46,10 +46,6 @@ public class FileReader implements ResourceRetriever {
 
         }
         return fileNames;
-    }
-
-    private Boolean notLastFile(File[] contents, int currentIndex){
-        return !(currentIndex == contents.length - 1);
     }
 
     private String fileData(File f) throws IOException {
