@@ -1,4 +1,5 @@
 import com.arlandis.FileResponseFactoryImp;
+import com.arlandis.Responses.FileResponses.DirectoryResponse;
 import com.arlandis.interfaces.Response;
 import mocks.MockFileReader;
 import mocks.MockRequest;
@@ -6,6 +7,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class FileResponseFactoryImpTest {
 
@@ -15,7 +17,8 @@ public class FileResponseFactoryImpTest {
     private MockRequest jpgFileRequest = new MockRequest("GET /browse/foo.jpg HTTP/1.0", "foo.jpg");
     private MockRequest pdfFileRequest = new MockRequest("GET /browse/foo.pdf HTTP/1.0", "foo.pdf");
     private MockRequest bmpFileRequest = new MockRequest("GET /browse/foo.bmp HTTP/1.0", "foo.bmp");
-    private MockRequest directoryRequest = new MockRequest("GET /browse/foo/ HTTP/1.0", "foo/");
+    private MockRequest directoryRequestWithSlash = new MockRequest("GET /browse/foo/", "foo/");
+    private MockRequest directoryRequestWithoutSlash = new MockRequest("GET /browse/foo", "foo") ;
     private MockFileReader reader = new MockFileReader("fake data");
     private FileResponseFactoryImp factory = new FileResponseFactoryImp();
 
@@ -52,11 +55,24 @@ public class FileResponseFactoryImpTest {
     }
 
     @Test
+    public void testDirectoryResponse(){
+        Response response = factory.fileResponse(directoryRequestWithSlash, reader);
+        assertEquals("Content-type: text/html", response.contentType());
+    }
+
+    @Test
+    public void testBlankExtensionYieldsDirectoryResponse(){
+        Response response = factory.fileResponse(directoryRequestWithoutSlash, reader);
+        assertTrue(response instanceof DirectoryResponse);
+    }
+
+    @Test
     public void testDefaultContentTypeIsText(){
         reader = new MockFileReader("");
         MockRequest request = new MockRequest("", "bar.clj");
         Response response = factory.fileResponse(request, reader);
         assertEquals("Content-type: text/html", response.contentType());
     }
+
 
 }

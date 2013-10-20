@@ -6,6 +6,7 @@ import com.arlandis.interfaces.Request;
 import com.arlandis.interfaces.ResourceRetriever;
 import com.arlandis.interfaces.Response;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,7 +46,7 @@ public class FileResponseFactoryImp implements FileResponseFactory {
     }
 
     private boolean isDirectoryRequest(Request request){
-        return fileRequestSection(request).endsWith("/");
+        return (new File(request.requestedResource())).isDirectory();
     }
 
     private String lookupContentType(String requestSection) {
