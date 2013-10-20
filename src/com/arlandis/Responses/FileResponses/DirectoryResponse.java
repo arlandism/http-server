@@ -21,11 +21,14 @@ public class DirectoryResponse implements Response {
         String dirPath = configPath + request.requestedResource();
         String[] dirContents = retriever.retrieveDirContents(dirPath);
         StringBuilder output = new StringBuilder();
-        for (int i = 0; i < dirContents.length ; i++){
-            String file = dirContents[i];
-            output.append("<a href='").append(file).append("'>").append(file).append("</a>").append(" ");
+        for (String fileName : dirContents) {
+            output.append(makeLinkTag(fileName));
         }
         return output.toString();
+    }
+
+    private String makeLinkTag(String fileName) {
+        return "<a href='" + fileName + "'>" + fileName + "</a>" + " ";
     }
 
     @Override
