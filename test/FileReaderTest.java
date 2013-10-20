@@ -41,7 +41,8 @@ public class FileReaderTest {
               "bar.txt",
               "test.txt"
       };
-      assertEquals(expected, reader.retrieveDirContents("test/tmp/"));
+      assertEquals(expected[0], reader.retrieveDirContents("test/tmp/")[0]);
+      assertEquals(expected[1], reader.retrieveDirContents("test/tmp/")[1]);
     }
 
 }
