@@ -6,11 +6,11 @@ import com.arlandis.interfaces.*;
 public class HttpResponseBuilder implements ResponseBuilder {
 
     private ResourceRetriever retriever;
-    private FileResponseFactory factory;
+    private FileResponseFactory fileResponseFactory;
 
     public HttpResponseBuilder(ResourceRetriever retriever, FileResponseFactory factory) {
         this.retriever = retriever;
-        this.factory = factory;
+        this.fileResponseFactory = factory;
     }
 
     @Override
@@ -42,7 +42,7 @@ public class HttpResponseBuilder implements ResponseBuilder {
 
         } else if (isFileRequest(request)) {
 
-             response = factory.fileResponse(request, retriever);
+             response = fileResponseFactory.fileResponse(request, retriever);
 
         } else {
 
