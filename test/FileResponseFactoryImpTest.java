@@ -1,3 +1,4 @@
+import com.arlandis.Config;
 import com.arlandis.FileResponseFactoryImp;
 import com.arlandis.Responses.FileResponses.DirectoryResponse;
 import com.arlandis.interfaces.Response;
@@ -62,6 +63,7 @@ public class FileResponseFactoryImpTest {
 
     @Test
     public void testBlankExtensionYieldsDirectoryResponse(){
+        Config.instance().setRootDir(System.getProperty("user.dir"));
         Response response = factory.fileResponse(directoryRequestWithoutSlash, reader);
         assertTrue(response instanceof DirectoryResponse);
     }

@@ -15,6 +15,7 @@ public class HttpResponseBuilderTest {
     private MockRequest postRequest;
     private MockRequest sleepRequest;
     private MockRequest txtFileRequest;
+    private MockRequest directoryRequest;
     private MockPostRequest encodedPostRequest;
     private HttpResponseBuilder builder;
     private String testFilePath = "foo/bar/baz.txt";
@@ -30,10 +31,10 @@ public class HttpResponseBuilderTest {
         postRequest = new MockRequest("POST /form HTTP/1.0\r\n\r\n");
         sleepRequest = new MockRequest("GET /ping?sleep=4 HTTP/1.0\r\n\r\n");
         txtFileRequest = new MockRequest("GET /browse/" + testFilePath +  " HTTP/1.0\r\n\r\n");
+        directoryRequest = new MockRequest("GET /browse");
         encodedPostRequest = new MockPostRequest("POST /form HTTP/1.0\r\n\r\n", "foo Hello!<>", "bar baz<>!");
         mockFactory = new MockFileResponseFactory(new MockResponse("mock content type", "bar"));
         factory = mockFactory;
-
         mockReader = new MockFileReader("foo");
         retriever = mockReader;
         builder = new HttpResponseBuilder(mockReader, factory);
