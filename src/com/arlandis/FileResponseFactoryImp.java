@@ -46,7 +46,9 @@ public class FileResponseFactoryImp implements FileResponseFactory {
     }
 
     private boolean isDirectoryRequest(Request request){
-        return (new File(request.requestedResource())).isDirectory();
+        String configuredDir = Config.instance().getRootDir();
+        String requestedPath = request.requestedResource();
+        return (new File(configuredDir + requestedPath)).isDirectory();
     }
 
     private String lookupContentType(String requestSection) {
