@@ -17,7 +17,7 @@ public class DirectoryResponseTest {
     @Test
     public void testDirectoryResponsePollsReader(){
         DirectoryResponse response = new DirectoryResponse(request, retriever);
-        assertEquals("<a href='bar'>bar</a> ",response.body());
+        assertEquals("bar<br />",response.body());
     }
 
     @Test
