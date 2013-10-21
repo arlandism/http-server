@@ -50,8 +50,22 @@ public class HttpRequestTest {
 
     @Test
     public void testRequestedResource(){
-        String rawHeader = "GET /browse/foo.txt HTTP/1.0";
+        String rawHeader = "GET /browse/bar/foo.txt HTTP/1.0";
         HttpRequest request = new HttpRequest(rawHeader);
-        assertEquals("foo.txt", request.requestedResource());
+        assertEquals("bar/foo.txt", request.requestedResource());
+    }
+
+    @Test
+    public void testBlankExtensionReturnsSlash(){
+        String rawHeader = "GET /browse HTTP/1.0";
+        HttpRequest request = new HttpRequest(rawHeader);
+        assertEquals("/", request.requestedResource());
+    }
+
+    @Test
+    public void testSlashReturnsSlash(){
+        String rawHeader = "GET /browse/ HTTP/1.0";
+        HttpRequest request = new HttpRequest(rawHeader);
+        assertEquals("/", request.requestedResource());
     }
 }
