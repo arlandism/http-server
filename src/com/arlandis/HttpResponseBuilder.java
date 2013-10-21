@@ -40,7 +40,7 @@ public class HttpResponseBuilder implements ResponseBuilder {
 
             response = new SleepResponse(request, new ThreadSleeper());
 
-        } else if (isFileRequest(request)) {
+        } else if (isResourceRequest(request)) {
 
              response = fileResponseFactory.fileResponse(request, retriever);
 
@@ -65,7 +65,7 @@ public class HttpResponseBuilder implements ResponseBuilder {
         return request.headers().startsWith("GET /ping?sleep");
     }
 
-    private boolean isFileRequest(Request request) {
+    private boolean isResourceRequest(Request request) {
         return request.headers().startsWith("GET /browse");
     }
 
