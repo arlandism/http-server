@@ -16,7 +16,7 @@ public class HttpRequest implements Request {
     }
 
     public Integer bytesToRead() {
-        final Integer contentHeaderLength = 16;
+        Integer contentHeaderLength = 16;
         Integer START_LOCATION = requestHeaders.indexOf("Content-Length: ") + contentHeaderLength;
         return parseHeadersForInt(START_LOCATION);
     }
@@ -46,13 +46,41 @@ public class HttpRequest implements Request {
     }
 
     public String requestedResource(){
-        Integer startOfRequestSection = requestHeaders.indexOf("/browse") + 8;
-        Integer protocolIndex = requestHeaders.indexOf("HTTP");
-        return requestHeaders.substring(startOfRequestSection, protocolIndex - 1).trim();
+        Integer startOfRequestSection = startOfRequest();
+        String resource;
+        if (requestForDirectory()){
+            resource = "/";
+        } else {
+            resource = requestHeaders.substring(startOfRequestSection, protocolIndex() - 1).trim();
+        }
+        return resource;
     }
+
 
     public void sleep(Sleeper sleeper) {
         sleeper.sleep(sleepTime());
+    }
+
+    private boolean requestForDirectory() {
+        Integer indexOfRequestPrefix = 7;
+        String resourcePrefix = requestHeaders.substring(browseIndex() + indexOfRequestPrefix, startOfRequest());
+        return resourcePrefix.equals(" ") || (resourcePrefix.equals("/") && isEndOfRequest());
+    }
+
+    private boolean isEndOfRequest() {
+        return requestHeaders.substring(startOfRequest(), protocolIndex()).equals(" ");
+    }
+
+    private Integer startOfRequest() {
+        return browseIndex() + 8;
+    }
+
+    private Integer browseIndex(){
+        return requestHeaders.indexOf("/browse");
+    }
+
+    private Integer protocolIndex(){
+        return requestHeaders.indexOf("HTTP");
     }
 
     private Integer sleepTime() {
