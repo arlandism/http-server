@@ -5,6 +5,8 @@ import com.arlandis.interfaces.Request;
 import com.arlandis.interfaces.ResourceRetriever;
 import com.arlandis.interfaces.Response;
 
+import java.io.File;
+
 public class DirectoryResponse implements Response {
 
     private Request request;
@@ -22,15 +24,10 @@ public class DirectoryResponse implements Response {
         String[] dirContents = retriever.retrieveDirContents(dirPath);
         StringBuilder output = new StringBuilder();
         for (String fileName : dirContents) {
-            output.append(makeLinkTag(fileName));
+            output.append(fileName).append("<br />");
         }
         return output.toString();
     }
-
-    private String makeLinkTag(String fileName) {
-        return "<a href='" + fileName + "'>" + fileName + "</a>" + " ";
-    }
-
     @Override
     public String contentType(){
         return "Content-type: text/html";
