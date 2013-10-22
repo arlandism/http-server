@@ -49,26 +49,10 @@ public class HttpRequest implements Request {
 
         String resource = requestHeaders.substring(startOfRequest(), endOfRequest());
         return resource;
-        //f (resource.endsWith("/")){
-        //    return "/";
-        //} else {
-        //    return resource;
-        //}
-
     }
 
     public void sleep(Sleeper sleeper) {
         sleeper.sleep(sleepTime());
-    }
-
-    private boolean requestForDirectory() {
-        Integer indexOfRequestPrefix = 7;
-        String resourcePrefix = requestHeaders.substring(browseIndex() + indexOfRequestPrefix, startOfRequest());
-        return resourcePrefix.equals(" ") || (resourcePrefix.equals("/") && isEndOfRequest());
-    }
-
-    private boolean isEndOfRequest() {
-        return requestHeaders.substring(startOfRequest(), protocolIndex()).equals(" ");
     }
 
     private Integer startOfRequest() {
@@ -77,10 +61,6 @@ public class HttpRequest implements Request {
 
     private Integer endOfRequest(){
         return protocolIndex() - 1;
-    }
-
-    private Integer browseIndex(){
-        return requestHeaders.indexOf("/browse");
     }
 
     private Integer protocolIndex(){
