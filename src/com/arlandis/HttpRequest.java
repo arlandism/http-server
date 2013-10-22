@@ -46,16 +46,16 @@ public class HttpRequest implements Request {
     }
 
     public String requestedResource(){
-        Integer startOfRequestSection = startOfRequest();
-        String resource;
-        if (requestForDirectory()){
-            resource = "/";
-        } else {
-            resource = requestHeaders.substring(startOfRequestSection, protocolIndex() - 1).trim();
-        }
-        return resource;
-    }
 
+        String resource = requestHeaders.substring(startOfRequest(), endOfRequest());
+        return resource;
+        //f (resource.endsWith("/")){
+        //    return "/";
+        //} else {
+        //    return resource;
+        //}
+
+    }
 
     public void sleep(Sleeper sleeper) {
         sleeper.sleep(sleepTime());
@@ -72,7 +72,11 @@ public class HttpRequest implements Request {
     }
 
     private Integer startOfRequest() {
-        return browseIndex() + 8;
+        return requestHeaders.indexOf("/");
+    }
+
+    private Integer endOfRequest(){
+        return protocolIndex() - 1;
     }
 
     private Integer browseIndex(){

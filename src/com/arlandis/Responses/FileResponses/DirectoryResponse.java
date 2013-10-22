@@ -20,7 +20,7 @@ public class DirectoryResponse implements Response {
     @Override
     public String body() {
         String configPath = Config.instance().getRootDir();
-        String dirPath = configPath + request.requestedResource();
+        String dirPath = configPath + requestSection();
         String[] dirContents = retriever.retrieveDirContents(dirPath);
         StringBuilder output = new StringBuilder();
         for (String fileName : dirContents) {
@@ -28,6 +28,13 @@ public class DirectoryResponse implements Response {
         }
         return output.toString();
     }
+
+    private String requestSection(){
+        Integer browseIndex = request.requestedResource().indexOf("/browse");
+        Integer OFF_SET = "/browse".length() + 1;
+        return request.requestedResource().substring(browseIndex + OFF_SET);
+    }
+
     @Override
     public String contentType(){
         return "Content-type: text/html";

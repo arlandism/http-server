@@ -1,7 +1,6 @@
-import com.arlandis.HttpResponseBuilder;
+import com.arlandis.*;
+import com.arlandis.interfaces.*;
 import mocks.*;
-import com.arlandis.interfaces.FileResponseFactory;
-import com.arlandis.interfaces.ResourceRetriever;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -23,6 +22,7 @@ public class HttpResponseBuilderTest {
     private MockFileResponseFactory mockFactory;
     private MockFileReader mockReader;
     private ResourceRetriever retriever;
+    private String htmlContentType = "text/html";
 
     @Before
     public void setUp(){
@@ -42,61 +42,70 @@ public class HttpResponseBuilderTest {
 
     @Test
     public void testGetPingResponse(){
-        String expected = "HTTP/1.0 200 OK" + "\r\n" +
-                          "Content-type: text/html" + "\r\n\r\n" +
-                          "<html><body>pong</body></html>";
-        assertEquals(expected, builder.generateResponse(pingRequest));
+        String expectedBody = "<html><body>pong</body></html>";
+        String response = builder.generateResponse(pingRequest);
+        assertContentTypeAndBodyMatch(htmlContentType, expectedBody, response);
     }
 
     @Test
     public void testGetFormResponse(){
+        String expectedBody = "<html><body>" +
+                              "<form method='post', action='/form'>" +
+                              "<label>foo<input name='foo'></label>" +
+                              "<br /><label>bar<input name='bar'></label>" +
+                              "<br /><input value='submit' type='submit'>" +
+                              "</form></body></html>";
         String response = builder.generateResponse(formRequest);
-        String expected = "HTTP/1.0 200 OK" + "\r\n" +
-                          "Content-type: text/html" + "\r\n\r\n" +
-                          "<html><body>" +
-                          "<form method='post', action='/form'>" +
-                          "<label>foo<input name='foo'></label>" +
-                          "<br /><label>bar<input name='bar'></label>" +
-                          "<br /><input value='submit' type='submit'>" +
-                          "</form></body></html>";
-        assertEquals(expected, response);
+        assertContentTypeAndBodyMatch(htmlContentType, expectedBody, response);
     }
 
     @Test
     public void testPostFormResponse(){
         String response = builder.generateResponse(postRequest);
-        String expected = "HTTP/1.0 200 OK" + "\r\n" +
-                          "Content-type: text/html" + "\r\n\r\n" +
-                          "foo = foo <br /> bar = bar";
-        assertEquals(expected, response);
+        String expectedBody = "foo = foo <br /> bar = bar";
+        assertContentTypeAndBodyMatch(htmlContentType, expectedBody, response);
     }
 
     @Test
     public void testPostFormResponsesAreDecoded(){
         String response = builder.generateResponse(encodedPostRequest);
-        String expected =   "HTTP/1.0 200 OK" + "\r\n" +
-                            "Content-type: text/html" + "\r\n\r\n" +
-                            "foo = foo Hello!<> <br /> bar = bar baz<>!";
-        assertEquals(expected, response);
+        String expectedBody = "foo = foo Hello!<> <br /> bar = bar baz<>!";
+        assertContentTypeAndBodyMatch(htmlContentType, expectedBody, response);
     }
 
     @Test
     public void testSleepResponse(){
-        String expected = "HTTP/1.0 200 OK" + "\r\n" +
-                          "Content-type: text/html" + "\r\n\r\n" +
-                          "<html><body>pong</body></html>";
+        String expectedBody = "<html><body>pong</body></html>";
         String response = builder.generateResponse(sleepRequest);
+        assertContentTypeAndBodyMatch(htmlContentType, expectedBody, response);
         assertTrue(sleepRequest.sleepCalled());
-        assertEquals(expected, response);
     }
 
     @Test
     public void testDanceWithFileResponseFactory(){
-        String expected = "HTTP/1.0 200 OK" + "\r\n" +
-                          "Content-type: mock content type" +  "\r\n\r\n" +
-                          "bar";
-        assertEquals(expected, builder.generateResponse(txtFileRequest));
-        assertEquals(txtFileRequest, mockFactory.history()[0]);
+        assertContentTypeAndBodyMatch("mock content type", "bar", builder.generateResponse(txtFileRequest));
+        assertFileResponseFactoryCalledCorrectly(txtFileRequest, retriever);
+    }
+
+    @Test
+    public void testResponseWithServiceRequest(){
+        String contentType = "foo";
+        String body = "bar";
+        ServiceRequest serviceRequest = new MockServiceRequest();
+        Response serviceResponse = new MockResponse(contentType, body);
+        ResponseFactory responseFactory = new MockResponseFactory(serviceResponse);
+        HttpResponseBuilder builder = new HttpResponseBuilder(retriever, mockFactory, responseFactory);
+        assertContentTypeAndBodyMatch(contentType, body, builder.generateResponse(serviceRequest));
+    }
+
+    private void assertFileResponseFactoryCalledCorrectly(Request request, ResourceRetriever retriever) {
+        assertEquals(request, mockFactory.history()[0]);
         assertEquals(retriever, mockFactory.history()[1]);
+    }
+
+    private void assertContentTypeAndBodyMatch(String expectedContentType, String expectedBody, String actual){
+        String OK_STATUS = "HTTP/1.0 200 OK";
+        String contentHeader = "Content-type: ";
+        assertEquals(OK_STATUS + "\r\n" + contentHeader + expectedContentType + "\r\n\r\n" + expectedBody, actual);
     }
 }

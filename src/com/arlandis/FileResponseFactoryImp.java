@@ -33,6 +33,7 @@ public class FileResponseFactoryImp implements FileResponseFactory {
     private Response getResponse(Request request, ResourceRetriever retriever) {
 
         String requestSection = fileRequestSection(request);
+        System.out.println("The request was: " + requestSection + " and was " + requestSection.length());
         Response response;
 
         if(isDirectoryRequest(request)){
@@ -48,7 +49,7 @@ public class FileResponseFactoryImp implements FileResponseFactory {
     private boolean isDirectoryRequest(Request request){
         String configuredDir = Config.instance().getRootDir();
         String requestedPath = request.requestedResource();
-        return (new File(configuredDir + requestedPath)).isDirectory();
+        return requestedPath.endsWith("/");
     }
 
     private String lookupContentType(String requestSection) {
@@ -62,11 +63,13 @@ public class FileResponseFactoryImp implements FileResponseFactory {
 
     private String extension(String filename){
         int lastDotIndex = filename.lastIndexOf('.');
-
         return filename.substring(lastDotIndex + 1);
     }
 
     private String fileRequestSection(Request request){
-        return request.requestedResource();
+        Integer browseIndex = request.requestedResource().indexOf("/browse");
+        Integer OFF_SET = "/browse".length() + 1;
+        return request.requestedResource().substring(browseIndex + OFF_SET);
     }
+
 }

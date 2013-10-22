@@ -34,9 +34,16 @@ public class FileResponse implements Response {
 
     private String fileBody() {
         String configRootDir = Config.instance().getRootDir();
-        String requestedResource = request.requestedResource();
+        String requestedResource = requestSection(request);
         String path = configRootDir + requestedResource;
         return retriever.retrieve(path);
+    }
+
+    private String requestSection(Request request){
+        Integer browseIndex = request.requestedResource().indexOf("/browse");
+        Integer OFF_SET = "/browse".length() + 1;
+        System.out.println(request.requestedResource());
+        return request.requestedResource().substring(browseIndex + OFF_SET);
     }
 
 }

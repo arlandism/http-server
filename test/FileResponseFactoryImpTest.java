@@ -12,14 +12,14 @@ import static org.junit.Assert.assertTrue;
 
 public class FileResponseFactoryImpTest {
 
-    private MockRequest textFileRequest = new MockRequest("GET /browse/foo.txt HTTP/1.0", "foo.txt");
-    private MockRequest pngFileRequest = new MockRequest("GET /browse/foo.png HTTP/1.0", "foo.png");
-    private MockRequest jpegFileRequest = new MockRequest("GET /browse/foo.jpeg HTTP/1.0", "foo.jpeg");
-    private MockRequest jpgFileRequest = new MockRequest("GET /browse/foo.jpg HTTP/1.0", "foo.jpg");
-    private MockRequest pdfFileRequest = new MockRequest("GET /browse/foo.pdf HTTP/1.0", "foo.pdf");
-    private MockRequest bmpFileRequest = new MockRequest("GET /browse/foo.bmp HTTP/1.0", "foo.bmp");
-    private MockRequest directoryRequestWithSlash = new MockRequest("GET /browse/foo/", "foo/");
-    private MockRequest directoryRequestWithoutSlash = new MockRequest("GET /browse/foo", "foo") ;
+    private MockRequest textFileRequest = new MockRequest("GET /browse/foo.txt HTTP/1.0", "/browse/foo.txt");
+    private MockRequest pngFileRequest = new MockRequest("GET /browse/foo.png HTTP/1.0", "/browse/foo.png");
+    private MockRequest jpegFileRequest = new MockRequest("GET /browse/foo.jpeg HTTP/1.0", "/browse/foo.jpeg");
+    private MockRequest jpgFileRequest = new MockRequest("GET /browse/foo.jpg HTTP/1.0", "/browse/foo.jpg");
+    private MockRequest pdfFileRequest = new MockRequest("GET /browse/foo.pdf HTTP/1.0", "/browse/foo.pdf");
+    private MockRequest bmpFileRequest = new MockRequest("GET /browse/foo.bmp HTTP/1.0", "/browse/foo.bmp");
+    private MockRequest directoryRequestWithSlash = new MockRequest("GET /browse/foo/", "/browse/foo/");
+    private MockRequest directoryRequestWithoutSlash = new MockRequest("GET /browse/foo", "/browse/foo") ;
     private MockFileReader reader = new MockFileReader("fake data");
     private FileResponseFactoryImp factory = new FileResponseFactoryImp();
 
@@ -59,13 +59,6 @@ public class FileResponseFactoryImpTest {
     public void testDirectoryResponse(){
         Response response = factory.fileResponse(directoryRequestWithSlash, reader);
         assertEquals("Content-type: text/html", response.contentType());
-    }
-
-    @Test
-    public void testBlankExtensionYieldsDirectoryResponse(){
-        Config.instance().setRootDir(System.getProperty("user.dir"));
-        Response response = factory.fileResponse(directoryRequestWithoutSlash, reader);
-        assertTrue(response instanceof DirectoryResponse);
     }
 
     @Test

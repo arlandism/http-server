@@ -36,7 +36,7 @@ public class FileReaderTest {
     @Test
     public void testRetrieveDir() throws IOException {
       (new File("test/tmp/bar.txt")).createNewFile();
-      (new File("test/tmp/bar.txt")).createNewFile();
+      (new File("test/tmp/test.txt")).createNewFile();
       String[] expected = {
               "bar.txt",
               "test.txt"

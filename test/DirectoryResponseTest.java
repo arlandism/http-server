@@ -12,7 +12,7 @@ public class DirectoryResponseTest {
 
     private MockFileReader mockFileReader = new MockFileReader("", "bar");
     private ResourceRetriever retriever = mockFileReader;
-    private MockRequest request = new MockRequest("", "me");
+    private MockRequest request = new MockRequest("", "/browse/me");
 
     @Test
     public void testDirectoryResponsePollsReader(){

@@ -11,7 +11,7 @@ import static org.junit.Assert.assertEquals;
 public class FileResponseTest {
     private MockFileReader mockReader = new MockFileReader("data from mock reader");
     private ResourceRetriever retriever = mockReader;
-    private MockRequest mockRequest = new MockRequest("", "bar");
+    private MockRequest mockRequest = new MockRequest("", "/browse/bar");
     private Request request = mockRequest;
     private FileResponse fileResponse = new FileResponse(request, retriever);
 
