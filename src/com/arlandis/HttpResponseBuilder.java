@@ -7,27 +7,15 @@ public class HttpResponseBuilder implements ResponseBuilder {
 
     private ResourceRetriever retriever;
     private FileResponseFactory fileResponseFactory;
-    private ResponseFactory responseFactory;
 
     public HttpResponseBuilder(ResourceRetriever retriever, FileResponseFactory factory) {
         this.retriever = retriever;
         this.fileResponseFactory = factory;
     }
 
-    public HttpResponseBuilder(ResourceRetriever retriever, FileResponseFactory fileResponseFactory, ResponseFactory responseFactory) {
-        this.retriever = retriever;
-        this.fileResponseFactory = fileResponseFactory;
-        this.responseFactory = responseFactory;
-    }
-
     @Override
     public String generateResponse(Request request) {
         return getBody(request);
-    }
-
-    public String generateResponse(ServiceRequest request) {
-        Response response = responseFactory.serviceResponse(request);
-        return addStatusCode(response.contentType() + "\r\n\r\n" + response.body());
     }
 
     private String getBody(Request request) {

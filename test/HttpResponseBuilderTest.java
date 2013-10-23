@@ -93,13 +93,13 @@ public class HttpResponseBuilderTest {
     @Test
     @Ignore("No way to generate service requests yet")
     public void testResponseWithRealServiceRequest(){
-        String contentType = "foo";
-        String body = "bar";
-        ServiceRequest serviceRequest = new MockServiceRequest();
-        Response serviceResponse = new MockResponse(contentType, body);
-        ResponseFactory responseFactory = new MockResponseFactory(serviceResponse);
-        HttpResponseBuilder builder = new HttpResponseBuilder(retriever, mockFactory, responseFactory);
-        assertContentTypeAndBodyMatch(contentType, body, builder.generateResponse(serviceRequest));
+        //String contentType = "foo";
+        //String body = "bar";
+        //ServiceRequest serviceRequest = new MockServiceRequest();
+        //Response serviceResponse = new MockResponse(contentType, body);
+        //ResponseFactory responseFactory = new MockResponseFactory(serviceResponse);
+        //HttpResponseBuilder builder = new HttpResponseBuilder(retriever, mockFactory, responseFactory);
+        //assertContentTypeAndBodyMatch(contentType, body, builder.generateResponse(serviceRequest));
     }
 
     private void assertFileResponseFactoryCalledCorrectly(Request request, ResourceRetriever retriever) {
