@@ -1,6 +1,7 @@
 package com.arlandis;
 
 import com.arlandis.Responses.TicTacToeService.Move;
+import com.arlandis.interfaces.NetworkIO;
 import com.arlandis.interfaces.TTTService;
 import com.google.gson.JsonObject;
 
@@ -14,25 +15,31 @@ public class TTTServiceImp implements TTTService
 {
 
     private Socket socket;
+    private NetworkIO networkIO;
 
-    public TTTServiceImp(Socket connSocket) {
-        socket = connSocket;
+    public TTTServiceImp(NetworkIO networkIO) {
+        this.networkIO = networkIO;
     }
 
     @Override
     public String answer(Move[] queryItem) throws IOException {
-        JsonObject toSend = new JsonObject();
         JsonObject moves = new JsonObject();
-
-        Integer spot = queryItem[0].getPosition();
-        String token = queryItem[0].getToken();
-        moves.addProperty(spot.toString(), token);
-        toSend.add("board", moves);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        PrintWriter out = new PrintWriter(socket.getOutputStream());
-
-        out.write(toSend.toString());
-        out.close();
+        for (Move move: queryItem){
+            addMove(moves, move);
+        }
+        JsonObject gameData = addMovesToGameData(new JsonObject(), moves);
+        networkIO.send(gameData.toString());
         return "";
+    }
+
+    private void addMove(JsonObject movesSoFar, Move move){
+        Integer position = move.getPosition();
+        String token = move.getToken();
+        movesSoFar.addProperty(position.toString(), token);
+    }
+
+    private JsonObject addMovesToGameData(JsonObject gameData, JsonObject moves){
+        gameData.add("board", moves);
+        return gameData;
     }
 }

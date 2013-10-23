@@ -1,5 +1,7 @@
+import com.arlandis.NetworkIOImp;
 import com.arlandis.Responses.TicTacToeService.Move;
 import com.arlandis.TTTServiceImp;
+import com.arlandis.interfaces.NetworkIO;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.junit.After;
@@ -38,7 +40,8 @@ public class TTTServiceIntegrationTest {
     @Test
     public void testServiceIntegration() throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(connSocket.getInputStream()));
-        TTTServiceImp service = new TTTServiceImp(clientSocket);
+        NetworkIO networkIO = new NetworkIOImp(clientSocket);
+        TTTServiceImp service = new TTTServiceImp(networkIO);
         Move[] moves = new Move[1];
         moves[0] = new Move(1, "x");
         service.answer(moves);
