@@ -2,33 +2,36 @@ import com.arlandis.Responses.TicTacToeService.Move;
 import com.arlandis.TTTServiceImp;
 import com.arlandis.interfaces.NetworkIO;
 import com.google.gson.JsonObject;
-import junit.extensions.TestSetup;
 import mocks.MockNetworkIO;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 public class TTTServiceImpTest {
-
+    private Move[] moves = {new Move(1, "x")};
+    private JsonObject jsonMoves;
+    private JsonObject expectedServiceQuery;
+    private TTTServiceImp service;
     private MockNetworkIO mockIO = new MockNetworkIO();
     private NetworkIO networkIO = mockIO;
-    private Move[] moves = {new Move(1, "x")};
-    private TTTServiceImp service = new TTTServiceImp(networkIO);
-    private JsonObject jsonMoves = new JsonObject();
-    private JsonObject expectedServiceQuery = new JsonObject();
 
     @Before
-    public void setUp(){
+    public void setUp() {
+        jsonMoves = new JsonObject();
         jsonMoves.addProperty("1", "x");
+        expectedServiceQuery = new JsonObject();
+        service = new TTTServiceImp(networkIO);
     }
 
     @Test
-    public void testServiceImpSendsDataCorrectly() throws IOException {
-        service.answer(moves);
+    public void testServiceIntegration() throws IOException {
         expectedServiceQuery.add("board", jsonMoves);
-        assertTrue(mockIO.lastCallArg().equals(expectedServiceQuery.toString()));
+        service.answer(moves);
+        String calledWith = mockIO.lastCallArg();
+        assertEquals(expectedServiceQuery.toString(), calledWith);
     }
 }

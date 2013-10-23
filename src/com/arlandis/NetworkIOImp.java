@@ -12,12 +12,14 @@ public class NetworkIOImp implements NetworkIO {
 
     private PrintWriter out;
     private BufferedReader in;
+    private Socket conn;
 
     public NetworkIOImp(Socket connSocket) {
         try {
 
             in = new BufferedReader(new InputStreamReader(connSocket.getInputStream()));
             out = new PrintWriter(connSocket.getOutputStream(), true);
+            conn = connSocket;
         } catch (IOException e) {
             e.printStackTrace();
         }

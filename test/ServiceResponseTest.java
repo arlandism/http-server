@@ -1,7 +1,7 @@
 import com.arlandis.interfaces.TTTService;
 import mocks.MockService;
 import com.arlandis.Responses.TicTacToeService.Move;
-import com.arlandis.ServiceResponse;
+import com.arlandis.Responses.ServiceResponse;
 import com.arlandis.interfaces.Request;
 import mocks.MockRequest;
 import org.junit.Before;

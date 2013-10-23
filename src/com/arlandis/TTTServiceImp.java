@@ -13,12 +13,10 @@ import java.net.Socket;
 
 public class TTTServiceImp implements TTTService
 {
-
-    private Socket socket;
-    private NetworkIO networkIO;
+    private NetworkIO io;
 
     public TTTServiceImp(NetworkIO networkIO) {
-        this.networkIO = networkIO;
+        io = networkIO;
     }
 
     @Override
@@ -27,19 +25,22 @@ public class TTTServiceImp implements TTTService
         for (Move move: queryItem){
             addMove(moves, move);
         }
+
         JsonObject gameData = addMovesToGameData(new JsonObject(), moves);
-        networkIO.send(gameData.toString());
+        io.send(gameData.toString());
         return "";
     }
 
-    private void addMove(JsonObject movesSoFar, Move move){
+    private JsonObject addMove(JsonObject movesSoFar, Move move){
         Integer position = move.getPosition();
         String token = move.getToken();
         movesSoFar.addProperty(position.toString(), token);
+        return movesSoFar;
     }
 
     private JsonObject addMovesToGameData(JsonObject gameData, JsonObject moves){
         gameData.add("board", moves);
         return gameData;
     }
+
 }
