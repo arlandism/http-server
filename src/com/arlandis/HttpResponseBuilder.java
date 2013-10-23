@@ -15,13 +15,7 @@ public class HttpResponseBuilder implements ResponseBuilder {
 
     @Override
     public String generateResponse(Request request) {
-        return getBody(request);
-    }
-
-    private String getBody(Request request) {
-        String body;
-        body = respondToRequest(request);
-        return body;
+        return respondToRequest(request);
     }
 
     private String respondToRequest(Request request) {
@@ -50,7 +44,8 @@ public class HttpResponseBuilder implements ResponseBuilder {
 
         }
 
-        return addStatusCode(response.contentType() + "\r\n\r\n" + response.body());
+        return "HTTP/1.0 200 OK" + "\r\n" + response.contentType() + "\r\n\r\n" + response.body();
+
     }
 
     private boolean isFormRequest(Request request) {
@@ -68,10 +63,5 @@ public class HttpResponseBuilder implements ResponseBuilder {
     private boolean isResourceRequest(Request request) {
         return request.headers().startsWith("GET /browse");
     }
-
-    private String addStatusCode(String body){
-        return "HTTP/1.0 200 OK" + "\r\n" + body;
-    }
-
 
 }
