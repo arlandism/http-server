@@ -14,7 +14,7 @@ public class MockRequestFactory implements RequestFactory{
     }
 
     @Override
-    public Request nextRequest(NetworkIO networkIO) throws IOException {
+    public Request nextRequest() throws IOException {
         return toReturn;
     }
 }

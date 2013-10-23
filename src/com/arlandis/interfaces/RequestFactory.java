@@ -4,5 +4,5 @@ import java.io.IOException;
 
 public interface RequestFactory {
 
-    Request nextRequest(NetworkIO networkIO) throws IOException;
+    Request nextRequest() throws IOException;
 }

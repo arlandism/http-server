@@ -18,7 +18,7 @@ public class HttpRequestFactoryTest {
         mockNetworkIO.addToOutputQueue("Fake Request Header");
         mockNetworkIO.addToOutputQueue("");
         NetworkIO networkIO = mockNetworkIO;
-        assertEquals("Fake Request Header", factory.nextRequest(networkIO).headers());
+        assertEquals("Fake Request Header", factory.nextRequest().headers());
     }
 
     @Test
@@ -26,6 +26,6 @@ public class HttpRequestFactoryTest {
         mockNetworkIO.addToOutputQueue("Content-Length: 7");
         mockNetworkIO.addToOutputQueue("");
         mockNetworkIO.addToOutputQueue("foo=nom&bar=baz");
-        assertEquals("nom", factory.nextRequest(networkIO).fooValue());
+        assertEquals("nom", factory.nextRequest().fooValue());
     }
 }

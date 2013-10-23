@@ -13,7 +13,7 @@ public class HttpRequestFactory implements RequestFactory {
         this.networkIO = networkIO;
     }
 
-    public HttpRequest nextRequest(NetworkIO networkIO) throws IOException {
+    public HttpRequest nextRequest() throws IOException {
 
         String requestHeaders = readRequestHeaders(networkIO);
         HttpRequest request = buildRequest(networkIO, requestHeaders);

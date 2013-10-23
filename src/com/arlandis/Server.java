@@ -22,7 +22,7 @@ public class Server implements Responder {
         Request request = null;
 
         try {
-            request = requestFactory.nextRequest(networkIO);
+            request = requestFactory.nextRequest();
         } catch (IOException e) {
             e.printStackTrace();
         }
