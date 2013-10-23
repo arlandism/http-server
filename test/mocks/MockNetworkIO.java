@@ -25,7 +25,7 @@ public class MockNetworkIO implements NetworkIO {
         return outputQueue.removeFirst().toCharArray();
     }
 
-    public String lastResponse(){
+    public String lastCallArg(){
         return inputQueue.getLast();
     }
 
