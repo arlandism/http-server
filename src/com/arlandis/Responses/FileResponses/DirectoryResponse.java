@@ -18,19 +18,13 @@ public class DirectoryResponse implements Response {
     @Override
     public String body() {
         String configPath = Config.instance().getRootDir();
-        String dirPath = configPath + requestSection();
+        String dirPath = configPath + requestedResource;
         String[] dirContents = retriever.retrieveDirContents(dirPath);
         StringBuilder output = new StringBuilder();
         for (String fileName : dirContents) {
             output.append(fileName).append("<br />");
         }
         return output.toString();
-    }
-
-    private String requestSection(){
-        Integer browseIndex = requestedResource.indexOf("/browse");
-        Integer OFF_SET = "/browse".length() + 1;
-        return requestedResource.substring(browseIndex + OFF_SET);
     }
 
     @Override

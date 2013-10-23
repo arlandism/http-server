@@ -36,7 +36,7 @@ public class FileResponseFactoryImp implements FileResponseFactory {
         Response response;
 
         if(isDirectoryRequest(request)){
-            response = new DirectoryResponse(fileRequestSection(request), retriever);
+            response = new DirectoryResponse(requestSection, retriever);
         }else{
             String contentType = lookupContentType(requestSection);
             response = new FileResponse(request, retriever, contentType);

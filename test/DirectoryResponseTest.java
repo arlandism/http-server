@@ -12,19 +12,18 @@ public class DirectoryResponseTest {
 
     private MockFileReader mockFileReader = new MockFileReader("", "bar");
     private ResourceRetriever retriever = mockFileReader;
-    private MockRequest request = new MockRequest("", "/browse/me");
 
     @Test
     public void testDirectoryResponsePollsReader(){
-        DirectoryResponse response = new DirectoryResponse("/browse/me", retriever);
+        DirectoryResponse response = new DirectoryResponse("", retriever);
         assertEquals("bar<br />",response.body());
     }
 
     @Test
     public void testDirectoryResponsePollsConfig(){
         Config.instance().setRootDir("buzz");
-        DirectoryResponse response = new DirectoryResponse("/browse/me", retriever);
+        DirectoryResponse response = new DirectoryResponse("me/", retriever);
         response.body();
-        assertEquals("buzz/me", mockFileReader.history());
+        assertEquals("buzz/me/", mockFileReader.history());
     }
 }
