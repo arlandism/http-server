@@ -42,7 +42,6 @@ public class FileResponse implements Response {
     private String requestSection(Request request){
         Integer browseIndex = request.requestedResource().indexOf("/browse");
         Integer OFF_SET = "/browse".length() + 1;
-        System.out.println(request.requestedResource());
         return request.requestedResource().substring(browseIndex + OFF_SET);
     }
 

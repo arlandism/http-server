@@ -4,6 +4,8 @@ import com.arlandis.Responses.TicTacToeService.Move;
 import com.arlandis.interfaces.Request;
 import com.arlandis.interfaces.TTTService;
 
+import java.io.IOException;
+
 public class ServiceResponse {
 
     private TTTService service;
@@ -15,7 +17,14 @@ public class ServiceResponse {
     }
 
     public String body() {
-        return service.answer(parseRequestIntoMoves(request));
+        String responseFromService;
+        try {
+            responseFromService = service.answer(parseRequestIntoMoves(request));
+        } catch (IOException e) {
+            e.printStackTrace();
+            responseFromService = "NOT FOUND";
+        }
+        return responseFromService;
     }
 
     public String contentType() {
