@@ -43,7 +43,7 @@ public class IntegrationTest {
             e.printStackTrace();
         }
     }
-    private Integer generateRandomPort() {
+    public static Integer generateRandomPort() {
         final int MIN_PORT = 2000;
         final int MAX_PORT = 65535;
 
@@ -60,7 +60,7 @@ public class IntegrationTest {
         return client;
     }
 
-    private String readResponse(BufferedReader in) {
+    public static String readResponse(BufferedReader in) {
         String response = "";
         String nextLine;
         try {
