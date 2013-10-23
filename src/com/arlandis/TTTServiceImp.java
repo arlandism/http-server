@@ -17,14 +17,19 @@ public class TTTServiceImp implements TTTService
 
     @Override
     public String answer(Move[] queryItem) throws IOException {
-        JsonObject moves = new JsonObject();
-        for (Move move: queryItem){
-            addMove(moves, move);
-        }
-
+        JsonObject moves = movesToJson(queryItem);
         JsonObject gameData = addMovesToGameData(new JsonObject(), moves);
         networkIO.send(gameData.toString());
         return serviceData();
+    }
+
+    private JsonObject movesToJson(Move[] queryItem) {
+        JsonObject moves = new JsonObject();
+
+        for (Move move: queryItem){
+            addMove(moves, move);
+        }
+        return moves;
     }
 
     private JsonObject addMove(JsonObject movesSoFar, Move move){
