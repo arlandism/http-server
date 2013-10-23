@@ -7,6 +7,12 @@ import java.io.IOException;
 
 public class HttpRequestFactory implements RequestFactory {
 
+    private NetworkIO networkIO;
+
+    public HttpRequestFactory(NetworkIO networkIO){
+        this.networkIO = networkIO;
+    }
+
     public HttpRequest nextRequest(NetworkIO networkIO) throws IOException {
 
         String requestHeaders = readRequestHeaders(networkIO);

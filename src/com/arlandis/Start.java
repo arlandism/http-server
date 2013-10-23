@@ -11,7 +11,7 @@ public class Start {
         Integer port = portNum(args);
         Config.instance().setRootDir(rootDir(args));
         ServerSocket serverSock = null;
-        HttpRequestFactory requestFactory = new HttpRequestFactory();
+        HttpRequestFactory requestFactory;
         FileResponseFactoryImp fileResponseFactory = new FileResponseFactoryImp();
         HttpResponseBuilder builder = new HttpResponseBuilder(new FileReader(), fileResponseFactory);
 
@@ -27,6 +27,7 @@ public class Start {
             try {
                 Socket connSocket = serverSock.accept();
                 NetworkIOImp networkIO = new NetworkIOImp(connSocket);
+                requestFactory = new HttpRequestFactory(networkIO);
                 Server server = new Server(networkIO, requestFactory, builder);
                 (new Thread(new ServerThread(server))).start();
 

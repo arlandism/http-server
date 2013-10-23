@@ -27,7 +27,7 @@ public class IntegrationTest {
             ServerSocket servSocket = new ServerSocket(port);
             client = trySocketCreation(port);
             NetworkIOImp networkIO = new NetworkIOImp(servSocket.accept());
-            RequestFactory requestFactory = new HttpRequestFactory();
+            RequestFactory requestFactory = new HttpRequestFactory(networkIO);
             FileResponseFactoryImp responseFactoryImp = new FileResponseFactoryImp();
             FileReader retriever = new FileReader();
             HttpResponseBuilder builder = new HttpResponseBuilder(retriever, responseFactoryImp);

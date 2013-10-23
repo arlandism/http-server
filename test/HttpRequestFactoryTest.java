@@ -11,7 +11,7 @@ public class HttpRequestFactoryTest {
 
     private MockNetworkIO mockNetworkIO = new MockNetworkIO();
     private NetworkIO networkIO = mockNetworkIO;
-    private HttpRequestFactory factory = new HttpRequestFactory();
+    private HttpRequestFactory factory = new HttpRequestFactory(networkIO);
 
     @Test
     public void testFactorySetsRequestHeaders() throws IOException {
