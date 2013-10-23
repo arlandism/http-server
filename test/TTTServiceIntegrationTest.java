@@ -4,6 +4,7 @@ import com.arlandis.TTTServiceImp;
 import com.google.gson.JsonObject;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.BufferedReader;
@@ -44,12 +45,13 @@ public class TTTServiceIntegrationTest {
         connSocket.close();
     }
 
-    @Test
-    public void testServiceIntegration() throws IOException {
-        service.answer(moves);
-        expectedServiceQuery.add("board", jsonMoves);
-        String response  = IntegrationTest.readResponse(in);
-        assertTrue(expectedServiceQuery.toString().equals(response));
-    }
+    //@Test
+    //@Ignore("Save for later")
+    //public void testServiceIntegration() throws IOException {
+    //    service.answer(moves);
+    //    expectedServiceQuery.add("board", jsonMoves);
+    //    String response  = IntegrationTest.readResponse(in);
+    //    assertTrue(expectedServiceQuery.toString().equals(response));
+    //}
 
 }

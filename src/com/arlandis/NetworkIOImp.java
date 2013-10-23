@@ -28,7 +28,13 @@ public class NetworkIOImp implements NetworkIO {
     @Override
     public void send(String response) {
         out.print(response);
-        out.close();
+        out.println("\r\n\r\n");
+
+        try {
+            conn.shutdownOutput();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

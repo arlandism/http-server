@@ -5,18 +5,14 @@ import com.arlandis.interfaces.NetworkIO;
 import com.arlandis.interfaces.TTTService;
 import com.google.gson.JsonObject;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.Socket;
 
 public class TTTServiceImp implements TTTService
 {
-    private NetworkIO io;
+    private NetworkIO networkIO;
 
     public TTTServiceImp(NetworkIO networkIO) {
-        io = networkIO;
+        this.networkIO = networkIO;
     }
 
     @Override
@@ -27,8 +23,8 @@ public class TTTServiceImp implements TTTService
         }
 
         JsonObject gameData = addMovesToGameData(new JsonObject(), moves);
-        io.send(gameData.toString());
-        return "";
+        networkIO.send(gameData.toString());
+        return serviceData();
     }
 
     private JsonObject addMove(JsonObject movesSoFar, Move move){
@@ -41,6 +37,15 @@ public class TTTServiceImp implements TTTService
     private JsonObject addMovesToGameData(JsonObject gameData, JsonObject moves){
         gameData.add("board", moves);
         return gameData;
+    }
+
+    private String serviceData() throws IOException {
+        String nextPiece;
+        StringBuilder serviceData = new StringBuilder();
+        while ((nextPiece = networkIO.readLine()) != null){
+            serviceData.append(nextPiece);
+        }
+        return serviceData.toString();
     }
 
 }

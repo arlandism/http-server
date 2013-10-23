@@ -28,10 +28,19 @@ public class TTTServiceImpTest {
     }
 
     @Test
-    public void testServiceIntegration() throws IOException {
+    public void testServiceQueriedCorrectly() throws IOException {
+        mockIO.addToOutputQueue(null);
         expectedServiceQuery.add("board", jsonMoves);
         service.answer(moves);
         String calledWith = mockIO.lastCallArg();
         assertEquals(expectedServiceQuery.toString(), calledWith);
+    }
+
+    @Test
+    public void testResponseComesFromService() throws IOException {
+       mockIO.addToOutputQueue("bar");
+       mockIO.addToOutputQueue(null);
+       String serviceResponse = service.answer(moves);
+       assertEquals("bar",serviceResponse);
     }
 }
