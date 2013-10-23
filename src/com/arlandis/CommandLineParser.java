@@ -23,6 +23,11 @@ public class CommandLineParser {
         return valueOrDefault("-d", System.getProperty("user.dir"));
     }
 
+    public int servicePort() {
+        String port = valueOrDefault("-s", "5000");
+        return Integer.parseInt(port);
+    }
+
     private Boolean flagPresent(String flag) {
         final Integer NOT_FOUND = -1;
         return Arrays.asList(argsToParse).indexOf(flag) != NOT_FOUND;
@@ -38,4 +43,6 @@ public class CommandLineParser {
         }
         return value;
     }
+
+
 }
