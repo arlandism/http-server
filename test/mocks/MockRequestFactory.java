@@ -1,6 +1,5 @@
 package mocks;
 
-import com.arlandis.interfaces.NetworkIO;
 import com.arlandis.interfaces.Request;
 import com.arlandis.interfaces.RequestFactory;
 

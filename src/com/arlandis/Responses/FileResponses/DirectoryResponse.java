@@ -5,15 +5,13 @@ import com.arlandis.interfaces.Request;
 import com.arlandis.interfaces.ResourceRetriever;
 import com.arlandis.interfaces.Response;
 
-import java.io.File;
-
 public class DirectoryResponse implements Response {
 
-    private Request request;
+    private String requestedResource;
     private ResourceRetriever retriever;
 
-    public DirectoryResponse(Request request, ResourceRetriever retriever) {
-        this.request = request;
+    public DirectoryResponse(String requestedResource, ResourceRetriever retriever) {
+        this.requestedResource = requestedResource;
         this.retriever = retriever;
     }
 
@@ -30,9 +28,9 @@ public class DirectoryResponse implements Response {
     }
 
     private String requestSection(){
-        Integer browseIndex = request.requestedResource().indexOf("/browse");
+        Integer browseIndex = requestedResource.indexOf("/browse");
         Integer OFF_SET = "/browse".length() + 1;
-        return request.requestedResource().substring(browseIndex + OFF_SET);
+        return requestedResource.substring(browseIndex + OFF_SET);
     }
 
     @Override

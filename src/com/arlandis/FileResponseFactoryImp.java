@@ -33,11 +33,10 @@ public class FileResponseFactoryImp implements FileResponseFactory {
     private Response getResponse(Request request, ResourceRetriever retriever) {
 
         String requestSection = fileRequestSection(request);
-        System.out.println("The request was: " + requestSection + " and was " + requestSection.length());
         Response response;
 
         if(isDirectoryRequest(request)){
-            response = new DirectoryResponse(request, retriever);
+            response = new DirectoryResponse(fileRequestSection(request), retriever);
         }else{
             String contentType = lookupContentType(requestSection);
             response = new FileResponse(request, retriever, contentType);
@@ -47,7 +46,6 @@ public class FileResponseFactoryImp implements FileResponseFactory {
     }
 
     private boolean isDirectoryRequest(Request request){
-        String configuredDir = Config.instance().getRootDir();
         String requestedPath = request.requestedResource();
         return requestedPath.endsWith("/");
     }

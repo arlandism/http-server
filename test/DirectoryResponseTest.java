@@ -16,14 +16,14 @@ public class DirectoryResponseTest {
 
     @Test
     public void testDirectoryResponsePollsReader(){
-        DirectoryResponse response = new DirectoryResponse(request, retriever);
+        DirectoryResponse response = new DirectoryResponse("/browse/me", retriever);
         assertEquals("bar<br />",response.body());
     }
 
     @Test
     public void testDirectoryResponsePollsConfig(){
         Config.instance().setRootDir("buzz");
-        DirectoryResponse response = new DirectoryResponse(request, retriever);
+        DirectoryResponse response = new DirectoryResponse("/browse/me", retriever);
         response.body();
         assertEquals("buzz/me", mockFileReader.history());
     }
