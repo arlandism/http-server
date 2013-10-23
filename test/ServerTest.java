@@ -32,7 +32,7 @@ public class ServerTest {
     public void getsRequestAndSendsToResponse(){
         Server server = new Server(io, factory, builder);
         server.respond();
-        assertEquals("baz", mockIO.lastResponse()) ;
+        assertEquals("baz", mockIO.lastCallArg()) ;
     }
 
     @Test
