@@ -1,14 +1,15 @@
-import com.arlandis.Config;
 import com.arlandis.FileResponseFactoryImp;
-import com.arlandis.Responses.FileResponses.DirectoryResponse;
+import com.arlandis.interfaces.Request;
 import com.arlandis.interfaces.Response;
 import mocks.MockFileReader;
 import mocks.MockRequest;
-import org.junit.Ignore;
+import org.junit.Before;
 import org.junit.Test;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class FileResponseFactoryImpTest {
 
@@ -19,54 +20,33 @@ public class FileResponseFactoryImpTest {
     private MockRequest pdfFileRequest = new MockRequest("GET /browse/foo.pdf HTTP/1.0", "/browse/foo.pdf");
     private MockRequest bmpFileRequest = new MockRequest("GET /browse/foo.bmp HTTP/1.0", "/browse/foo.bmp");
     private MockRequest directoryRequestWithSlash = new MockRequest("GET /browse/foo/", "/browse/foo/");
-    private MockRequest directoryRequestWithoutSlash = new MockRequest("GET /browse/foo", "/browse/foo") ;
     private MockFileReader reader = new MockFileReader("fake data");
     private FileResponseFactoryImp factory = new FileResponseFactoryImp();
+    private Map<Request, String> requestToExtension = new HashMap<Request, String>();
 
-    @Test
-    public void testContentTypeWithRequestForTextFile(){
-        Response response = factory.fileResponse(textFileRequest, reader);
-        assertEquals("Content-type: text/html", response.contentType());
+    @Before
+    public void setUp(){
+        requestToExtension.put(textFileRequest, "text/html");
+        requestToExtension.put(pngFileRequest, "image/png");
+        requestToExtension.put(jpegFileRequest, "image/jpeg");
+        requestToExtension.put(jpgFileRequest, "image/jpeg");
+        requestToExtension.put(pdfFileRequest, "application/pdf");
+        requestToExtension.put(bmpFileRequest, "image/bmp");
+        requestToExtension.put(directoryRequestWithSlash, "text/html");
+        requestToExtension.put(new MockRequest("", "bar.clj"), "text/html");
     }
 
     @Test
-    public void testContentTypeWithRequestForPngFile(){
-        Response response = factory.fileResponse(pngFileRequest, reader);
-        assertEquals("Content-type: image/png", response.contentType());
+    public void testContentTypesAgainstMockRequests(){
+        for (Request request: requestToExtension.keySet()){
+            String expectedType = requestToExtension.get(request);
+            Response response = factory.fileResponse(request, reader);
+            assertCorrectContentType(expectedType, response);
+        }
     }
 
-    @Test
-    public void testContentTypeWithRequestForJpegFile(){
-        Response response = factory.fileResponse(jpegFileRequest, reader);
-        assertEquals("Content-type: image/jpeg", response.contentType());
-        Response response1 = factory.fileResponse(jpgFileRequest, reader);
-        assertEquals("Content-type: image/jpeg", response1.contentType());
-    }
-
-    @Test
-    public void testContentTypeWithRequestForPdfFile(){
-        Response response = factory.fileResponse(pdfFileRequest, reader);
-        assertEquals("Content-type: application/pdf", response.contentType());
-    }
-
-    @Test
-    public void testContentTypeWithRequestForBmpFile(){
-        Response response = factory.fileResponse(bmpFileRequest, reader);
-        assertEquals("Content-type: image/bmp", response.contentType());
-    }
-
-    @Test
-    public void testDirectoryResponse(){
-        Response response = factory.fileResponse(directoryRequestWithSlash, reader);
-        assertEquals("Content-type: text/html", response.contentType());
-    }
-
-    @Test
-    public void testDefaultContentTypeIsText(){
-        reader = new MockFileReader("");
-        MockRequest request = new MockRequest("", "bar.clj");
-        Response response = factory.fileResponse(request, reader);
-        assertEquals("Content-type: text/html", response.contentType());
+    public void assertCorrectContentType(String extension, Response response){
+        assertEquals("Content-type: " + extension, response.contentType());
     }
 
 
