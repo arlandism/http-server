@@ -14,9 +14,15 @@ public class DirectoryResponseTest {
     private ResourceRetriever retriever = mockFileReader;
 
     @Test
-    public void testDirectoryResponseMakesLinksFromReaderData(){
-        DirectoryResponse response = new DirectoryResponse("browse/", retriever);
-        assertEquals("<a href='browse/bar'>bar</a><br />",response.body());
+    public void testDirectoryResponseMakesLinksWithoutBrowse(){
+        DirectoryResponse response = new DirectoryResponse("", retriever);
+        assertEquals("<a href='/browse/bar'>bar</a><br />",response.body());
+    }
+
+    @Test
+    public void testDirectoryResponseWithBrowserIncluded(){
+        DirectoryResponse response = new DirectoryResponse("/browse/foo/", retriever);
+        assertEquals("<a href='/browse/foo/bar'>bar</a><br />", response.body());
     }
 
     @Test
@@ -24,6 +30,6 @@ public class DirectoryResponseTest {
         Config.instance().setRootDir("buzz");
         DirectoryResponse response = new DirectoryResponse("browse/", retriever);
         response.body();
-        assertEquals("buzz/browse/", mockFileReader.history());
+        assertEquals("buzz/", mockFileReader.history());
     }
 }

@@ -18,7 +18,7 @@ public class DirectoryResponse implements Response {
     @Override
     public String body() {
         String configPath = Config.instance().getRootDir();
-        String dirPath = configPath + requestedResource;
+        String dirPath = configPath + resourceSection();
         String[] dirContents = retriever.retrieveDirContents(dirPath);
         StringBuilder output = new StringBuilder();
         for (String fileName : dirContents) {
@@ -28,17 +28,20 @@ public class DirectoryResponse implements Response {
     }
 
     private String makeLinkTag(String fileName) {
-        return "<a href='browse" + resourceSection() + fileName + "'>" + fileName + "</a><br />";
+        return "<a href='/browse/" + resourceSection() + fileName + "'>" + fileName + "</a><br />";
     }
 
     @Override
-    public String contentType(){
+    public String contentType() {
         return "Content-type: text/html";
     }
 
     private String resourceSection(){
-        Integer startOfResource = requestedResource.indexOf("/browse") + 7;
-        return requestedResource.substring(startOfResource);
+        if (requestedResource.contains("browse")){
+            return requestedResource.substring(requestedResource.indexOf("browse/") + 7);
+        }
+        else
+            return requestedResource;
     }
 
 }
