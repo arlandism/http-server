@@ -37,19 +37,23 @@ public class FileReader implements ResourceRetriever {
     private String[] concatFileNames(File[] directoryContents) {
 
         String[] fileNames = new String[directoryContents.length];
-        String nextFileName;
 
         for (int i = 0; i < directoryContents.length; i++){
             File nextFile = directoryContents[i];
-            nextFileName = nextFile.getName();
-            if (nextFile.isDirectory()){
-                fileNames[i] = nextFileName + "/";
-            } else {
-                fileNames[i] = nextFileName;
-            }
-
+            fileNames[i] = generateFileName(nextFile);
         }
+
         return fileNames;
+    }
+
+    private String generateFileName(File f){
+        String name;
+        if (f.isDirectory()){
+            name = f.getName() + "/";
+        } else {
+            name  = f.getName();
+        }
+        return name;
     }
 
     private String fileData(File f) throws IOException {
