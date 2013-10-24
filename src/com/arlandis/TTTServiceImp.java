@@ -16,17 +16,16 @@ public class TTTServiceImp implements TTTService
     }
 
     @Override
-    public String answer(Move[] queryItem) throws IOException {
-        JsonObject moves = movesToJson(queryItem);
-        JsonObject gameData = addMovesToGameData(new JsonObject(), moves);
+    public String answer(Move[] movesToSend, String depth) throws IOException {
+        JsonObject gameData = addPayload(new JsonObject(), movesToSend, depth);
         networkIO.send(gameData.toString());
         return serviceData();
     }
 
-    private JsonObject movesToJson(Move[] queryItem) {
+    private JsonObject movesToJson(Move[] movesToTransform) {
         JsonObject moves = new JsonObject();
 
-        for (Move move: queryItem){
+        for (Move move: movesToTransform){
             addMove(moves, move);
         }
         return moves;
@@ -37,6 +36,12 @@ public class TTTServiceImp implements TTTService
         String token = move.getToken();
         movesSoFar.addProperty(position.toString(), token);
         return movesSoFar;
+    }
+
+    private JsonObject addPayload(JsonObject gameData, Move[] moves, String depth){
+        gameData = addMovesToGameData(gameData, movesToJson(moves));
+        gameData.addProperty("depth", depth);
+        return gameData;
     }
 
     private JsonObject addMovesToGameData(JsonObject gameData, JsonObject moves){

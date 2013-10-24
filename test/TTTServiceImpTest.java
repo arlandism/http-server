@@ -18,6 +18,7 @@ public class TTTServiceImpTest {
     private TTTServiceImp service;
     private MockNetworkIO mockIO = new MockNetworkIO();
     private NetworkIO networkIO = mockIO;
+    private String depth = "20";
 
     @Before
     public void setUp() {
@@ -32,14 +33,15 @@ public class TTTServiceImpTest {
     @Test
     public void testTTTQueriedCorrectly() throws IOException {
         expectedServiceQuery.add("board", jsonMoves);
-        service.answer(moves);
+        expectedServiceQuery.addProperty("depth", depth);
+        service.answer(moves, depth);
         String sentFromService = mockIO.lastCallArg();
         assertEqualJson(expectedServiceQuery, sentFromService);
     }
 
     @Test
      public void testResponseComesFromIO() throws IOException {
-        String serviceResponse = service.answer(moves);
+        String serviceResponse = service.answer(moves, "bar");
         assertEquals("bar", serviceResponse);
     }
 

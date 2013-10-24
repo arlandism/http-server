@@ -6,6 +6,6 @@ import java.io.IOException;
 
 public interface TTTService {
 
-    String answer(Move[] queryItem) throws IOException;
+    String answer(Move[] movesToSend, String depth) throws IOException;
 
 }

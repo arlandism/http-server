@@ -17,7 +17,6 @@ public class HttpRequestFactoryTest {
     public void testFactorySetsRequestHeaders() throws IOException {
         mockNetworkIO.addToOutputQueue("Fake Request Header");
         mockNetworkIO.addToOutputQueue("");
-        NetworkIO networkIO = mockNetworkIO;
         assertEquals("Fake Request Header", factory.nextRequest().headers());
     }
 

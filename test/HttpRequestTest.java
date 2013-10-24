@@ -1,4 +1,3 @@
-import com.arlandis.Config;
 import com.arlandis.HttpRequest;
 import com.arlandis.interfaces.Sleeper;
 import mocks.MockSleeper;

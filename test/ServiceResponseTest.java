@@ -1,3 +1,4 @@
+import com.arlandis.TTTServiceData;
 import com.arlandis.interfaces.TTTService;
 import mocks.MockService;
 import com.arlandis.Responses.TicTacToeService.Move;
@@ -5,7 +6,6 @@ import com.arlandis.Responses.ServiceResponse;
 import com.arlandis.interfaces.Request;
 import mocks.MockRequest;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -41,8 +41,13 @@ public class ServiceResponseTest {
     @Test
     public void testServiceResponseQueriesServiceWithMoves(){
         Move[] moves = { new Move(1, "x"), new Move(3, "o") };
+        TTTServiceData[] data = {new TTTServiceData(1, "x", "20")};
         serviceResponse.body();
         assertServiceCalledWithMoves(moves);
+        assertServiceCalledWithData(data);
+    }
+
+    private void assertServiceCalledWithData(TTTServiceData[] data) {
     }
 
     @Test
