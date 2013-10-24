@@ -40,9 +40,13 @@ public class FileReader implements ResourceRetriever {
         String nextFileName;
 
         for (int i = 0; i < directoryContents.length; i++){
-
-            nextFileName = directoryContents[i].getName();
-            fileNames[i] = nextFileName;
+            File nextFile = directoryContents[i];
+            nextFileName = nextFile.getName();
+            if (nextFile.isDirectory()){
+                fileNames[i] = nextFileName + "/";
+            } else {
+                fileNames[i] = nextFileName;
+            }
 
         }
         return fileNames;
