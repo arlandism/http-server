@@ -7,6 +7,7 @@ public class MockService implements TTTService {
 
     private String answerToReturn;
     private Move[] movesCalledWith;
+    private String difficultyCalledWith;
 
     public MockService(String answerToReturn) {
         this.answerToReturn = answerToReturn;
@@ -21,6 +22,10 @@ public class MockService implements TTTService {
         return found;
     }
 
+    public boolean calledWith(String difficulty) {
+       return difficultyCalledWith.equals(difficulty);
+    }
+
     private Boolean movesAreEqual(Move moveOne, Move moveTwo){
        Integer moveOnePos = moveOne.getPosition();
        Integer moveTwoPos = moveTwo.getPosition();
@@ -30,8 +35,11 @@ public class MockService implements TTTService {
     }
 
     @Override
-    public String answer(Move[] queryItem) {
-        movesCalledWith = queryItem;
+    public String answer(Move[] movesToSend, String depth) {
+        movesCalledWith = movesToSend;
+        difficultyCalledWith = depth;
         return answerToReturn;
     }
+
+
 }
