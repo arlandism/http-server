@@ -25,22 +25,27 @@ public class TTTServiceImpTest {
         jsonMoves.addProperty("1", "x");
         expectedServiceQuery = new JsonObject();
         service = new TTTServiceImp(networkIO);
+        mockIO.addToOutputQueue("bar");
+        mockIO.addToOutputQueue(null);
     }
 
     @Test
-    public void testServiceQueriedCorrectly() throws IOException {
-        mockIO.addToOutputQueue(null);
+    public void testTTTQueriedCorrectly() throws IOException {
         expectedServiceQuery.add("board", jsonMoves);
         service.answer(moves);
-        String calledWith = mockIO.lastCallArg();
-        assertEquals(expectedServiceQuery.toString(), calledWith);
+        String sentFromService = mockIO.lastCallArg();
+        assertEqualJson(expectedServiceQuery, sentFromService);
     }
 
     @Test
-    public void testResponseComesFromService() throws IOException {
-       mockIO.addToOutputQueue("bar");
-       mockIO.addToOutputQueue(null);
-       String serviceResponse = service.answer(moves);
-       assertEquals("bar",serviceResponse);
+     public void testResponseComesFromIO() throws IOException {
+        String serviceResponse = service.answer(moves);
+        assertEquals("bar", serviceResponse);
     }
+
+    private void assertEqualJson(JsonObject expectedJsonObj, String actualJsonString) {
+        assertEquals(expectedJsonObj.toString(), actualJsonString);
+    }
+
+
 }
