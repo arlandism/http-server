@@ -14,16 +14,16 @@ public class DirectoryResponseTest {
     private ResourceRetriever retriever = mockFileReader;
 
     @Test
-    public void testDirectoryResponsePollsReader(){
-        DirectoryResponse response = new DirectoryResponse("", retriever);
-        assertEquals("bar<br />",response.body());
+    public void testDirectoryResponseMakesLinksFromReaderData(){
+        DirectoryResponse response = new DirectoryResponse("browse/", retriever);
+        assertEquals("<a href='browse/bar'>bar</a><br />",response.body());
     }
 
     @Test
     public void testDirectoryResponsePollsConfig(){
         Config.instance().setRootDir("buzz");
-        DirectoryResponse response = new DirectoryResponse("me/", retriever);
+        DirectoryResponse response = new DirectoryResponse("browse/", retriever);
         response.body();
-        assertEquals("buzz/me/", mockFileReader.history());
+        assertEquals("buzz/browse/", mockFileReader.history());
     }
 }
