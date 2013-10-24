@@ -46,7 +46,6 @@ public class ServiceResponseTest {
     }
 
     @Test
-    @Ignore
     public void testServiceResponseQueriesServiceWithDifficulty(){
         String difficulty = "20";
         serviceResponse.body();
