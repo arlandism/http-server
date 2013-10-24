@@ -2,11 +2,12 @@ package com.arlandis.Responses;
 
 import com.arlandis.Responses.TicTacToeService.Move;
 import com.arlandis.interfaces.Request;
+import com.arlandis.interfaces.Response;
 import com.arlandis.interfaces.TTTService;
 
 import java.io.IOException;
 
-public class ServiceResponse {
+public class ServiceResponse implements Response {
 
     private TTTService service;
     private Request request;

@@ -1,6 +1,9 @@
 import com.arlandis.*;
 import com.arlandis.FileReader;
 import com.arlandis.interfaces.RequestFactory;
+import com.arlandis.interfaces.TTTService;
+import mocks.MockServer;
+import mocks.MockService;
 import org.junit.*;
 
 import java.io.*;
@@ -30,7 +33,8 @@ public class IntegrationTest {
             RequestFactory requestFactory = new HttpRequestFactory(networkIO);
             FileResponseFactoryImp responseFactoryImp = new FileResponseFactoryImp();
             FileReader retriever = new FileReader();
-            HttpResponseBuilder builder = new HttpResponseBuilder(retriever, responseFactoryImp);
+            TTTService service = new MockService("bar");
+            HttpResponseBuilder builder = new HttpResponseBuilder(retriever, responseFactoryImp, service);
             server = new Server(networkIO, requestFactory, builder);
             out = new PrintWriter(client.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(client.getInputStream()));

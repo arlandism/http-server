@@ -6,14 +6,15 @@ import java.net.Socket;
 
 public class Start {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         Integer port = portNum(args);
         Config.instance().setRootDir(rootDir(args));
         ServerSocket serverSock = null;
         HttpRequestFactory requestFactory;
         FileResponseFactoryImp fileResponseFactory = new FileResponseFactoryImp();
-        HttpResponseBuilder builder = new HttpResponseBuilder(new FileReader(), fileResponseFactory);
+        TTTServiceImp service = new TTTServiceImp(new NetworkIOImp(new Socket("localhost", 5000)));
+        HttpResponseBuilder builder = new HttpResponseBuilder(new FileReader(), fileResponseFactory, service);
 
         try {
             serverSock = new ServerSocket(port);

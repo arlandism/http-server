@@ -7,10 +7,12 @@ public class HttpResponseBuilder implements ResponseBuilder {
 
     private ResourceRetriever retriever;
     private FileResponseFactory fileResponseFactory;
+    private TTTService service;
 
-    public HttpResponseBuilder(ResourceRetriever retriever, FileResponseFactory factory) {
+    public HttpResponseBuilder(ResourceRetriever retriever, FileResponseFactory factory, TTTService service) {
         this.retriever = retriever;
         this.fileResponseFactory = factory;
+        this.service = service;
     }
 
     @Override
@@ -38,6 +40,10 @@ public class HttpResponseBuilder implements ResponseBuilder {
 
              response = fileResponseFactory.fileResponse(request, retriever);
 
+        } else if (isServiceRequest(request)){
+
+            response = new ServiceResponse(service, request);
+
         } else {
 
             response = new PongResponse();
@@ -62,6 +68,10 @@ public class HttpResponseBuilder implements ResponseBuilder {
 
     private boolean isResourceRequest(Request request) {
         return request.headers().startsWith("GET /browse");
+    }
+
+    private boolean isServiceRequest(Request request){
+        return request.headers().startsWith("GET /game");
     }
 
 }

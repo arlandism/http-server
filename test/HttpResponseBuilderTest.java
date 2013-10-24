@@ -15,7 +15,6 @@ public class HttpResponseBuilderTest {
     private MockRequest postRequest;
     private MockRequest sleepRequest;
     private MockRequest txtFileRequest;
-    private MockRequest directoryRequest;
     private MockRequest serviceRequest;
     private MockPostRequest encodedPostRequest;
     private HttpResponseBuilder builder;
@@ -24,6 +23,7 @@ public class HttpResponseBuilderTest {
     private MockFileResponseFactory mockFactory;
     private MockFileReader mockReader;
     private ResourceRetriever retriever;
+    private TTTService service;
     private String htmlContentType = "text/html";
 
     @Before
@@ -33,14 +33,14 @@ public class HttpResponseBuilderTest {
         postRequest = new MockRequest("POST /form HTTP/1.0\r\n\r\n");
         sleepRequest = new MockRequest("GET /ping?sleep=4 HTTP/1.0\r\n\r\n");
         txtFileRequest = new MockRequest("GET /browse/" + testFilePath +  " HTTP/1.0\r\n\r\n");
-        directoryRequest = new MockRequest("GET /browse/");
-        serviceRequest = new MockRequest("GET /game?1=x", "/game?1=x");
+        serviceRequest = new MockRequest("GET /game?1=x&depth=10", "/game?1=x&depth=10");
         encodedPostRequest = new MockPostRequest("POST /form HTTP/1.0\r\n\r\n", "foo Hello!<>", "bar baz<>!");
         mockFactory = new MockFileResponseFactory(new MockResponse("mock content type", "bar"));
         factory = mockFactory;
         mockReader = new MockFileReader("foo");
+        service = new MockService("foo");
         retriever = mockReader;
-        builder = new HttpResponseBuilder(mockReader, factory);
+        builder = new HttpResponseBuilder(mockReader, factory, service);
     }
 
     @Test
@@ -88,6 +88,12 @@ public class HttpResponseBuilderTest {
     public void testDanceWithFileResponseFactory(){
         assertContentTypeAndBodyMatch("mock content type", "bar", builder.generateResponse(txtFileRequest));
         assertFileResponseFactoryCalledCorrectly(txtFileRequest, retriever);
+    }
+
+    @Test
+    public void testDanceWithService(){
+        HttpResponseBuilder builder = new HttpResponseBuilder(retriever, factory, service);
+        assertContentTypeAndBodyMatch("application/json", "foo", builder.generateResponse(serviceRequest));
     }
 
     private void assertFileResponseFactoryCalledCorrectly(Request request, ResourceRetriever retriever) {
