@@ -18,6 +18,7 @@ public class ServerTest {
     private Request mockRequest;
     private MockResponseBuilder builder;
     private RequestFactory factory;
+    private Server server;
 
     @Before
     public void setUp(){
@@ -26,18 +27,17 @@ public class ServerTest {
         mockRequest = new MockRequest("", "");
         builder = new MockResponseBuilder("baz");
         factory = new MockRequestFactory(mockRequest);
+        server = new Server(io, factory, builder);
     }
 
     @Test
-    public void getsRequestAndSendsToResponse(){
-        Server server = new Server(io, factory, builder);
+    public void testResponseFromBuilderSent(){
         server.respond();
         assertEquals("baz", mockIO.lastCallArg()) ;
     }
 
     @Test
-    public void getsResponseUsingRequest(){
-        Server server = new Server(io, factory, builder);
+    public void testBuilderGetsRequest(){
         server.respond();
         assertEquals(mockRequest, builder.history());
     }
