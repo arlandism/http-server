@@ -22,31 +22,32 @@ public class TTTServiceImp implements TTTService
         return serviceData();
     }
 
-    private JsonObject movesToJson(Move[] movesToTransform) {
-        JsonObject moves = new JsonObject();
+    private JsonObject addPayload(JsonObject gameData, Move[] moves, String depth){
+        gameData = addMovesToGameData(gameData, movesToJson(moves));
+        gameData.addProperty("depth", depth);
+        return gameData;
 
-        for (Move move: movesToTransform){
-            addMove(moves, move);
-        }
-        return moves;
     }
+
+    private JsonObject addMovesToGameData(JsonObject gameData, JsonObject moves){
+        gameData.add("board", moves);
+        return gameData;
+    }
+
+    private JsonObject movesToJson(Move[] movesToTransform) {
+            JsonObject moves = new JsonObject();
+
+            for (Move move: movesToTransform){
+                addMove(moves, move);
+            }
+            return moves;
+        }
 
     private JsonObject addMove(JsonObject movesSoFar, Move move){
         Integer position = move.getPosition();
         String token = move.getToken();
         movesSoFar.addProperty(position.toString(), token);
         return movesSoFar;
-    }
-
-    private JsonObject addPayload(JsonObject gameData, Move[] moves, String depth){
-        gameData = addMovesToGameData(gameData, movesToJson(moves));
-        gameData.addProperty("depth", depth);
-        return gameData;
-    }
-
-    private JsonObject addMovesToGameData(JsonObject gameData, JsonObject moves){
-        gameData.add("board", moves);
-        return gameData;
     }
 
     private String serviceData() throws IOException {
