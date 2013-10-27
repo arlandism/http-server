@@ -25,6 +25,7 @@ public class Start {
         startTTTServer(tttServicePort);
         port = portNum(args);
         serverSock = new ServerSocket(port);
+        startTTTServer(tttServicePort);
 
         while (true) {
 
@@ -42,7 +43,7 @@ public class Start {
 
     private static void startTTTServer(Integer tttServicePort) {
         try {
-            Runtime.getRuntime().exec("python /Users/arlandislawrence/development/python/tic_tac_toe/network_io/start_server.py");
+            Runtime.getRuntime().exec("python /Users/arlandislawrence/development/python/tic_tac_toe/network_io/start_server.py -p " + tttServicePort);
         } catch (IOException e) {
             e.printStackTrace();
         }
