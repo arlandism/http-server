@@ -21,8 +21,9 @@ public class Start {
     public static void main(String[] args) throws IOException {
         Config.instance().setRootDir(rootDir(args));
 
-        port = portNum(args);
         tttServicePort = tttServicePort(args);
+        startTTTServer(tttServicePort);
+        port = portNum(args);
         serverSock = new ServerSocket(port);
 
         while (true) {
@@ -36,6 +37,14 @@ public class Start {
             server = new Server(clientIO, requestFactory, responseBuilder);
 
             (new Thread(new ServerThread(server))).start();
+        }
+    }
+
+    private static void startTTTServer(Integer tttServicePort) {
+        try {
+            Runtime.getRuntime().exec("python /Users/arlandislawrence/development/python/tic_tac_toe/network_io/start_server.py");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
