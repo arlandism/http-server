@@ -9,6 +9,8 @@ public class Server implements Responder {
     private final ResponseBuilder builder;
     private RequestFactory requestFactory;
     private NetworkIO networkIO;
+    private String response;
+    private Request request;
 
     public Server(NetworkIO networkIO, RequestFactory requestFactory, ResponseBuilder builder) {
         this.networkIO = networkIO;
@@ -18,17 +20,19 @@ public class Server implements Responder {
     }
 
     public void respond() {
-        String response;
-        Request request = null;
+        request = nextRequest();
+        response = builder.generateResponse(request);
+        networkIO.send(response);
+    }
 
+    private Request nextRequest() {
+        Request request = null;
         try {
             request = requestFactory.nextRequest();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        response = builder.generateResponse(request);
-        networkIO.send(response);
+        return request;
     }
 
 }

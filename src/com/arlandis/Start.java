@@ -22,7 +22,7 @@ public class Start {
         Config.instance().setRootDir(rootDir(args));
 
         port = portNum(args);
-        tttServicePort = new CommandLineParser(args).servicePort();
+        tttServicePort = tttServicePort(args);
         serverSock = new ServerSocket(port);
 
         while (true) {
@@ -37,6 +37,10 @@ public class Start {
 
             (new Thread(new ServerThread(server))).start();
         }
+    }
+
+    private static int tttServicePort(String[] args) {
+        return new CommandLineParser(args).servicePort();
     }
 
     private static Integer portNum(String[] args) {
