@@ -10,31 +10,23 @@ public class Start {
 
         Integer port = portNum(args);
         Config.instance().setRootDir(rootDir(args));
-        ServerSocket serverSock = null;
+        Integer servicePort = new CommandLineParser(args).servicePort();
+        ServerSocket serverSock;
         HttpRequestFactory requestFactory;
         FileResponseFactoryImp fileResponseFactory = new FileResponseFactoryImp();
-        TTTServiceImp service = new TTTServiceImp(new NetworkIOImp(new Socket("localhost", 5000)));
-        HttpResponseBuilder builder = new HttpResponseBuilder(new FileReader(), fileResponseFactory, service);
-
-        try {
-            serverSock = new ServerSocket(port);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        System.out.printf("Server starting on port: %d\n", port);
+        serverSock = new ServerSocket(port);
 
         while (true) {
 
-            try {
-                Socket connSocket = serverSock.accept();
-                NetworkIOImp networkIO = new NetworkIOImp(connSocket);
-                requestFactory = new HttpRequestFactory(networkIO);
-                Server server = new Server(networkIO, requestFactory, builder);
-                (new Thread(new ServerThread(server))).start();
+            Socket connSocket = serverSock.accept();
+            Socket socketForService = new Socket("localhost", servicePort);
+            TTTServiceImp service = new TTTServiceImp(new NetworkIOImp(socketForService));
+            HttpResponseBuilder builder = new HttpResponseBuilder(new FileReader(), fileResponseFactory, service);
+            NetworkIOImp networkIO = new NetworkIOImp(connSocket);
+            requestFactory = new HttpRequestFactory(networkIO);
+            Server server = new Server(networkIO, requestFactory, builder);
 
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            (new Thread(new ServerThread(server))).start();
         }
     }
 
@@ -43,9 +35,8 @@ public class Start {
         return new CommandLineParser(args).portNum();
     }
 
-    private static String rootDir(String[] args){
+    private static String rootDir(String[] args) {
 
         return new CommandLineParser(args).browsePath();
     }
-
 }
