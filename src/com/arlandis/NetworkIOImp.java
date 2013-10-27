@@ -2,10 +2,7 @@ package com.arlandis;
 
 import com.arlandis.interfaces.NetworkIO;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 
 public class NetworkIOImp implements NetworkIO {
@@ -15,21 +12,27 @@ public class NetworkIOImp implements NetworkIO {
     private Socket conn;
 
     public NetworkIOImp(Socket connSocket) {
-        try {
+        setIOStreams(connSocket);
+        conn = connSocket;
+    }
 
+    private void setIOStreams(Socket connSocket) {
+        try {
             in = new BufferedReader(new InputStreamReader(connSocket.getInputStream()));
             out = new PrintWriter(connSocket.getOutputStream(), true);
-            conn = connSocket;
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     @Override
     public void send(String response) {
-        out.print(response);
-        out.println("\r\n\r\n");
+        out.println(response);
+        closeOutputStream();
+    }
 
+    private void closeOutputStream() {
         try {
             conn.shutdownOutput();
         } catch (IOException e) {
