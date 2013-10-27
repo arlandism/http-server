@@ -6,25 +6,34 @@ import java.net.Socket;
 
 public class Start {
 
-    public static void main(String[] args) throws IOException {
+    private static Integer port;
+    private static Integer tttServicePort;
+    private static Socket tttServiceSocket;
+    private static TTTServiceImp tttServiceImp;
+    private static ServerSocket serverSock;
+    private static Socket connSocket;
+    private static NetworkIOImp clientIO;
+    private static HttpRequestFactory requestFactory;
+    private static HttpResponseBuilder responseBuilder;
+    private static FileResponseFactoryImp fileResponseFactory = new FileResponseFactoryImp();
+    private static Server server;
 
-        Integer port = portNum(args);
+    public static void main(String[] args) throws IOException {
         Config.instance().setRootDir(rootDir(args));
-        Integer servicePort = new CommandLineParser(args).servicePort();
-        ServerSocket serverSock;
-        HttpRequestFactory requestFactory;
-        FileResponseFactoryImp fileResponseFactory = new FileResponseFactoryImp();
+
+        port = portNum(args);
+        tttServicePort = new CommandLineParser(args).servicePort();
         serverSock = new ServerSocket(port);
 
         while (true) {
 
-            Socket connSocket = serverSock.accept();
-            Socket socketForService = new Socket("localhost", servicePort);
-            TTTServiceImp service = new TTTServiceImp(new NetworkIOImp(socketForService));
-            HttpResponseBuilder builder = new HttpResponseBuilder(new FileReader(), fileResponseFactory, service);
-            NetworkIOImp networkIO = new NetworkIOImp(connSocket);
-            requestFactory = new HttpRequestFactory(networkIO);
-            Server server = new Server(networkIO, requestFactory, builder);
+            connSocket = serverSock.accept();
+            tttServiceSocket = new Socket("localhost", tttServicePort);
+            tttServiceImp= new TTTServiceImp(new NetworkIOImp(tttServiceSocket));
+            responseBuilder = new HttpResponseBuilder(new FileReader(), fileResponseFactory, tttServiceImp);
+            clientIO = new NetworkIOImp(connSocket);
+            requestFactory = new HttpRequestFactory(clientIO);
+            server = new Server(clientIO, requestFactory, responseBuilder);
 
             (new Thread(new ServerThread(server))).start();
         }
