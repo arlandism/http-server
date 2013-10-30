@@ -5,6 +5,9 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -46,6 +49,7 @@ public class HttpResponseBuilderTest {
     @Test
     public void testGetPingResponse(){
         String expectedBody = "<html><body>pong</body></html>";
+
         String response = builder.generateResponse(pingRequest);
         assertContentTypeAndBodyMatch(htmlContentType, expectedBody, response);
     }
@@ -82,6 +86,14 @@ public class HttpResponseBuilderTest {
         String response = builder.generateResponse(sleepRequest);
         assertContentTypeAndBodyMatch(htmlContentType, expectedBody, response);
         assertTrue(sleepRequest.sleepCalled());
+    }
+
+    @Test
+    public void testFeatureNotFoundResponse(){
+        MockRequest notFoundRequest = new MockRequest("GET /foobar HTTP/1.0\r\n\r\n");
+        String expectedBody = "<html><body>The feature you're looking for can't be found.</body></html>";
+        String response = builder.generateResponse(notFoundRequest);
+        assertContentTypeAndBodyMatch("text/html", expectedBody, response);
     }
 
     @Test

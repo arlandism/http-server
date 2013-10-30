@@ -44,14 +44,22 @@ public class HttpResponseBuilder implements ResponseBuilder {
 
             response = new ServiceResponse(service, request);
 
-        } else {
+        } else if (isPongRequest(request)){
 
             response = new PongResponse();
+
+        } else {
+
+            response = new FeatureNotFoundResponse();
 
         }
 
         return "HTTP/1.0 200 OK" + "\r\n" + response.contentType() + "\r\n\r\n" + response.body();
 
+    }
+
+    private boolean isPongRequest(Request request) {
+        return request.headers().startsWith("GET /ping");
     }
 
     private boolean isFormRequest(Request request) {
