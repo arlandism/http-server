@@ -1,3 +1,5 @@
+package ResponseTests;
+
 import com.arlandis.Config;
 import com.arlandis.Responses.FileResponses.FileResponse;
 import com.arlandis.interfaces.Request;

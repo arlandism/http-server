@@ -1,3 +1,5 @@
+package ResponseTests;
+
 import com.arlandis.Responses.PostFormResponse;
 import com.arlandis.interfaces.Request;
 import mocks.MockPostRequest;

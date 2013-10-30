@@ -1,3 +1,5 @@
+package ResponseTests;
+
 import com.arlandis.Responses.SleepResponse;
 import com.arlandis.interfaces.Request;
 import com.arlandis.interfaces.Sleeper;

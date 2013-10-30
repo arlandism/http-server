@@ -1,15 +1,10 @@
 import com.arlandis.HttpRequest;
-import com.arlandis.interfaces.Sleeper;
-import mocks.MockSleeper;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class HttpRequestTest {
-
-    private MockSleeper sleeper = new MockSleeper();
-    private HttpRequest headlessRequest = new HttpRequest("");
 
     @Test
     public void testReadBytes(){

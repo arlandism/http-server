@@ -1,3 +1,5 @@
+package ResponseTests;
+
 import com.arlandis.interfaces.TTTService;
 import mocks.MockService;
 import com.arlandis.Responses.TicTacToeService.Move;
