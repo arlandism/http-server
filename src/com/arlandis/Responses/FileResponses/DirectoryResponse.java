@@ -33,7 +33,7 @@ public class DirectoryResponse implements Response {
 
     @Override
     public String contentType() {
-        return "Content-type: text/html";
+        return "text/html";
     }
 
     private String resourceSection(){

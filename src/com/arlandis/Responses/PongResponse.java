@@ -9,7 +9,7 @@ public class PongResponse implements Response {
     }
 
     public String contentType(){
-        return "Content-type: text/html";
+        return "text/html";
     }
 
     private String addHeaderAndBodyTags(String content) {

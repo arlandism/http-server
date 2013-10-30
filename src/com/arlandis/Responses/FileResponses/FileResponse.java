@@ -29,7 +29,7 @@ public class FileResponse implements Response {
 
     @Override
     public String contentType() {
-        return "Content-type: " + this.contentType;
+        return this.contentType;
     }
 
     private String fileBody() {

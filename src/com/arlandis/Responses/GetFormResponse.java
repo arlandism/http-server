@@ -9,7 +9,7 @@ public class GetFormResponse implements Response {
     }
 
     public String contentType(){
-        return "Content-type: text/html";
+        return "text/html";
     }
 
     private String formBody() {

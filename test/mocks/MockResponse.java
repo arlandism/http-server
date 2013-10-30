@@ -20,6 +20,6 @@ public class MockResponse implements Response {
 
     @Override
     public String contentType() {
-        return "Content-type: " + contentTypeToReturn;
+        return contentTypeToReturn;
     }
 }

@@ -46,7 +46,7 @@ public class FileResponseFactoryImpTest {
     }
 
     public void assertCorrectContentType(String extension, Response response){
-        assertEquals("Content-type: " + extension, response.contentType());
+        assertEquals(extension, response.contentType());
     }
 
 

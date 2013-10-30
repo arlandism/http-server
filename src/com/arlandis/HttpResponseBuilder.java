@@ -54,7 +54,7 @@ public class HttpResponseBuilder implements ResponseBuilder {
 
         }
 
-        return "HTTP/1.0 200 OK" + "\r\n" + response.contentType() + "\r\n\r\n" + response.body();
+        return "HTTP/1.0 200 OK" + "\r\n" + "Content-type: " + response.contentType() + "\r\n\r\n" + response.body();
 
     }
 

@@ -30,7 +30,7 @@ public class ServiceResponseTest {
 
     @Test
     public void testServiceResponseContentType(){
-        assertEquals("Content-type: application/json", serviceResponse.contentType());
+        assertEquals("application/json", serviceResponse.contentType());
     }
 
     @Test

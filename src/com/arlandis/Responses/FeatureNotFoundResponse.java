@@ -11,6 +11,6 @@ public class FeatureNotFoundResponse implements Response {
 
     @Override
     public String contentType() {
-        return "Content-type: text/html";
+        return "text/html";
     }
 }

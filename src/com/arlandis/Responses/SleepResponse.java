@@ -19,6 +19,6 @@ public class SleepResponse implements Response {
     }
 
     public String contentType(){
-        return "Content-type: text/html";
+        return "text/html";
     }
 }

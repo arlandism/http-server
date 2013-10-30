@@ -18,7 +18,7 @@ public class ServiceResponse implements Response {
     }
 
     public String contentType() {
-        return "Content-type: application/json";
+        return "application/json";
     }
 
     public String body() {
