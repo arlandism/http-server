@@ -67,7 +67,7 @@ public class HttpResponseBuilder implements ResponseBuilder {
     }
 
     private boolean isPostRequest(Request request) {
-        return request.headers().startsWith("POST ");
+        return request.headers().startsWith("POST /form");
     }
 
     private boolean isSleepRequest(Request request) {
