@@ -26,20 +26,6 @@ public class HttpRequestTest {
     }
 
     @Test
-    public void testFooValue(){
-        String body = "foo=hello&bar=hi";
-        headlessRequest.setBody(body);
-        assertEquals("hello", headlessRequest.fooValue());
-    }
-
-    @Test
-    public void testBarValue(){
-        String body = "foo=hello&bar=hi";
-        headlessRequest.setBody(body);
-        assertEquals("hi", headlessRequest.barValue());
-    }
-
-    @Test
     public void testRequestedResource(){
         String rawHeader = "GET /browse/bar/foo.txt HTTP/1.0";
         HttpRequest request = new HttpRequest(rawHeader);

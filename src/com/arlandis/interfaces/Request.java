@@ -12,9 +12,5 @@ public interface Request {
 
     void setBody(String body);
 
-    String fooValue();
-
-    String barValue();
-
     String requestedResource();
 }

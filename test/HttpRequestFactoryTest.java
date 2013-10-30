@@ -25,6 +25,6 @@ public class HttpRequestFactoryTest {
         mockNetworkIO.addToOutputQueue("Content-Length: 7");
         mockNetworkIO.addToOutputQueue("");
         mockNetworkIO.addToOutputQueue("foo=nom&bar=baz");
-        assertEquals("nom", factory.nextRequest().fooValue());
+        assertEquals("foo=nom&bar=baz", factory.nextRequest().getBody());
     }
 }

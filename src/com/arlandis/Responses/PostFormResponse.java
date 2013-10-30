@@ -39,12 +39,13 @@ public class PostFormResponse implements Response {
     }
 
     private String decodeValue(String value) {
+        String decodedValue = null;
         try {
-            return URLDecoder.decode(value, "UTF-8");
+            decodedValue = URLDecoder.decode(value, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
-            return "";
         }
+        return decodedValue;
     }
 
 }

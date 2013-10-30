@@ -40,16 +40,6 @@ public class MockRequest implements Request {
     }
 
     @Override
-    public String fooValue() {
-        return "foo";
-    }
-
-    @Override
-    public String barValue() {
-        return "bar";
-    }
-
-    @Override
     public String requestedResource() {
         return resourceToReturn;
     }
