@@ -2,21 +2,15 @@ package mocks;
 
 public class MockPostRequest extends MockRequest {
 
-    private String fooToReturn;
-    private String barToReturn;
+    private String body;
 
-    public MockPostRequest(String headersToReturn, String fooToReturn, String barToReturn) {
+    public MockPostRequest(String headersToReturn, String body) {
 
         super(headersToReturn);
-        this.fooToReturn = fooToReturn;
-        this.barToReturn = barToReturn;
+        this.body = body;
     }
 
-    public String fooValue() {
-        return fooToReturn;
-    }
-
-    public String barValue() {
-        return barToReturn;
+    public String getBody(){
+        return body;
     }
 }

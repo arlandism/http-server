@@ -40,15 +40,6 @@ public class HttpRequestTest {
     }
 
     @Test
-    public void testSleepCanBeCalledWithQuery(){
-        String rawHeader = "GET /ping?sleep=4\r\n";
-        HttpRequest request = new HttpRequest(rawHeader);
-        Sleeper s = sleeper;
-        request.sleep(s);
-        assertTrue(sleeper.sleepCalledWith(4));
-    }
-
-    @Test
     public void testRequestedResource(){
         String rawHeader = "GET /browse/bar/foo.txt HTTP/1.0";
         HttpRequest request = new HttpRequest(rawHeader);

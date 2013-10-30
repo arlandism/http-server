@@ -23,7 +23,19 @@ public class PostFormResponse implements Response {
     }
     private String formParams() {
         String LINE_BREAK = "<br />";
-        return "foo = " + decodeValue(request.fooValue()) + " " + LINE_BREAK + " bar = " + decodeValue(request.barValue());
+        return "foo = " + decodeValue(fooValue()) + " " + LINE_BREAK + " bar = " + decodeValue(barValue());
+    }
+
+    private String barValue() {
+        Integer fooEnd = request.getBody().indexOf("&");
+        Integer barBegin = request.getBody().indexOf("=", fooEnd) + 1;
+        return request.getBody().substring(barBegin, request.getBody().length());
+    }
+
+    private String fooValue() {
+        Integer fooBegin = request.getBody().indexOf("=") + 1;
+        Integer fooEnd = request.getBody().indexOf("&");
+        return request.getBody().substring(fooBegin, fooEnd);
     }
 
     private String decodeValue(String value) {
@@ -34,4 +46,5 @@ public class PostFormResponse implements Response {
             return "";
         }
     }
+
 }

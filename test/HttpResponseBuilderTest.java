@@ -33,11 +33,9 @@ public class HttpResponseBuilderTest {
     public void setUp(){
         pingRequest = new MockRequest("GET /ping HTTP/1.0\r\n\r\n");
         formRequest = new MockRequest("GET /form HTTP/1.0\r\n\r\n");
-        postRequest = new MockRequest("POST /form HTTP/1.0\r\n\r\n");
         sleepRequest = new MockRequest("GET /ping?sleep=4 HTTP/1.0\r\n\r\n");
         txtFileRequest = new MockRequest("GET /browse/" + testFilePath +  " HTTP/1.0\r\n\r\n");
         serviceRequest = new MockRequest("GET /game?1=x&depth=10", "/game?1=x&depth=10");
-        encodedPostRequest = new MockPostRequest("POST /form HTTP/1.0\r\n\r\n", "foo Hello!<>", "bar baz<>!");
         mockFactory = new MockFileResponseFactory(new MockResponse("mock content type", "bar"));
         factory = mockFactory;
         mockReader = new MockFileReader("foo");
@@ -67,25 +65,10 @@ public class HttpResponseBuilderTest {
     }
 
     @Test
-    public void testPostFormResponse(){
-        String response = builder.generateResponse(postRequest);
-        String expectedBody = "foo = foo <br /> bar = bar";
-        assertContentTypeAndBodyMatch(htmlContentType, expectedBody, response);
-    }
-
-    @Test
-    public void testPostFormResponsesAreDecoded(){
-        String response = builder.generateResponse(encodedPostRequest);
-        String expectedBody = "foo = foo Hello!<> <br /> bar = bar baz<>!";
-        assertContentTypeAndBodyMatch(htmlContentType, expectedBody, response);
-    }
-
-    @Test
     public void testSleepResponse(){
         String expectedBody = "<html><body>pong</body></html>";
         String response = builder.generateResponse(sleepRequest);
         assertContentTypeAndBodyMatch(htmlContentType, expectedBody, response);
-        assertTrue(sleepRequest.sleepCalled());
     }
 
     @Test

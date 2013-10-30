@@ -2,6 +2,8 @@ package com.arlandis.interfaces;
 
 public interface Request {
 
+    String getBody();
+
     String headers();
 
     Integer bytesToRead();
@@ -9,8 +11,6 @@ public interface Request {
     Boolean hasBody();
 
     void setBody(String body);
-
-    void sleep(Sleeper sleeper);
 
     String fooValue();
 

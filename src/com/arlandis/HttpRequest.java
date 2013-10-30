@@ -1,7 +1,6 @@
 package com.arlandis;
 
 import com.arlandis.interfaces.Request;
-import com.arlandis.interfaces.Sleeper;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -33,6 +32,10 @@ public class HttpRequest implements Request {
         this.body = body;
     }
 
+    public String getBody(){
+        return body;
+    }
+
     public String barValue() {
         Integer fooEnd = body.indexOf("&");
         Integer barBegin = body.indexOf("=", fooEnd) + 1;
@@ -51,10 +54,6 @@ public class HttpRequest implements Request {
         return resource;
     }
 
-    public void sleep(Sleeper sleeper) {
-        sleeper.sleep(sleepTime());
-    }
-
     private Integer startOfRequest() {
         return requestHeaders.indexOf("/");
     }
@@ -65,11 +64,6 @@ public class HttpRequest implements Request {
 
     private Integer protocolIndex(){
         return requestHeaders.indexOf("HTTP");
-    }
-
-    private Integer sleepTime() {
-        Integer start = requestHeaders.indexOf("sleep") + 6;
-        return parseHeadersForInt(start);
     }
 
     private Integer parseHeadersForInt(Integer indexToStartAt) {
