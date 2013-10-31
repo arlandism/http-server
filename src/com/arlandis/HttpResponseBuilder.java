@@ -3,15 +3,11 @@ package com.arlandis;
 import com.arlandis.Responses.*;
 import com.arlandis.interfaces.*;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class HttpResponseBuilder implements ResponseBuilder {
 
     private ResourceRetriever retriever;
     private FileResponseFactory fileResponseFactory;
     private TTTService service;
-    private Map<String, Response> requestHeaderToResponse = new HashMap<String, Response>();
 
     public HttpResponseBuilder(ResourceRetriever retriever, FileResponseFactory factory, TTTService service) {
         this.retriever = retriever;
@@ -21,32 +17,69 @@ public class HttpResponseBuilder implements ResponseBuilder {
 
     @Override
     public String generateResponse(Request request) {
-        Response response;
-        requestHeaderToResponse.put("GET /ping", new PongResponse());
-        requestHeaderToResponse.put("GET /form", new GetFormResponse());
-        requestHeaderToResponse.put("POST /form", new PostFormResponse(request));
-        requestHeaderToResponse.put("GET /ping?sleep", new SleepResponse(request, new ThreadSleeper()));
-        requestHeaderToResponse.put("GET /game", new ServiceResponse(service, request));
-        response = findResponse(requestHeaderToResponse, request);
-
-        return "HTTP/1.0 200 OK" + "\r\n" + "Content-type: " + response.contentType() + "\r\n\r\n" + response.body();
+        return respondToRequest(request);
     }
 
-    private Response findResponse(Map<String, Response> registeredHeaders, Request request){
+    private String respondToRequest(Request request) {
 
-      for (String route: registeredHeaders.keySet()){
-          if (request.headers().startsWith(route))
-              return registeredHeaders.get(route);
-      }
+        Response response;
 
-      if (isResourceRequest(request)){
-          return fileResponseFactory.fileResponse(request, retriever);
-      }
+        if (isFormRequest(request)) {
 
-      return new FeatureNotFoundResponse();
+            response = new GetFormResponse();
+
+        } else if (isPostRequest(request)) {
+
+            response = new PostFormResponse(request);
+
+        } else if (isSleepRequest(request)) {
+
+            response = new SleepResponse(request, new ThreadSleeper());
+
+        } else if (isResourceRequest(request)) {
+
+             response = fileResponseFactory.fileResponse(request, retriever);
+
+        } else if (isServiceRequest(request)){
+
+            response = new ServiceResponse(service, request);
+
+        } else if (isPongRequest(request)){
+
+            response = new PongResponse();
+
+        } else {
+
+            response = new FeatureNotFoundResponse();
+
+        }
+
+        return "HTTP/1.0 200 OK" + "\r\n" + "Content-type: " + response.contentType() + "\r\n\r\n" + response.body();
+
+    }
+
+    private boolean isPongRequest(Request request) {
+        return request.headers().startsWith("GET /ping");
+    }
+
+    private boolean isFormRequest(Request request) {
+        return request.headers().startsWith("GET /form");
+    }
+
+    private boolean isPostRequest(Request request) {
+        return request.headers().startsWith("POST /form");
+    }
+
+    private boolean isSleepRequest(Request request) {
+        return request.headers().startsWith("GET /ping?sleep");
     }
 
     private boolean isResourceRequest(Request request) {
         return request.headers().startsWith("GET /browse");
     }
+
+    private boolean isServiceRequest(Request request){
+        return request.headers().startsWith("GET /game");
+    }
+
 }
