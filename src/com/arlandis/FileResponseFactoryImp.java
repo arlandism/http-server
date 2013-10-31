@@ -31,7 +31,6 @@ public class FileResponseFactoryImp implements FileResponseFactory {
     }
 
     private Response getResponse(Request request, ResourceRetriever retriever) {
-
         String requestSection = fileRequestSection(request);
         Response response;
 
