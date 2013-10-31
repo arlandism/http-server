@@ -20,6 +20,22 @@ public class HttpResponseBuilder implements ResponseBuilder {
         return respondToRequest(request);
     }
 
+    public String generateResponse(Request request, Toggler toggler) {
+        Response response;
+        String returnVal;
+        if (featureEnabled(request, toggler)) {
+            returnVal = respondToRequest(request);
+        } else {
+            response = new FeatureNotFoundResponse();
+            returnVal = createResponseString(response);
+        }
+        return returnVal;
+    }
+
+    private Boolean featureEnabled(Request request, Toggler toggler) {
+        return toggler.isEnabled(request.headers());
+    }
+
     private String respondToRequest(Request request) {
 
         Response response;
@@ -38,13 +54,13 @@ public class HttpResponseBuilder implements ResponseBuilder {
 
         } else if (isResourceRequest(request)) {
 
-             response = fileResponseFactory.fileResponse(request, retriever);
+            response = fileResponseFactory.fileResponse(request, retriever);
 
-        } else if (isServiceRequest(request)){
+        } else if (isServiceRequest(request)) {
 
             response = new ServiceResponse(service, request);
 
-        } else if (isPongRequest(request)){
+        } else if (isPongRequest(request)) {
 
             response = new PongResponse();
 
@@ -54,8 +70,12 @@ public class HttpResponseBuilder implements ResponseBuilder {
 
         }
 
-        return "HTTP/1.0 200 OK" + "\r\n" + "Content-type: " + response.contentType() + "\r\n\r\n" + response.body();
+        return createResponseString(response);
 
+    }
+
+    private String createResponseString(Response response) {
+        return "HTTP/1.0 200 OK" + "\r\n" + "Content-type: " + response.contentType() + "\r\n\r\n" + response.body();
     }
 
     private boolean isPongRequest(Request request) {
@@ -78,8 +98,7 @@ public class HttpResponseBuilder implements ResponseBuilder {
         return request.headers().startsWith("GET /browse");
     }
 
-    private boolean isServiceRequest(Request request){
+    private boolean isServiceRequest(Request request) {
         return request.headers().startsWith("GET /game");
     }
-
 }
