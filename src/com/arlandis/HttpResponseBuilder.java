@@ -3,11 +3,15 @@ package com.arlandis;
 import com.arlandis.Responses.*;
 import com.arlandis.interfaces.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class HttpResponseBuilder implements ResponseBuilder {
 
     private ResourceRetriever retriever;
     private FileResponseFactory fileResponseFactory;
     private TTTService service;
+    private Map<String, Response> routesToResponses = new HashMap<String, Response>();
 
     public HttpResponseBuilder(ResourceRetriever retriever, FileResponseFactory factory, TTTService service) {
         this.retriever = retriever;
@@ -21,15 +25,19 @@ public class HttpResponseBuilder implements ResponseBuilder {
     }
 
     public String generateResponse(Request request, Toggler toggler) {
+        return getResponseString(request, toggler);
+    }
+
+    private String getResponseString(Request request, Toggler toggler) {
+        String responseString;
         Response response;
-        String returnVal;
         if (featureEnabled(request, toggler)) {
-            returnVal = respondToRequest(request);
+            responseString = respondToRequest(request);
         } else {
             response = new FeatureNotFoundResponse();
-            returnVal = createResponseString(response);
+            responseString = createResponseString(response);
         }
-        return returnVal;
+        return responseString;
     }
 
     private Boolean featureEnabled(Request request, Toggler toggler) {
@@ -37,38 +45,13 @@ public class HttpResponseBuilder implements ResponseBuilder {
     }
 
     private String respondToRequest(Request request) {
+        routesToResponses.put("GET /ping", new PongResponse());
+        routesToResponses.put("GET /form", new GetFormResponse());
+        routesToResponses.put("POST /form", new PostFormResponse(request));
+        routesToResponses.put("GET /ping?sleep", new SleepResponse(request, new ThreadSleeper()));
+        routesToResponses.put("GET /game", new ServiceResponse(service, request));
 
-        Response response;
-
-        if (isFormRequest(request)) {
-
-            response = new GetFormResponse();
-
-        } else if (isPostRequest(request)) {
-
-            response = new PostFormResponse(request);
-
-        } else if (isSleepRequest(request)) {
-
-            response = new SleepResponse(request, new ThreadSleeper());
-
-        } else if (isResourceRequest(request)) {
-
-            response = fileResponseFactory.fileResponse(request, retriever);
-
-        } else if (isServiceRequest(request)) {
-
-            response = new ServiceResponse(service, request);
-
-        } else if (isPongRequest(request)) {
-
-            response = new PongResponse();
-
-        } else {
-
-            response = new FeatureNotFoundResponse();
-
-        }
+        Response response = getResponse(request);
 
         return createResponseString(response);
 
@@ -78,27 +61,25 @@ public class HttpResponseBuilder implements ResponseBuilder {
         return "HTTP/1.0 200 OK" + "\r\n" + "Content-type: " + response.contentType() + "\r\n\r\n" + response.body();
     }
 
-    private boolean isPongRequest(Request request) {
-        return request.headers().startsWith("GET /ping");
-    }
+    private Response getResponse(Request request){
+        Response response = null;
+        for (String route: routesToResponses.keySet()){
+            if (request.headers().startsWith(route)){
+                response = routesToResponses.get(route);
+            }
+        }
 
-    private boolean isFormRequest(Request request) {
-        return request.headers().startsWith("GET /form");
-    }
+        if (isResourceRequest(request)){
+            response = fileResponseFactory.fileResponse(request, retriever);
+        } else if (response == null){
+            response = new FeatureNotFoundResponse();
+        }
 
-    private boolean isPostRequest(Request request) {
-        return request.headers().startsWith("POST /form");
-    }
+        return response;
 
-    private boolean isSleepRequest(Request request) {
-        return request.headers().startsWith("GET /ping?sleep");
     }
 
     private boolean isResourceRequest(Request request) {
         return request.headers().startsWith("GET /browse");
-    }
-
-    private boolean isServiceRequest(Request request) {
-        return request.headers().startsWith("GET /game");
     }
 }
