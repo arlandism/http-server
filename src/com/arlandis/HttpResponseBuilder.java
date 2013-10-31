@@ -19,11 +19,6 @@ public class HttpResponseBuilder implements ResponseBuilder {
         this.service = service;
     }
 
-    @Override
-    public String generateResponse(Request request) {
-        return respondToRequest(request);
-    }
-
     public String generateResponse(Request request, Toggler toggler) {
         return getResponseString(request, toggler);
     }

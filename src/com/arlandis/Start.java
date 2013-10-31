@@ -17,10 +17,12 @@ public class Start {
     private static HttpResponseBuilder responseBuilder;
     private static FileResponseFactoryImp fileResponseFactory = new FileResponseFactoryImp();
     private static Server server;
+    private static FeatureToggler toggler;
 
     public static void main(String[] args) throws IOException {
         Config.instance().setRootDir(rootDir(args));
 
+        toggler = new FeatureToggler(new CommandLineParser(args));
         tttServicePort = tttServicePort(args);
         startTTTServer(tttServicePort);
         port = portNum(args);
@@ -35,7 +37,7 @@ public class Start {
             responseBuilder = new HttpResponseBuilder(new FileReader(), fileResponseFactory, tttServiceImp);
             clientIO = new NetworkIOImp(connSocket);
             requestFactory = new HttpRequestFactory(clientIO);
-            server = new Server(clientIO, requestFactory, responseBuilder);
+            server = new Server(clientIO, requestFactory, responseBuilder, toggler);
 
             (new Thread(new ServerThread(server))).start();
         }

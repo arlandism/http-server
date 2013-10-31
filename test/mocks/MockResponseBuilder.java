@@ -2,23 +2,26 @@ package mocks;
 
 import com.arlandis.interfaces.Request;
 import com.arlandis.interfaces.ResponseBuilder;
+import com.arlandis.interfaces.Toggler;
+
+import java.util.HashSet;
 
 public class MockResponseBuilder implements ResponseBuilder {
 
     private String toReturn;
-    private Request calledWith;
+    private HashSet callArgs = new HashSet();
 
     public MockResponseBuilder(String toReturn) {
         this.toReturn = toReturn;
     }
 
-    @Override
-    public String generateResponse(Request request) {
-        calledWith = request;
+    public String generateResponse(Request request, Toggler toggler){
+        callArgs.add(request);
+        callArgs.add(toggler);
         return toReturn;
     }
 
-    public Request history() {
-        return calledWith;
+    public boolean calledWith(Object obj) {
+        return callArgs.contains(obj);
     }
 }

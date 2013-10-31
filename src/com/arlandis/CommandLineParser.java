@@ -1,8 +1,10 @@
 package com.arlandis;
 
+import com.arlandis.interfaces.FeatureParser;
+
 import java.util.Arrays;
 
-public class CommandLineParser {
+public class CommandLineParser implements FeatureParser {
 
     private String[] argsToParse;
 
@@ -11,7 +13,7 @@ public class CommandLineParser {
     }
 
     public Integer portNum() {
-        String port = valueOrDefault("-p", "8000");
+        String port = valueOrDefault("-p", "8000", 1);
         return Integer.parseInt(port);
     }
 
@@ -20,12 +22,48 @@ public class CommandLineParser {
     }
 
     public String browsePath() {
-        return valueOrDefault("-d", System.getProperty("user.dir"));
+        return valueOrDefault("-d", System.getProperty("user.dir"), 1);
     }
 
     public int servicePort() {
-        String port = valueOrDefault("-s", "5000");
+        String port = valueOrDefault("-s", "5000", 1);
         return Integer.parseInt(port);
+    }
+
+    @Override
+     public Boolean pingValue() {
+        String pingValue = valueOrDefault("--ping", "true", 2);
+        return Boolean.valueOf(pingValue);
+    }
+
+    @Override
+     public Boolean formValue() {
+        String formValue = valueOrDefault("--form", "true", 2);
+        return Boolean.valueOf(formValue);
+    }
+
+    @Override
+    public Boolean postFormValue() {
+        String postFormValue = valueOrDefault("--post-form", "true", 2);
+        return Boolean.valueOf(postFormValue);
+    }
+
+    @Override
+    public Boolean sleepValue() {
+        String sleepValue = valueOrDefault("--sleep", "true", 2);
+        return Boolean.valueOf(sleepValue);
+    }
+
+    @Override
+    public Boolean gameValue() {
+        String gameValue = valueOrDefault("--game", "true", 2);
+        return Boolean.valueOf(gameValue);
+    }
+
+    @Override
+    public Boolean browseValue() {
+        String browseValue = valueOrDefault("--browse", "true", 2);
+        return Boolean.valueOf(browseValue);
     }
 
     private Boolean flagPresent(String flag) {
@@ -33,9 +71,9 @@ public class CommandLineParser {
         return Arrays.asList(argsToParse).indexOf(flag) != NOT_FOUND;
     }
 
-    private String valueOrDefault(String flag, String defaultValue) {
+    private String valueOrDefault(String flag, String defaultValue, Integer offSet) {
         String value;
-        Integer index = indexOfFlag(flag) + 1;
+        Integer index = indexOfFlag(flag) + offSet;
         if (flagPresent(flag)) {
             value = argsToParse[index];
         } else {
@@ -43,6 +81,4 @@ public class CommandLineParser {
         }
         return value;
     }
-
-
 }

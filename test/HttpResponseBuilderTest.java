@@ -17,6 +17,7 @@ public class HttpResponseBuilderTest {
     private MockFileResponseFactory mockFactory;
     private MockFileReader mockReader;
     private ResourceRetriever retriever;
+    private Toggler toggler;
     private TTTService service;
 
     @Before
@@ -28,24 +29,25 @@ public class HttpResponseBuilderTest {
         mockReader = new MockFileReader("foo");
         service = new MockService("foo");
         retriever = mockReader;
+        toggler = new MockToggler(true);
         builder = new HttpResponseBuilder(mockReader, factory, service);
     }
 
     @Test
     public void testDanceWithFileResponseFactory() {
-        assertContentTypeAndBodyMatch("mock content type", "bar", builder.generateResponse(txtFileRequest));
+        assertContentTypeAndBodyMatch("mock content type", "bar", builder.generateResponse(txtFileRequest, toggler));
         assertFileResponseFactoryCalledCorrectly(txtFileRequest, retriever);
     }
 
     @Test
     public void testDanceWithService() {
         HttpResponseBuilder builder = new HttpResponseBuilder(retriever, factory, service);
-        assertContentTypeAndBodyMatch("application/json", "foo", builder.generateResponse(serviceRequest));
+        assertContentTypeAndBodyMatch("application/json", "foo", builder.generateResponse(serviceRequest, toggler));
     }
 
     @Test
     public void testResponseNotFoundForUnrecognizedRoutes() {
-        String response = builder.generateResponse(new MockRequest("GET /foo HTTP/1.0\r\n\r\n"));
+        String response = builder.generateResponse(new MockRequest("GET /foo HTTP/1.0\r\n\r\n"), toggler);
         assertContentTypeAndBodyMatch("text/html",
                 "<html><body>The feature you're looking for can't be found.</body></html>", response);
     }

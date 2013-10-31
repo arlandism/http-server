@@ -2,7 +2,9 @@ import com.arlandis.*;
 import com.arlandis.FileReader;
 import com.arlandis.interfaces.RequestFactory;
 import com.arlandis.interfaces.TTTService;
+import com.arlandis.interfaces.Toggler;
 import mocks.MockService;
+import mocks.MockToggler;
 import org.junit.*;
 
 import java.io.*;
@@ -34,7 +36,8 @@ public class IntegrationTest {
             FileReader retriever = new FileReader();
             TTTService service = new MockService("bar");
             HttpResponseBuilder builder = new HttpResponseBuilder(retriever, responseFactoryImp, service);
-            server = new Server(networkIO, requestFactory, builder);
+            Toggler toggler = new MockToggler(true);
+            server = new Server(networkIO, requestFactory, builder, toggler);
             out = new PrintWriter(client.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(client.getInputStream()));
             (new File("test/tmp")).mkdir();

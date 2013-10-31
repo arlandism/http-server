@@ -2,14 +2,13 @@ import com.arlandis.Server;
 import com.arlandis.interfaces.NetworkIO;
 import com.arlandis.interfaces.Request;
 import com.arlandis.interfaces.RequestFactory;
-import mocks.MockNetworkIO;
-import mocks.MockRequest;
-import mocks.MockRequestFactory;
-import mocks.MockResponseBuilder;
+import com.arlandis.interfaces.Toggler;
+import mocks.*;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class ServerTest {
 
@@ -18,6 +17,7 @@ public class ServerTest {
     private Request mockRequest;
     private MockResponseBuilder builder;
     private RequestFactory factory;
+    private Toggler toggler;
     private Server server;
 
     @Before
@@ -27,7 +27,8 @@ public class ServerTest {
         mockRequest = new MockRequest("", "");
         builder = new MockResponseBuilder("baz");
         factory = new MockRequestFactory(mockRequest);
-        server = new Server(io, factory, builder);
+        toggler = new MockToggler(true);
+        server = new Server(io, factory, builder, toggler);
     }
 
     @Test
@@ -39,6 +40,12 @@ public class ServerTest {
     @Test
     public void testBuilderGetsRequest(){
         server.respond();
-        assertEquals(mockRequest, builder.history());
+        assertTrue(builder.calledWith(mockRequest));
+    }
+
+    @Test
+    public void testTogglerGetsPassedToBuilder(){
+        server.respond();
+        assertTrue(builder.calledWith(toggler));
     }
 }

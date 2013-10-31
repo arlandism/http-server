@@ -8,11 +8,9 @@ import java.util.Map;
 
 public class FeatureToggler implements Toggler {
 
-    private FeatureParser featureParser;
     private Map<String, Boolean> routeToEnabledValue = new HashMap<String, Boolean>();
 
     public FeatureToggler(FeatureParser featureParser) {
-        this.featureParser = featureParser;
         routeToEnabledValue.put("GET /ping", featureParser.pingValue());
         routeToEnabledValue.put("GET /form", featureParser.formValue());
         routeToEnabledValue.put("POST /form", featureParser.postFormValue());
