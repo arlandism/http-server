@@ -21,7 +21,7 @@ public class HttpResponseBuilder implements ResponseBuilder {
 
     public String generateResponse(Request request, Inventory featureInventory) {
         Response response;
-        response = findProperResponse(request, featureInventory);
+        response = routeRequest(request, featureInventory);
         return createResponseString(response);
     }
 
@@ -29,7 +29,7 @@ public class HttpResponseBuilder implements ResponseBuilder {
         return "HTTP/1.0 200 OK" + "\r\n" + "Content-type: " + response.contentType() + "\r\n\r\n" + response.body();
     }
 
-    private Response findProperResponse(Request request, Inventory featureInventory) {
+    private Response routeRequest(Request request, Inventory featureInventory) {
         Response response;
         routesToResponses.put("GET /ping", new PongResponse());
         routesToResponses.put("GET /form", new GetFormResponse());
