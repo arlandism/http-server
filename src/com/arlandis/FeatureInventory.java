@@ -1,16 +1,16 @@
 package com.arlandis;
 
 import com.arlandis.interfaces.FeatureParser;
-import com.arlandis.interfaces.Toggler;
+import com.arlandis.interfaces.Directory;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class FeatureToggler implements Toggler {
+public class FeatureInventory implements Directory {
 
     private Map<String, Boolean> routeToEnabledValue = new HashMap<String, Boolean>();
 
-    public FeatureToggler(FeatureParser featureParser) {
+    public FeatureInventory(FeatureParser featureParser) {
         routeToEnabledValue.put("GET /ping", featureParser.pingValue());
         routeToEnabledValue.put("GET /form", featureParser.formValue());
         routeToEnabledValue.put("POST /form", featureParser.postFormValue());

@@ -1,5 +1,5 @@
 package com.arlandis.interfaces;
 
-public interface Toggler {
+public interface Inventory {
     Boolean isEnabled(String headers);
 }

@@ -7,12 +7,12 @@ import com.arlandis.interfaces.TTTService;
 
 import java.io.IOException;
 
-public class ServiceResponse implements Response {
+public class GameResponse implements Response {
 
     private TTTService service;
     private Request request;
 
-    public ServiceResponse(TTTService service, Request request) {
+    public GameResponse(TTTService service, Request request) {
         this.service = service;
         this.request = request;
     }

@@ -1,14 +1,14 @@
 package mocks;
 
-import com.arlandis.interfaces.Toggler;
+import com.arlandis.interfaces.Inventory;
 
 import java.util.HashSet;
 
-public class MockToggler implements Toggler {
+public class MockInventory implements Inventory {
 
     private final Boolean valToReturn;
 
-    public MockToggler(Boolean valToReturn){
+    public MockInventory(Boolean valToReturn){
         this.valToReturn = valToReturn;
     }
 
