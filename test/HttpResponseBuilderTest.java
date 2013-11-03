@@ -48,10 +48,10 @@ public class HttpResponseBuilderTest {
     @Test
     public void testBuilderAsksInventoryAboutRequest() {
         Boolean featureEnabled = true;
-        MockInventory mock = new MockInventory(featureEnabled);
-        Inventory inventory = mock;
+        MockInventory mockInventory = new MockInventory(featureEnabled);
+        Inventory inventory = mockInventory;
         builder.generateResponse(txtFileRequest, inventory);
-        assertTrue(mock.calledWith(txtFileRequest.headers()));
+        assertTrue(mockInventory.calledWith(txtFileRequest.headers()));
     }
 
     @Test
