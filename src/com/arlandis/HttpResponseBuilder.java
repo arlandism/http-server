@@ -10,23 +10,23 @@ public class HttpResponseBuilder implements ResponseBuilder {
 
     private ResourceRetriever retriever;
     private FileResponseFactory fileResponseFactory;
-    private TTTService service;
+    private TTTService tttService;
     private Map<String, Response> routesToResponses = new HashMap<String, Response>();
 
-    public HttpResponseBuilder(ResourceRetriever retriever, FileResponseFactory factory, TTTService service) {
+    public HttpResponseBuilder(ResourceRetriever retriever, FileResponseFactory factory, TTTService tttService) {
         this.retriever = retriever;
         this.fileResponseFactory = factory;
-        this.service = service;
+        this.tttService = tttService;
     }
 
-    public String generateResponse(Request request, Toggler toggler) {
-        return getResponseString(request, toggler);
+    public String generateResponse(Request request, Inventory featureInventory) {
+        return getResponseString(request, featureInventory);
     }
 
-    private String getResponseString(Request request, Toggler toggler) {
+    private String getResponseString(Request request, Inventory featureInventory) {
         String responseString;
         Response response;
-        if (featureEnabled(request, toggler)) {
+        if (featureEnabled(request, featureInventory)) {
             responseString = respondToRequest(request);
         } else {
             response = new FeatureNotFoundResponse();
@@ -35,8 +35,9 @@ public class HttpResponseBuilder implements ResponseBuilder {
         return responseString;
     }
 
-    private Boolean featureEnabled(Request request, Toggler toggler) {
-        return toggler.isEnabled(request.headers());
+    private Boolean featureEnabled(Request request, Inventory featureInventory) {
+        String requestedFeature = request.headers();
+        return featureInventory.isEnabled(requestedFeature);
     }
 
     private String respondToRequest(Request request) {
@@ -44,7 +45,7 @@ public class HttpResponseBuilder implements ResponseBuilder {
         routesToResponses.put("GET /form", new GetFormResponse());
         routesToResponses.put("POST /form", new PostFormResponse(request));
         routesToResponses.put("GET /ping?sleep", new SleepResponse(request, new ThreadSleeper()));
-        routesToResponses.put("GET /game", new ServiceResponse(service, request));
+        routesToResponses.put("GET /game", new GameResponse(tttService, request));
 
         Response response = getResponse(request);
 

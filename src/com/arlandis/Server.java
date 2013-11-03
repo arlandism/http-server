@@ -9,21 +9,21 @@ public class Server implements Responder {
     private final ResponseBuilder builder;
     private RequestFactory requestFactory;
     private NetworkIO networkIO;
-    private Toggler toggler;
+    private Inventory inventory;
     private String response;
     private Request request;
 
-    public Server(NetworkIO networkIO, RequestFactory requestFactory, ResponseBuilder builder, Toggler toggler) {
+    public Server(NetworkIO networkIO, RequestFactory requestFactory, ResponseBuilder builder, Inventory inventory) {
         this.networkIO = networkIO;
         this.requestFactory = requestFactory;
         this.builder = builder;
-        this.toggler = toggler;
+        this.inventory = inventory;
 
     }
 
     public void respond() {
         request = nextRequest();
-        response = builder.generateResponse(request, toggler);
+        response = builder.generateResponse(request, inventory);
         networkIO.send(response);
     }
 

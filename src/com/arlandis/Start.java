@@ -17,12 +17,12 @@ public class Start {
     private static HttpResponseBuilder responseBuilder;
     private static FileResponseFactoryImp fileResponseFactory = new FileResponseFactoryImp();
     private static Server server;
-    private static FeatureToggler toggler;
+    private static FeatureInventory toggler;
 
     public static void main(String[] args) throws IOException {
         Config.instance().setRootDir(rootDir(args));
 
-        toggler = new FeatureToggler(new CommandLineParser(args));
+        toggler = new FeatureInventory(new CommandLineParser(args));
         tttServicePort = tttServicePort(args);
         startTTTServer(tttServicePort);
         port = portNum(args);

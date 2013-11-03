@@ -17,7 +17,7 @@ public class HttpResponseBuilderTest {
     private MockFileResponseFactory mockFactory;
     private MockFileReader mockReader;
     private ResourceRetriever retriever;
-    private Toggler toggler;
+    private Inventory inventory;
     private TTTService service;
 
     @Before
@@ -29,25 +29,25 @@ public class HttpResponseBuilderTest {
         mockReader = new MockFileReader("foo");
         service = new MockService("foo");
         retriever = mockReader;
-        toggler = new MockToggler(true);
+        inventory = new MockInventory(true);
         builder = new HttpResponseBuilder(mockReader, factory, service);
     }
 
     @Test
     public void testDanceWithFileResponseFactory() {
-        assertContentTypeAndBodyMatch("mock content type", "bar", builder.generateResponse(txtFileRequest, toggler));
+        assertContentTypeAndBodyMatch("mock content type", "bar", builder.generateResponse(txtFileRequest, inventory));
         assertFileResponseFactoryCalledCorrectly(txtFileRequest, retriever);
     }
 
     @Test
     public void testDanceWithService() {
         HttpResponseBuilder builder = new HttpResponseBuilder(retriever, factory, service);
-        assertContentTypeAndBodyMatch("application/json", "foo", builder.generateResponse(serviceRequest, toggler));
+        assertContentTypeAndBodyMatch("application/json", "foo", builder.generateResponse(serviceRequest, inventory));
     }
 
     @Test
     public void testResponseNotFoundForUnrecognizedRoutes() {
-        String response = builder.generateResponse(new MockRequest("GET /foo HTTP/1.0\r\n\r\n"), toggler);
+        String response = builder.generateResponse(new MockRequest("GET /foo HTTP/1.0\r\n\r\n"), inventory);
         assertContentTypeAndBodyMatch("text/html",
                 "<html><body>The feature you're looking for can't be found.</body></html>", response);
     }
@@ -55,18 +55,18 @@ public class HttpResponseBuilderTest {
     @Test
     public void testBuilderAsksTogglerAboutRequest() {
         Boolean featureEnabled = true;
-        MockToggler mock = new MockToggler(featureEnabled);
-        Toggler toggler = mock;
-        builder.generateResponse(txtFileRequest, toggler);
+        MockInventory mock = new MockInventory(featureEnabled);
+        Inventory inventory = mock;
+        builder.generateResponse(txtFileRequest, inventory);
         assertTrue(mock.calledWith(txtFileRequest.headers()));
     }
 
     @Test
     public void testResponseNotFoundForNonToggledFeatures() {
         Boolean featureEnabled = false;
-        MockToggler mock = new MockToggler(featureEnabled);
-        Toggler toggler = mock;
-        String response = builder.generateResponse(txtFileRequest, toggler);
+        MockInventory mock = new MockInventory(featureEnabled);
+        Inventory inventory = mock;
+        String response = builder.generateResponse(txtFileRequest, inventory);
         assertContentTypeAndBodyMatch("text/html",
                 "<html><body>The feature you're looking for can't be found.</body></html>", response);
     }

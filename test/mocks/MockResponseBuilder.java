@@ -2,7 +2,7 @@ package mocks;
 
 import com.arlandis.interfaces.Request;
 import com.arlandis.interfaces.ResponseBuilder;
-import com.arlandis.interfaces.Toggler;
+import com.arlandis.interfaces.Inventory;
 
 import java.util.HashSet;
 
@@ -15,9 +15,9 @@ public class MockResponseBuilder implements ResponseBuilder {
         this.toReturn = toReturn;
     }
 
-    public String generateResponse(Request request, Toggler toggler){
+    public String generateResponse(Request request, Inventory inventory){
         callArgs.add(request);
-        callArgs.add(toggler);
+        callArgs.add(inventory);
         return toReturn;
     }
 

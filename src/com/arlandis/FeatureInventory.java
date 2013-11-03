@@ -1,12 +1,12 @@
 package com.arlandis;
 
 import com.arlandis.interfaces.FeatureParser;
-import com.arlandis.interfaces.Directory;
+import com.arlandis.interfaces.Inventory;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class FeatureInventory implements Directory {
+public class FeatureInventory implements Inventory {
 
     private Map<String, Boolean> routeToEnabledValue = new HashMap<String, Boolean>();
 
