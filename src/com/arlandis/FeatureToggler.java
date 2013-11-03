@@ -21,6 +21,10 @@ public class FeatureToggler implements Toggler {
 
     @Override
     public Boolean isEnabled(String headers) {
-        return routeToEnabledValue.get(headers);
+        for (String route: routeToEnabledValue.keySet()){
+            if (headers.startsWith(route))
+                return routeToEnabledValue.get(route);
+        }
+        return false;
     }
 }

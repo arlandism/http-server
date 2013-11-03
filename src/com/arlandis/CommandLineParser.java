@@ -13,7 +13,7 @@ public class CommandLineParser implements FeatureParser {
     }
 
     public Integer portNum() {
-        String port = valueOrDefault("-p", "8000", 1);
+        String port = parseShortFormFlag("-p", "8000");
         return Integer.parseInt(port);
     }
 
@@ -22,58 +22,57 @@ public class CommandLineParser implements FeatureParser {
     }
 
     public String browsePath() {
-        return valueOrDefault("-d", System.getProperty("user.dir"), 1);
+        return parseShortFormFlag("-d", System.getProperty("user.dir"));
     }
 
     public int servicePort() {
-        String port = valueOrDefault("-s", "5000", 1);
+        String port = parseShortFormFlag("-s", "5000");
         return Integer.parseInt(port);
     }
 
     @Override
      public Boolean pingValue() {
-        String pingValue = valueOrDefault("--ping", "true", 2);
-        return Boolean.valueOf(pingValue);
+        return parseLongFormFlag("--ping");
     }
 
     @Override
      public Boolean formValue() {
-        String formValue = valueOrDefault("--form", "true", 2);
-        return Boolean.valueOf(formValue);
+        return parseLongFormFlag("--form");
     }
 
     @Override
     public Boolean postFormValue() {
-        String postFormValue = valueOrDefault("--post-form", "true", 2);
-        return Boolean.valueOf(postFormValue);
+        return parseLongFormFlag("--post-form");
     }
 
     @Override
     public Boolean sleepValue() {
-        String sleepValue = valueOrDefault("--sleep", "true", 2);
-        return Boolean.valueOf(sleepValue);
+        return parseLongFormFlag("--sleep");
     }
 
     @Override
     public Boolean gameValue() {
-        String gameValue = valueOrDefault("--game", "true", 2);
-        return Boolean.valueOf(gameValue);
+        return parseLongFormFlag("--game");
     }
 
     @Override
     public Boolean browseValue() {
-        String browseValue = valueOrDefault("--browse", "true", 2);
-        return Boolean.valueOf(browseValue);
+        return parseLongFormFlag("--browse");
     }
 
-    private Boolean flagPresent(String flag) {
-        final Integer NOT_FOUND = -1;
-        return Arrays.asList(argsToParse).indexOf(flag) != NOT_FOUND;
+    private Boolean parseLongFormFlag(String flag){
+        for (String arg: argsToParse){
+            if (arg.startsWith(flag)){
+                Integer indexOfEqualSign = arg.indexOf("=");
+                return Boolean.valueOf(arg.substring(indexOfEqualSign + 1));
+            }
+        }
+        return true;
     }
 
-    private String valueOrDefault(String flag, String defaultValue, Integer offSet) {
+    private String parseShortFormFlag(String flag, String defaultValue) {
         String value;
-        Integer index = indexOfFlag(flag) + offSet;
+        Integer index = indexOfFlag(flag) + 1;
         if (flagPresent(flag)) {
             value = argsToParse[index];
         } else {
@@ -81,4 +80,11 @@ public class CommandLineParser implements FeatureParser {
         }
         return value;
     }
+
+    private Boolean flagPresent(String flag) {
+        final Integer NOT_FOUND = -1;
+        return Arrays.asList(argsToParse).indexOf(flag) != NOT_FOUND;
+    }
+
+
 }

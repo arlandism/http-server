@@ -49,48 +49,48 @@ public class CommandLineParserTest {
 
     @Test
     public void testPingValue(){
-        String[] args = {"--ping", "=", "true"};
+        String[] args = {"--ping=true"};
         CommandLineParser parser = new CommandLineParser(args);
         assertEquals(true, parser.pingValue());
     }
 
     @Test
     public void testFormValue(){
-        String[] args = {"--form", "=", "false"};
+        String[] args = {"--form=false"};
         CommandLineParser parser = new CommandLineParser(args);
         assertEquals(false, parser.formValue());
     }
 
     @Test
     public void testPostFormValue(){
-        String[] args = {"--post-form", "=", "true"};
+        String[] args = {"--post-form=true"};
         CommandLineParser parser = new CommandLineParser(args);
         assertEquals(true, parser.postFormValue());
     }
 
     @Test
     public void testSleepValue(){
-        String[] args = {"--sleep", "=", "false"};
+        String[] args = {"--sleep=false"};
         CommandLineParser parser  = new CommandLineParser(args);
         assertEquals(false, parser.sleepValue());
     }
 
     @Test
     public void testGameValue(){
-        String[] args = {"--game", "=", "true"};
+        String[] args = {"--game=true"};
         CommandLineParser parser = new CommandLineParser(args);
         assertEquals(true, parser.gameValue());
     }
 
     @Test
     public void testBrowseValue(){
-        String[] args = {"--browse", "=", "false"};
+        String[] args = {"--browse=false"};
         CommandLineParser parser = new CommandLineParser(args);
         assertEquals(false, parser.browseValue());
     }
 
     @Test
-    public void testBothFlags(){
+    public void testMultipleFlags(){
         String[] args = {"-d", "foo/bar", "-p", "6700"};
         CommandLineParser parser = new CommandLineParser(args);
         assertEquals(Integer.valueOf(6700), parser.portNum());

@@ -52,4 +52,10 @@ public class FeatureTogglerTest {
         FeatureToggler toggler = new FeatureToggler(parser);
         assertFalse(toggler.isEnabled("GET /browse"));
     }
+
+    @Test
+    public void testTogglerReturnsFalseWhenNonSensicalRoutes(){
+        FeatureToggler toggler = new FeatureToggler(parser);
+        assertFalse(toggler.isEnabled("GET /foo"));
+    }
 }
