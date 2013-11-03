@@ -2,35 +2,29 @@ import com.arlandis.CommandLineParser;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class CommandLineParserTest {
+
+    String[] emptyArgList = new String[0];
+    private CommandLineParser parserWithNoArgs = new CommandLineParser(emptyArgList);
 
     @Test
     public void testPortNum(){
         String[] args = { "-p", "6500" };
         CommandLineParser parser = new CommandLineParser(args);
         assertEquals(Integer.valueOf(6500), parser.portNum());
-    }
-
-    @Test
-    public void testDefaultPort(){
-        String[] args = new String[0];
-        CommandLineParser parser = new CommandLineParser(args);
-        assertEquals(Integer.valueOf(8000), parser.portNum());
+        assertEquals(Integer.valueOf(8000), parserWithNoArgs.portNum());
     }
 
     @Test
     public void testBrowsePath(){
+        String currentWorkingDirectory = System.getProperty("user.dir");
         String[] args = {"-d", "foo/bar"};
         CommandLineParser parser = new CommandLineParser(args);
         assertEquals("foo/bar", parser.browsePath());
-    }
-
-    @Test
-    public void testDefaultBrowsePath(){
-        String[] args = new String[0];
-        CommandLineParser parser = new CommandLineParser(args);
-        assertEquals(System.getProperty("user.dir"), parser.browsePath());
+        assertEquals(currentWorkingDirectory, parserWithNoArgs.browsePath());
     }
 
     @Test
@@ -38,62 +32,64 @@ public class CommandLineParserTest {
         String[] args = {"-s", "8800"};
         CommandLineParser parser = new CommandLineParser(args);
         assertEquals(8800, parser.servicePort());
-    }
-
-    @Test
-    public void testDefaultServicePort(){
-        String[] args = new String[0];
-        CommandLineParser parser = new CommandLineParser(args);
-        assertEquals(5000, parser.servicePort());
+        assertEquals(5000, parserWithNoArgs.servicePort());
     }
 
     @Test
     public void testPingValue(){
-        String[] args = {"--ping=true"};
+        String[] args = {"--ping=false"};
         CommandLineParser parser = new CommandLineParser(args);
-        assertEquals(true, parser.pingValue());
+        assertFalse(parser.pingValue());
+        assertTrue(parserWithNoArgs.pingValue());
     }
 
     @Test
     public void testFormValue(){
         String[] args = {"--form=false"};
         CommandLineParser parser = new CommandLineParser(args);
-        assertEquals(false, parser.formValue());
+        assertFalse(parser.formValue());
+        assertTrue(parserWithNoArgs.formValue());
     }
 
     @Test
     public void testPostFormValue(){
-        String[] args = {"--post-form=true"};
+        String[] args = {"--post-form=false"};
         CommandLineParser parser = new CommandLineParser(args);
-        assertEquals(true, parser.postFormValue());
+        assertFalse(parser.postFormValue());
+        assertTrue(parserWithNoArgs.postFormValue());
     }
 
     @Test
     public void testSleepValue(){
         String[] args = {"--sleep=false"};
         CommandLineParser parser  = new CommandLineParser(args);
-        assertEquals(false, parser.sleepValue());
+        assertFalse(parser.sleepValue());
+        assertTrue(parserWithNoArgs.sleepValue());
     }
 
     @Test
     public void testGameValue(){
-        String[] args = {"--game=true"};
+        String[] args = {"--game=false"};
         CommandLineParser parser = new CommandLineParser(args);
-        assertEquals(true, parser.gameValue());
+        assertFalse(parser.gameValue());
+        assertTrue(parserWithNoArgs.gameValue());
     }
 
     @Test
     public void testBrowseValue(){
         String[] args = {"--browse=false"};
         CommandLineParser parser = new CommandLineParser(args);
-        assertEquals(false, parser.browseValue());
+        assertFalse(parser.browseValue());
+        assertTrue(parserWithNoArgs.browseValue());
     }
 
     @Test
     public void testMultipleFlags(){
-        String[] args = {"-d", "foo/bar", "-p", "6700"};
+        String[] args = {"-d", "foo/bar", "-p", "6700", "--browse=true"};
         CommandLineParser parser = new CommandLineParser(args);
         assertEquals(Integer.valueOf(6700), parser.portNum());
+        assertEquals("foo/bar", parser.browsePath());
+        assertTrue(parser.browseValue());
     }
 
 }
