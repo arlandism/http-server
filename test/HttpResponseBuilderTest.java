@@ -46,14 +46,7 @@ public class HttpResponseBuilderTest {
     }
 
     @Test
-    public void testResponseNotFoundForUnrecognizedRoutes() {
-        String response = builder.generateResponse(new MockRequest("GET /foo HTTP/1.0\r\n\r\n"), inventory);
-        assertContentTypeAndBodyMatch("text/html",
-                "<html><body>The feature you're looking for can't be found.</body></html>", response);
-    }
-
-    @Test
-    public void testBuilderAsksTogglerAboutRequest() {
+    public void testBuilderAsksInventoryAboutRequest() {
         Boolean featureEnabled = true;
         MockInventory mock = new MockInventory(featureEnabled);
         Inventory inventory = mock;

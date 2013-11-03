@@ -20,19 +20,42 @@ public class HttpResponseBuilder implements ResponseBuilder {
     }
 
     public String generateResponse(Request request, Inventory featureInventory) {
-        return getResponseString(request, featureInventory);
+        Response response;
+        response = findProperResponse(request, featureInventory);
+        return createResponseString(response);
     }
 
-    private String getResponseString(Request request, Inventory featureInventory) {
-        String responseString;
+    private String createResponseString(Response response) {
+        return "HTTP/1.0 200 OK" + "\r\n" + "Content-type: " + response.contentType() + "\r\n\r\n" + response.body();
+    }
+
+    private Response findProperResponse(Request request, Inventory featureInventory) {
         Response response;
-        if (featureEnabled(request, featureInventory)) {
-            responseString = respondToRequest(request);
+        routesToResponses.put("GET /ping", new PongResponse());
+        routesToResponses.put("GET /form", new GetFormResponse());
+        routesToResponses.put("POST /form", new PostFormResponse(request));
+        routesToResponses.put("GET /ping?sleep", new SleepResponse(request, new ThreadSleeper()));
+        routesToResponses.put("GET /game", new GameResponse(tttService, request));
+
+        if (enabledFeatureRequest(request, featureInventory)) {
+            response = getResponseFromMap(request);
+
+        } else if (enabledResourceRequest(request, featureInventory)){
+            response = fileResponseFactory.fileResponse(request, retriever);
+
         } else {
             response = new FeatureNotFoundResponse();
-            responseString = createResponseString(response);
         }
-        return responseString;
+
+        return response;
+    }
+
+    private Boolean enabledResourceRequest(Request request, Inventory inventory){
+        return featureEnabled(request, inventory) && isResourceRequest(request);
+    }
+
+    private Boolean enabledFeatureRequest(Request request, Inventory inventory){
+        return featureEnabled(request, inventory) && !isResourceRequest(request);
     }
 
     private Boolean featureEnabled(Request request, Inventory featureInventory) {
@@ -40,37 +63,12 @@ public class HttpResponseBuilder implements ResponseBuilder {
         return featureInventory.isEnabled(requestedFeature);
     }
 
-    private String respondToRequest(Request request) {
-        routesToResponses.put("GET /ping", new PongResponse());
-        routesToResponses.put("GET /form", new GetFormResponse());
-        routesToResponses.put("POST /form", new PostFormResponse(request));
-        routesToResponses.put("GET /ping?sleep", new SleepResponse(request, new ThreadSleeper()));
-        routesToResponses.put("GET /game", new GameResponse(tttService, request));
-
-        Response response = getResponse(request);
-
-        return createResponseString(response);
-
-    }
-
-    private String createResponseString(Response response) {
-        return "HTTP/1.0 200 OK" + "\r\n" + "Content-type: " + response.contentType() + "\r\n\r\n" + response.body();
-    }
-
-    private Response getResponse(Request request){
+    private Response getResponseFromMap(Request request){
         Response response = null;
         for (String route: routesToResponses.keySet()){
-            if (request.headers().startsWith(route)){
+            if (request.headers().startsWith(route))
                 response = routesToResponses.get(route);
-            }
         }
-
-        if (isResourceRequest(request)){
-            response = fileResponseFactory.fileResponse(request, retriever);
-        } else if (response == null){
-            response = new FeatureNotFoundResponse();
-        }
-
         return response;
 
     }
