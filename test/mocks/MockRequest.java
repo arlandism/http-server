@@ -7,6 +7,7 @@ public class MockRequest implements Request {
 
     private String headers;
     private String resourceToReturn;
+    private String body;
 
     public MockRequest(String headersToReturn){
        headers = headersToReturn;
@@ -19,7 +20,7 @@ public class MockRequest implements Request {
 
     @Override
     public String getBody() {
-        return "";
+        return body;
     }
 
     public String headers(){
@@ -36,6 +37,7 @@ public class MockRequest implements Request {
 
     @Override
     public void setBody(String body) {
+        this.body = body;
     }
 
     @Override

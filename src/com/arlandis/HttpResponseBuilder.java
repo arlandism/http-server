@@ -37,7 +37,6 @@ public class HttpResponseBuilder implements ResponseBuilder {
 
         } else if (enabledResourceRequest(request, directoryMap)){
             response = fileResponseFactory.fileResponse(request, retriever);
-
         } else {
             response = new FeatureNotFoundResponse();
         }
