@@ -34,7 +34,6 @@ public class HttpResponseBuilder implements ResponseBuilder {
 
         if (enabledFeatureRequest(request, directoryMap)) {
             response = getResponseFromMap(request, responseMap);
-
         } else if (enabledResourceRequest(request, directoryMap)){
             response = fileResponseFactory.fileResponse(request, retriever);
         } else {

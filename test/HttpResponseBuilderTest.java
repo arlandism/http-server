@@ -28,20 +28,25 @@ public class HttpResponseBuilderTest {
         serviceRequest = new MockRequest("GET /game?1=x&depth=10", "/game?1=x&depth=10");
         fileResponse = new MockResponse("mock content type", "bar");
         mockFactory = new MockFileResponseFactory(fileResponse);
-        factory = mockFactory;
         mockReader = new MockFileReader("foo");
         service = new MockService("foo");
-        retriever = mockReader;
-        builder = new HttpResponseBuilder(mockReader, factory, service);
         mockFeatureParser = new MockFeatureParser();
+        retriever = mockReader;
+        factory = mockFactory;
         parser = mockFeatureParser;
+        builder = new HttpResponseBuilder(mockReader, factory, service);
+        mockFeatureParser.setBrowseValue(true);
+        mockFeatureParser.setPostForm(true);
+        mockFeatureParser.setPing(true);
+        mockFeatureParser.setSleepValue(true);
+        mockFeatureParser.setForm(true);
+        mockFeatureParser.setGameValue(true);
     }
 
     @Test
     public void testSleepResponse(){
         MockSleeper mockSleeper = new MockSleeper();
         Sleeper sleeper = mockSleeper;
-        mockFeatureParser.setSleepValue(true);
         Request sleepRequest = new MockRequest("GET /ping?sleep=5000 HTTP/1.0\r\n\r\n", "/ping?sleep=5000");
         String response = builder.generateResponse(sleepRequest, parser);
         SleepResponse sleepResponse = new SleepResponse(sleepRequest, sleeper);
@@ -50,7 +55,6 @@ public class HttpResponseBuilderTest {
 
     @Test
     public void testFormResponse(){
-        mockFeatureParser.setForm(true);
         Request formRequest = new MockRequest("GET /form HTTP/1.0\r\n\r\n", "/form");
         String response = builder.generateResponse(formRequest, parser);
         GetFormResponse formResponse = new GetFormResponse();
@@ -59,7 +63,6 @@ public class HttpResponseBuilderTest {
 
     @Test
     public void testPongResponse(){
-        mockFeatureParser.setPing(true);
         Request pingRequest = new MockRequest("GET /ping HTTP/1.0\r\n\r\n", "/ping");
         String response = builder.generateResponse(pingRequest, parser);
         PongResponse pongResponse = new PongResponse();
@@ -68,7 +71,6 @@ public class HttpResponseBuilderTest {
 
     @Test
     public void testPostFormResponse(){
-        mockFeatureParser.setPostForm(true);
         Request postFormRequest = new MockRequest("POST /form HTTP/1.0\r\n\r\n", "/form");
         postFormRequest.setBody("foo=hello&bar=backatya");
         String response = builder.generateResponse(postFormRequest, parser);
@@ -78,8 +80,6 @@ public class HttpResponseBuilderTest {
 
     @Test
     public void testDanceWithFileResponseFactory() {
-        mockFeatureParser.setBrowseValue(true);
-        mockFeatureParser.setGameValue(true);
         String response = builder.generateResponse(txtFileRequest, parser);
         assertCorrectResponse(response, fileResponse);
         assertEquals(txtFileRequest, mockFactory.history()[0]);
@@ -88,7 +88,6 @@ public class HttpResponseBuilderTest {
 
     @Test
     public void testDanceWithService() {
-        mockFeatureParser.setGameValue(true);
         String response = builder.generateResponse(serviceRequest, parser);
         GameResponse gameResponse = new GameResponse(service, serviceRequest);
         assertCorrectResponse(response, gameResponse);
