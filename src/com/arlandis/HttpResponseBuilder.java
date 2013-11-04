@@ -4,7 +4,6 @@ import com.arlandis.Responses.*;
 import com.arlandis.interfaces.*;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class HttpResponseBuilder implements ResponseBuilder {
 
@@ -94,7 +93,7 @@ public class HttpResponseBuilder implements ResponseBuilder {
 
     }
 
-    private boolean isResourceRequest(Request request) {
+    private Boolean isResourceRequest(Request request) {
         return request.headers().startsWith("GET /browse");
     }
 
