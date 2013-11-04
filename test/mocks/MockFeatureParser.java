@@ -19,6 +19,22 @@ public class MockFeatureParser implements FeatureParser {
         this.formValue = formValue;
     }
 
+    public void setPostForm(boolean postFormValue) {
+        this.postFormValue = postFormValue;
+    }
+
+    public void setSleepValue(boolean sleepValue) {
+        this.sleepValue = sleepValue;
+    }
+
+    public void setGameValue(Boolean gameValue) {
+        this.gameValue = gameValue;
+    }
+
+    public void setBrowseValue(Boolean browseValue) {
+        this.browseValue = browseValue;
+    }
+
     @Override
     public Boolean pingValue() {
         return pingValue;
@@ -49,19 +65,4 @@ public class MockFeatureParser implements FeatureParser {
         return browseValue;
     }
 
-    public void setPostForm(boolean postFormValue) {
-        this.postFormValue = postFormValue;
-    }
-
-    public void setSleepValue(boolean sleepValue) {
-        this.sleepValue = sleepValue;
-    }
-
-    public void setGameValue(Boolean gameValue) {
-        this.gameValue = gameValue;
-    }
-
-    public void setBrowseValue(Boolean browseValue) {
-        this.browseValue = browseValue;
-    }
 }

@@ -1,8 +1,8 @@
 package mocks;
 
+import com.arlandis.interfaces.FeatureParser;
 import com.arlandis.interfaces.Request;
 import com.arlandis.interfaces.ResponseBuilder;
-import com.arlandis.interfaces.Inventory;
 
 import java.util.HashSet;
 
@@ -15,9 +15,9 @@ public class MockResponseBuilder implements ResponseBuilder {
         this.toReturn = toReturn;
     }
 
-    public String generateResponse(Request request, Inventory inventory){
+    public String generateResponse(Request request, FeatureParser parser){
         callArgs.add(request);
-        callArgs.add(inventory);
+        callArgs.add(parser);
         return toReturn;
     }
 

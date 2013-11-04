@@ -17,8 +17,9 @@ public class HttpResponseBuilderTest {
     private MockFileResponseFactory mockFactory;
     private MockFileReader mockReader;
     private ResourceRetriever retriever;
-    private Inventory inventory;
     private TTTService service;
+    private MockFeatureParser mockFeatureParser;
+    private FeatureParser parser;
 
     @Before
     public void setUp() {
@@ -29,37 +30,31 @@ public class HttpResponseBuilderTest {
         mockReader = new MockFileReader("foo");
         service = new MockService("foo");
         retriever = mockReader;
-        inventory = new MockInventory(true);
         builder = new HttpResponseBuilder(mockReader, factory, service);
+        mockFeatureParser = new MockFeatureParser();
+        parser = mockFeatureParser;
     }
 
     @Test
     public void testDanceWithFileResponseFactory() {
-        assertContentTypeAndBodyMatch("mock content type", "bar", builder.generateResponse(txtFileRequest, inventory));
+        mockFeatureParser.setBrowseValue(true);
+        mockFeatureParser.setGameValue(true);
+        String response = builder.generateResponse(txtFileRequest, parser);
+        assertContentTypeAndBodyMatch("mock content type", "bar", response);
         assertFileResponseFactoryCalledCorrectly(txtFileRequest, retriever);
     }
 
     @Test
     public void testDanceWithService() {
-        HttpResponseBuilder builder = new HttpResponseBuilder(retriever, factory, service);
-        assertContentTypeAndBodyMatch("application/json", "foo", builder.generateResponse(serviceRequest, inventory));
-    }
-
-    @Test
-    public void testBuilderAsksInventoryAboutRequest() {
-        Boolean featureEnabled = true;
-        MockInventory mockInventory = new MockInventory(featureEnabled);
-        Inventory inventory = mockInventory;
-        builder.generateResponse(txtFileRequest, inventory);
-        assertTrue(mockInventory.calledWith(txtFileRequest.headers()));
+        mockFeatureParser.setGameValue(true);
+        String response = builder.generateResponse(serviceRequest, parser);
+        assertContentTypeAndBodyMatch("application/json", "foo", response);
     }
 
     @Test
     public void testResponseNotFoundForNonToggledFeatures() {
-        Boolean featureEnabled = false;
-        MockInventory mock = new MockInventory(featureEnabled);
-        Inventory inventory = mock;
-        String response = builder.generateResponse(txtFileRequest, inventory);
+        mockFeatureParser.setBrowseValue(false);
+        String response = builder.generateResponse(txtFileRequest, parser);
         assertContentTypeAndBodyMatch("text/html",
                 "<html><body>The feature you're looking for can't be found.</body></html>", response);
     }

@@ -1,9 +1,8 @@
 import com.arlandis.*;
 import com.arlandis.FileReader;
+import com.arlandis.interfaces.FeatureParser;
 import com.arlandis.interfaces.RequestFactory;
 import com.arlandis.interfaces.TTTService;
-import com.arlandis.interfaces.Inventory;
-import mocks.MockInventory;
 import mocks.MockService;
 import org.junit.*;
 
@@ -36,8 +35,8 @@ public class IntegrationTest {
             FileReader retriever = new FileReader();
             TTTService service = new MockService("bar");
             HttpResponseBuilder builder = new HttpResponseBuilder(retriever, responseFactoryImp, service);
-            Inventory inventory = new MockInventory(true);
-            server = new Server(networkIO, requestFactory, builder, inventory);
+            FeatureParser parser = new CommandLineParser(new String[0]);
+            server = new Server(networkIO, requestFactory, builder, parser);
             out = new PrintWriter(client.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(client.getInputStream()));
             (new File("test/tmp")).mkdir();

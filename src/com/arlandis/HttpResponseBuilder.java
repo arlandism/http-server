@@ -11,7 +11,6 @@ public class HttpResponseBuilder implements ResponseBuilder {
     private ResourceRetriever retriever;
     private FileResponseFactory fileResponseFactory;
     private TTTService tttService;
-    private Map<String, Response> routesToResponses = new HashMap<String, Response>();
 
     public HttpResponseBuilder(ResourceRetriever retriever, FileResponseFactory factory, TTTService tttService) {
         this.retriever = retriever;
@@ -19,9 +18,9 @@ public class HttpResponseBuilder implements ResponseBuilder {
         this.tttService = tttService;
     }
 
-    public String generateResponse(Request request, Inventory featureInventory) {
+    public String generateResponse(Request request, FeatureParser parser) {
         Response response;
-        response = routeRequest(request, featureInventory);
+        response = routeRequest(request, parser);
         return createResponseString(response);
     }
 
@@ -29,18 +28,15 @@ public class HttpResponseBuilder implements ResponseBuilder {
         return "HTTP/1.0 200 OK" + "\r\n" + "Content-type: " + response.contentType() + "\r\n\r\n" + response.body();
     }
 
-    private Response routeRequest(Request request, Inventory featureInventory) {
+    private Response routeRequest(Request request, FeatureParser parser) {
         Response response;
-        routesToResponses.put("GET /ping", new PongResponse());
-        routesToResponses.put("GET /form", new GetFormResponse());
-        routesToResponses.put("POST /form", new PostFormResponse(request));
-        routesToResponses.put("GET /ping?sleep", new SleepResponse(request, new ThreadSleeper()));
-        routesToResponses.put("GET /game", new GameResponse(tttService, request));
+        HashMap<String, Response> responseMap = buildResponseMap(request);
+        HashMap<String, Boolean> directoryMap = buildFeatureDirectory(parser);
 
-        if (enabledFeatureRequest(request, featureInventory)) {
-            response = getResponseFromMap(request);
+        if (enabledFeatureRequest(request, directoryMap)) {
+            response = getResponseFromMap(request, responseMap);
 
-        } else if (enabledResourceRequest(request, featureInventory)){
+        } else if (enabledResourceRequest(request, directoryMap)){
             response = fileResponseFactory.fileResponse(request, retriever);
 
         } else {
@@ -50,20 +46,45 @@ public class HttpResponseBuilder implements ResponseBuilder {
         return response;
     }
 
-    private Boolean enabledResourceRequest(Request request, Inventory inventory){
-        return featureEnabled(request, inventory) && isResourceRequest(request);
+    private HashMap<String, Boolean> buildFeatureDirectory(FeatureParser parser) {
+        HashMap<String, Boolean> routesToEnabled = new HashMap<String, Boolean>();
+        routesToEnabled.put("GET /ping", parser.pingValue());
+        routesToEnabled.put("GET /form", parser.formValue());
+        routesToEnabled.put("POST /form", parser.postFormValue());
+        routesToEnabled.put("GET /ping?sleep", parser.sleepValue());
+        routesToEnabled.put("GET /game", parser.gameValue());
+        routesToEnabled.put("GET /browse", parser.browseValue());
+        return routesToEnabled;
     }
 
-    private Boolean enabledFeatureRequest(Request request, Inventory inventory){
-        return featureEnabled(request, inventory) && !isResourceRequest(request);
+    private HashMap<String, Response> buildResponseMap(Request request) {
+        HashMap<String, Response> routesToResponses = new HashMap<String, Response>();
+        routesToResponses.put("GET /ping", new PongResponse());
+        routesToResponses.put("GET /form", new GetFormResponse());
+        routesToResponses.put("POST /form", new PostFormResponse(request));
+        routesToResponses.put("GET /ping?sleep", new SleepResponse(request, new ThreadSleeper()));
+        routesToResponses.put("GET /game", new GameResponse(tttService, request));
+        return routesToResponses;
     }
 
-    private Boolean featureEnabled(Request request, Inventory featureInventory) {
+    private Boolean enabledResourceRequest(Request request, HashMap<String, Boolean> routesToEnabled){
+        return isResourceRequest(request) && routesToEnabled.get("GET /browse");
+    }
+
+    private Boolean enabledFeatureRequest(Request request, HashMap<String, Boolean> routesToEnabled){
+        return featureEnabled(request, routesToEnabled) && !isResourceRequest(request);
+    }
+
+    private Boolean featureEnabled(Request request, HashMap<String, Boolean> routesToEnabled) {
         String requestedFeature = request.headers();
-        return featureInventory.isEnabled(requestedFeature);
+        for (String route: routesToEnabled.keySet()){
+            if (requestedFeature.startsWith(route))
+                return routesToEnabled.get(route);
+        }
+        return false;
     }
 
-    private Response getResponseFromMap(Request request){
+    private Response getResponseFromMap(Request request, HashMap<String, Response> routesToResponses){
         Response response = null;
         for (String route: routesToResponses.keySet()){
             if (request.headers().startsWith(route))
@@ -76,4 +97,5 @@ public class HttpResponseBuilder implements ResponseBuilder {
     private boolean isResourceRequest(Request request) {
         return request.headers().startsWith("GET /browse");
     }
+
 }

@@ -1,8 +1,5 @@
 import com.arlandis.Server;
-import com.arlandis.interfaces.NetworkIO;
-import com.arlandis.interfaces.Request;
-import com.arlandis.interfaces.RequestFactory;
-import com.arlandis.interfaces.Inventory;
+import com.arlandis.interfaces.*;
 import mocks.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +14,7 @@ public class ServerTest {
     private Request mockRequest;
     private MockResponseBuilder builder;
     private RequestFactory factory;
-    private Inventory inventory;
+    private FeatureParser parser;
     private Server server;
 
     @Before
@@ -27,8 +24,8 @@ public class ServerTest {
         mockRequest = new MockRequest("", "");
         builder = new MockResponseBuilder("baz");
         factory = new MockRequestFactory(mockRequest);
-        inventory = new MockInventory(true);
-        server = new Server(io, factory, builder, inventory);
+        parser = new MockFeatureParser();
+        server = new Server(io, factory, builder, parser);
     }
 
     @Test
@@ -44,8 +41,8 @@ public class ServerTest {
     }
 
     @Test
-    public void testTogglerGetsPassedToBuilder(){
+    public void testParserGetsPassedToBuilder(){
         server.respond();
-        assertTrue(builder.calledWith(inventory));
+        assertTrue(builder.calledWith(parser));
     }
 }
