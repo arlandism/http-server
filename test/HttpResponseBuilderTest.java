@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class HttpResponseBuilderTest {
 
@@ -14,11 +15,13 @@ public class HttpResponseBuilderTest {
     private MockResponse fileResponse;
     private HttpResponseBuilder builder;
     private String testFilePath = "foo/bar/baz.txt";
-    private FileResponseFactory factory;
     private MockFileResponseFactory mockFactory;
     private MockFileReader mockReader;
+    private MockSleeper mockSleeper;
+    private FileResponseFactory factory;
     private ResourceRetriever retriever;
     private TTTService service;
+    private Sleeper sleeper;
     private MockFeatureParser mockFeatureParser;
     private FeatureParser parser;
 
@@ -31,10 +34,12 @@ public class HttpResponseBuilderTest {
         mockReader = new MockFileReader("foo");
         service = new MockService("foo");
         mockFeatureParser = new MockFeatureParser();
+        mockSleeper = new MockSleeper();
         retriever = mockReader;
         factory = mockFactory;
+        sleeper = mockSleeper;
         parser = mockFeatureParser;
-        builder = new HttpResponseBuilder(mockReader, factory, service);
+        builder = new HttpResponseBuilder(mockReader, factory, service, sleeper);
         mockFeatureParser.setBrowseValue(true);
         mockFeatureParser.setPostForm(true);
         mockFeatureParser.setPing(true);
@@ -45,12 +50,11 @@ public class HttpResponseBuilderTest {
 
     @Test
     public void testSleepResponse(){
-        MockSleeper mockSleeper = new MockSleeper();
-        Sleeper sleeper = mockSleeper;
         Request sleepRequest = new MockRequest("GET /ping?sleep=5000 HTTP/1.0\r\n\r\n", "/ping?sleep=5000");
         String response = builder.generateResponse(sleepRequest, parser);
-        SleepResponse sleepResponse = new SleepResponse(sleepRequest, sleeper);
+        SleepResponse sleepResponse = new SleepResponse(sleepRequest, new MockSleeper());
         assertCorrectResponse(response, sleepResponse);
+        assertTrue(mockSleeper.sleepCalledWith(5000));
     }
 
     @Test

@@ -22,6 +22,7 @@ public class IntegrationTest {
     private String testFileContent = "Testing...123...Testing...4567";
     private File f;
     private BufferedWriter writer;
+    private ThreadSleeper sleeper;
 
     @Before
     public void setUp(){
@@ -33,8 +34,9 @@ public class IntegrationTest {
             RequestFactory requestFactory = new HttpRequestFactory(networkIO);
             FileResponseFactoryImp responseFactoryImp = new FileResponseFactoryImp();
             FileReader retriever = new FileReader();
+            sleeper = new ThreadSleeper();
             TTTService service = new MockService("bar");
-            HttpResponseBuilder builder = new HttpResponseBuilder(retriever, responseFactoryImp, service);
+            HttpResponseBuilder builder = new HttpResponseBuilder(retriever, responseFactoryImp, service, sleeper);
             FeatureParser parser = new CommandLineParser(new String[0]);
             server = new Server(networkIO, requestFactory, builder, parser);
             out = new PrintWriter(client.getOutputStream(), true);

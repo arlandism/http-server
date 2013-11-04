@@ -8,7 +8,7 @@ public class MockSleeper implements Sleeper {
     private Integer sleepParam;
 
     public Boolean sleepCalledWith(Integer sleepLength){
-        return sleepCalled && sleepParam == sleepLength;
+        return sleepCalled && sleepParam.equals(sleepLength);
     }
 
     public void sleep(Integer sleepLength){

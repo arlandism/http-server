@@ -1,5 +1,7 @@
 package com.arlandis;
 
+import com.arlandis.interfaces.Sleeper;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -15,6 +17,7 @@ public class Start {
     private static NetworkIOImp clientIO;
     private static HttpRequestFactory requestFactory;
     private static HttpResponseBuilder responseBuilder;
+    private static Sleeper sleeper = new ThreadSleeper();
     private static FileResponseFactoryImp fileResponseFactory = new FileResponseFactoryImp();
     private static Server server;
     private static CommandLineParser parser;
@@ -33,7 +36,7 @@ public class Start {
             connSocket = serverSock.accept();
             tttServiceSocket = new Socket("localhost", tttServicePort);
             tttServiceImp = new TTTServiceImp(new NetworkIOImp(tttServiceSocket));
-            responseBuilder = new HttpResponseBuilder(new FileReader(), fileResponseFactory, tttServiceImp);
+            responseBuilder = new HttpResponseBuilder(new FileReader(), fileResponseFactory, tttServiceImp, sleeper);
             clientIO = new NetworkIOImp(connSocket);
             requestFactory = new HttpRequestFactory(clientIO);
             server = new Server(clientIO, requestFactory, responseBuilder, parser);
