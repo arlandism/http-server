@@ -11,9 +11,7 @@ public class ServerLogger implements Logger {
     private File logFile;
     private static ServerLogger theInstance;
 
-    private ServerLogger(String filePath) {
-        logFile = new File(filePath);
-    }
+    private ServerLogger() {}
 
     public void log(String message) {
         try {
@@ -29,10 +27,14 @@ public class ServerLogger implements Logger {
         writer.close();
     }
 
-    public static ServerLogger instance(String filePath) {
+    public static ServerLogger instance() {
         if (theInstance == null){
-            theInstance = new ServerLogger(filePath);
+            theInstance = new ServerLogger();
         }
         return theInstance;
+    }
+
+    public void setLogFile(String filePath) {
+        this.logFile = new File(filePath);
     }
 }

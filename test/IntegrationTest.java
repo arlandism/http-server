@@ -21,6 +21,7 @@ public class IntegrationTest {
     private BufferedReader in;
     private String filePath = "test/tmp/testing.txt";
     private String testFileContent = "Testing...123...Testing...4567";
+    private File logFile = new File("test/tmp/log_test.txt");
     private Logger logger;
     private File f;
     private BufferedWriter writer;
@@ -32,6 +33,8 @@ public class IntegrationTest {
             Integer port = generateRandomPort();
             ServerSocket servSocket = new ServerSocket(port);
             client = trySocketCreation(port);
+            ServerLogger.instance().setLogFile("test/tmp/log_test.txt");
+            logger = ServerLogger.instance();
             NetworkIOImp networkIO = new NetworkIOImp(servSocket.accept());
             RequestFactory requestFactory = new HttpRequestFactory(networkIO);
             FileResponseFactoryImp responseFactoryImp = new FileResponseFactoryImp();
@@ -46,6 +49,7 @@ public class IntegrationTest {
             (new File("test/tmp")).mkdir();
             f = new File(filePath);
             f.createNewFile();
+            logFile.createNewFile();
             writer = new BufferedWriter(new FileWriter(f.getAbsolutePath()));
 
         } catch (IOException e) {
@@ -96,6 +100,7 @@ public class IntegrationTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        logFile.delete();
     }
 
     @Test
@@ -139,6 +144,21 @@ public class IntegrationTest {
                           "Content-type: text/html" +
                            testFileContent;
         assertEquals(expected, response);
+    }
+
+    @Test
+    public void testLogging(){
+        String requestHeader = "GET /foo HTTP/1.0";
+        out.print(requestHeader);
+        out.println();
+        out.println();
+        server.respond();
+        String expectedContent = "GET /foo HTTP/1.0\n" +
+                          "HTTP/1.0 200 OK\r\n" +
+                          "Content-type: text/html\r\n\r\n" +
+                          "<html><body>The feature you're looking for can't be found.</body></html>";
+        FileReader reader = new FileReader();
+        assertEquals(expectedContent, reader.retrieve(logFile.getAbsolutePath()));
     }
 
 }
