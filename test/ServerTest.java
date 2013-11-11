@@ -13,6 +13,7 @@ public class ServerTest {
     private NetworkIO io;
     private Request mockRequest;
     private MockResponseBuilder builder;
+    private MockLogger mockLogger;
     private RequestFactory factory;
     private FeatureParser parser;
     private Server server;
@@ -21,11 +22,13 @@ public class ServerTest {
     public void setUp(){
         mockIO = new MockNetworkIO();
         io = mockIO;
-        mockRequest = new MockRequest("", "");
+        mockRequest = new MockRequest("GET /foo/bar HTTP/1.0\r\n\r\n", "");
         builder = new MockResponseBuilder("baz");
         factory = new MockRequestFactory(mockRequest);
         parser = new MockFeatureParser();
-        server = new Server(io, factory, builder, parser);
+        mockLogger = new MockLogger();
+        Logger logger = mockLogger;
+        server = new Server(io, factory, builder, parser, logger);
     }
 
     @Test
@@ -44,5 +47,13 @@ public class ServerTest {
     public void testParserGetsPassedToBuilder(){
         server.respond();
         assertTrue(builder.calledWith(parser));
+    }
+
+    @Test
+    public void testLoggerGetsRequestAndResponse(){
+        String response = "baz";
+        String requestHeaders = "GET /foo/bar HTTP/1.0\r\n\r\n";
+        server.respond();
+        assertTrue(mockLogger.calledWith(requestHeaders + "\n" + response));
     }
 }

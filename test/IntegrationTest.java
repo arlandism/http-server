@@ -1,6 +1,7 @@
 import com.arlandis.*;
 import com.arlandis.FileReader;
 import com.arlandis.interfaces.FeatureParser;
+import com.arlandis.interfaces.Logger;
 import com.arlandis.interfaces.RequestFactory;
 import com.arlandis.interfaces.TTTService;
 import mocks.MockService;
@@ -20,6 +21,7 @@ public class IntegrationTest {
     private BufferedReader in;
     private String filePath = "test/tmp/testing.txt";
     private String testFileContent = "Testing...123...Testing...4567";
+    private Logger logger;
     private File f;
     private BufferedWriter writer;
     private ThreadSleeper sleeper;
@@ -38,7 +40,7 @@ public class IntegrationTest {
             TTTService service = new MockService("bar");
             HttpResponseBuilder builder = new HttpResponseBuilder(retriever, responseFactoryImp, service, sleeper);
             FeatureParser parser = new CommandLineParser(new String[0]);
-            server = new Server(networkIO, requestFactory, builder, parser);
+            server = new Server(networkIO, requestFactory, builder, parser, logger);
             out = new PrintWriter(client.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(client.getInputStream()));
             (new File("test/tmp")).mkdir();
