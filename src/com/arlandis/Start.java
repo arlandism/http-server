@@ -20,7 +20,7 @@ public class Start {
     private static HttpResponseBuilder responseBuilder;
     private static Sleeper sleeper = new ThreadSleeper();
     private static FileResponseFactoryImp fileResponseFactory = new FileResponseFactoryImp();
-    private static Logger logger;
+    private static ServerLogger logger = ServerLogger.instance();
     private static Server server;
     private static CommandLineParser parser;
 
@@ -41,6 +41,7 @@ public class Start {
             responseBuilder = new HttpResponseBuilder(new FileReader(), fileResponseFactory, tttServiceImp, sleeper);
             clientIO = new NetworkIOImp(connSocket);
             requestFactory = new HttpRequestFactory(clientIO);
+            logger.setLogFile("log.txt");
             server = new Server(clientIO, requestFactory, responseBuilder, parser, logger);
 
             (new Thread(new ServerThread(server))).start();

@@ -14,7 +14,9 @@ public class Server implements Responder {
     private String response;
     private Request request;
 
-    public Server(NetworkIO networkIO, RequestFactory requestFactory, ResponseBuilder builder, FeatureParser parser, Logger logger) {
+    public Server(NetworkIO networkIO, RequestFactory requestFactory,
+                  ResponseBuilder builder, FeatureParser parser,
+                  Logger logger) {
         this.networkIO = networkIO;
         this.requestFactory = requestFactory;
         this.builder = builder;

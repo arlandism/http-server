@@ -21,7 +21,7 @@ public class ServerLogger implements Logger {
         }
     }
 
-    private void logMessage(String message) throws IOException {
+    private synchronized void logMessage(String message) throws IOException {
         FileWriter writer = new FileWriter(logFile, true);
         writer.write(message);
         writer.close();
